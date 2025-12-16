@@ -1,0 +1,31 @@
+{
+  "name": "mishki-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo pour les projets B2C et B2B Mishki",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:b2c\" \"npm run dev:b2b\" --names \"B2C,B2B\" --prefix-colors \"cyan,magenta\"",
+    "dev:b2c": "cd apps/b2c && npm run dev",
+    "dev:b2b": "cd apps/b2b && npm run dev",
+    "build": "npm run build:b2c && npm run build:b2b",
+    "build:b2c": "cd apps/b2c && npm run build",
+    "build:b2b": "cd apps/b2b && npm run build",
+    "start:b2c": "cd apps/b2c && npm run start",
+    "start:b2b": "cd apps/b2b && npm run start",
+    "lint:b2c": "cd apps/b2c && npm run lint",
+    "lint:b2b": "cd apps/b2b && npm run lint",
+    "clean": "rimraf apps/*/node_modules apps/*/.next packages/*/node_modules node_modules"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "rimraf": "^5.0.5"
+  }
+}
