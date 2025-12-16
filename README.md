@@ -1,6 +1,6 @@
 # 🌿 Mishki Monorepo
 
-Monorepo Next.js contenant les applications **B2C** (client final) et **B2B** (professionnels).
+Monorepo Next.js contenant les applications **B2C** (espace client) et **B2B** (espace professionnel).
 
 ---
 
@@ -9,8 +9,8 @@ Monorepo Next.js contenant les applications **B2C** (client final) et **B2B** (p
 ```
 mishki-monorepo/
 ├── apps/
-│   ├── b2c/          # Site grand public
-│   └── b2b/          # Portail professionnels
+│   ├── b2c/          # Espace client (particuliers)
+│   └── b2b/          # Espace professionnel (spa, instituts, salons)
 ├── packages/         # Code partagé (à venir)
 └── package.json
 ```

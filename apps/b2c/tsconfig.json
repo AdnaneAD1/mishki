@@ -25,7 +25,8 @@
     "paths": {
       "@/*": [
         "./*"
-      ]
+      ],
+      "@mishki/shared": ["../../packages/shared/src"]
     }
   },
   "include": [
