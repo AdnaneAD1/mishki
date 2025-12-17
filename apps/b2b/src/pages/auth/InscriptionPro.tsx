@@ -407,3 +407,8 @@ export default function InscriptionPro() {
     </div>
   );
 }
+
+// Force SSR pour éviter les erreurs de build avec useAuth
+export async function getServerSideProps() {
+  return { props: {} };
+}

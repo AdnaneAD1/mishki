@@ -12,13 +12,13 @@ export interface User {
 
 export interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   logout: () => void;
   isLoading: boolean;
 }
 
 export interface LoginProps {
-  onLogin: (email: string, password: string) => Promise<void>;
+  onLogin: (email: string, password: string) => Promise<User>;
   isLoading?: boolean;
   error?: string;
   redirectUrl?: string;

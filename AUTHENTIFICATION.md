@@ -6,24 +6,24 @@
 
 Lorsqu'un utilisateur se connecte, le système :
 
-1. **Analyse l'email** pour déterminer le rôle (B2C ou B2B)
-2. **Redirige automatiquement** vers l'application appropriée
+1. **Récupère l'utilisateur depuis la base de données** avec son rôle (B2C ou B2B)
+2. **Redirige automatiquement** vers l'application appropriée selon le rôle stocké
 
 ---
 
-## 📧 Détection du Rôle par Email
+## 👤 Détermination du Rôle
+
+Le rôle de l'utilisateur est **défini lors de l'inscription** et **stocké en base de données**.
 
 ### B2B (Espace Professionnel)
-Un utilisateur est redirigé vers l'espace professionnel si son email contient :
-- `spa` (ex: `contact@spa-zen.fr`)
-- `institut` (ex: `marie@institut-beaute.com`)
-- `salon` (ex: `admin@salon-coiffure.fr`)
-- `beaute`, `esthetique`
-- `pro` (ex: `service@mishki-pro.com`)
-- `enterprise`, `company`
+- Rôle attribué lors de l'inscription professionnelle
+- Nécessite : SIRET, raison sociale, KBIS
+- Accès à l'espace professionnel avec tarifs préférentiels
 
 ### B2C (Espace Client)
-Tous les autres emails - particuliers (ex: `sophie@gmail.com`)
+- Rôle attribué lors de l'inscription client
+- Particuliers
+- Accès à l'espace client standard
 
 ---
 
@@ -47,49 +47,53 @@ Tous les autres emails - particuliers (ex: `sophie@gmail.com`)
 
 ## 💡 Exemples d'Utilisation
 
-### Exemple 1 : Email Grand Public
+### Exemple 1 : Client Particulier
 ```
-Email : sophie.martin@gmail.com
-→ Rôle détecté : B2C
+Inscription → Formulaire client (B2C)
+→ Rôle stocké en BDD : 'b2c'
+→ Connexion : sophie.martin@gmail.com
 → Redirection : www.mishki.com (B2C)
 ```
 
-### Exemple 2 : Email Professionnel - SPA
+### Exemple 2 : Professionnel - SPA
 ```
-Email : contact@spa-beaute-paris.fr
-→ Rôle détecté : B2B (contient "spa")
+Inscription → Formulaire professionnel (B2B)
+→ Documents : SIRET, KBIS
+→ Rôle stocké en BDD : 'b2b'
+→ Connexion : contact@spa-beaute-paris.fr
 → Redirection : pro.mishki.com (B2B)
 ```
 
-### Exemple 3 : Email Professionnel - Institut
+### Exemple 3 : Professionnel - Institut
 ```
-Email : marie@institut-harmonie.com
-→ Rôle détecté : B2B (contient "institut")
+Inscription → Formulaire professionnel (B2B)
+→ Documents : SIRET, KBIS
+→ Rôle stocké en BDD : 'b2b'
+→ Connexion : marie@institut-harmonie.com
 → Redirection : pro.mishki.com (B2B)
 ```
 
 ---
 
-## 🛠️ Personnaliser la Détection
+## 🛠️ Intégration Backend
 
-Pour modifier la logique de détection, éditer :
-`packages/shared/src/utils/auth.ts`
-
+### Lors de l'inscription
 ```typescript
-export function getUserRole(email: string): 'b2c' | 'b2b' {
-  // Votre logique personnalisée
-  
-  // Option 1 : Par domaine
-  const businessDomains = ['spa', 'institut', 'salon', ...];
-  
-  // Option 2 : Vérification en base de données (recommandé en prod)
-  // const user = await db.users.findByEmail(email);
-  // return user.role;
-  
-  // Option 3 : Liste blanche d'emails
-  // const b2bEmails = ['admin@mishki.com', ...];
-  // return b2bEmails.includes(email) ? 'b2b' : 'b2c';
-}
+// L'utilisateur choisit son type de compte
+const user = {
+  email: "contact@spa.fr",
+  role: "b2b", // Défini selon le formulaire d'inscription
+  // ... autres champs
+};
+await db.users.create(user);
+```
+
+### Lors de la connexion
+```typescript
+// L'API retourne l'utilisateur avec son rôle
+const user = await api.login(email, password);
+// user.role provient de la base de données
+// Redirection automatique selon user.role
 ```
 
 ---

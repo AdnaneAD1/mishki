@@ -5,4 +5,4 @@ export * from './types/auth';
 export { LoginForm } from './components/auth/LoginForm';
 
 // Utils
-export { getUserRole, getRedirectUrl } from './utils/auth';
+export { getRedirectUrl } from './utils/auth';

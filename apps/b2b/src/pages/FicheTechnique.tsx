@@ -102,8 +102,11 @@ const mockFiche = {
 };
 
 export default function FicheTechnique() {
-  const { id } = useParams();
+  const params = useParams();
   const router = useRouter();
+  
+  // Vérifier si params existe (évite les erreurs lors du build)
+  const id = params?.id;
 
   // Mock data - in production, fetch from API
   const fiche = mockFiche;
@@ -258,4 +261,9 @@ export default function FicheTechnique() {
       </div>
     </div>
   );
+}
+
+// Force SSR pour éviter les erreurs de build avec useParams
+export async function getServerSideProps() {
+  return { props: {} };
 }

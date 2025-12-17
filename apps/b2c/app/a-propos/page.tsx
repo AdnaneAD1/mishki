@@ -28,7 +28,7 @@ const values = [
   }
 ]
 
-export default function AboutPage() {
+export default function AboutPage(): React.JSX.Element {
   return (
     <>
       <Header />

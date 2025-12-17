@@ -5,19 +5,25 @@ import { LoginForm } from '@mishki/shared';
 
 export default function LoginPage() {
   const handleLogin = async (email: string, password: string) => {
-    // Logique de connexion universelle
+    // En production : appel API qui retourne l'utilisateur avec son rôle depuis la BDD
+    // Exemple : const user = await api.login(email, password);
+    
     console.log('Login:', email);
     
-    // Mock user pour démo
+    // Mock user pour démo - simule une réponse de l'API
+    // En réalité, le rôle vient de la base de données, pas de l'email
     const mockUser = {
       id: '1',
       email,
-      role: email.includes('spa') || email.includes('pro') ? 'b2b' as const : 'b2c' as const,
+      nom: 'Dupont',
+      prenom: 'Jean',
+      role: 'b2c' as const, // Rôle stocké en BDD lors de l'inscription
     };
     
     localStorage.setItem('user', JSON.stringify(mockUser));
     
-    // La redirection automatique se fera selon le rôle
+    // Retourne l'utilisateur avec son rôle pour la redirection
+    return mockUser;
   };
 
   return (

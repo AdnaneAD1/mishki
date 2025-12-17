@@ -389,3 +389,8 @@ export default function DemandeDevis() {
     </div>
   );
 }
+
+// Force SSR pour éviter les erreurs de build
+export async function getServerSideProps() {
+  return { props: {} };
+}

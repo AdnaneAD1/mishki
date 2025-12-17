@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Lock, Mail, AlertCircle } from 'lucide-react';
 import type { LoginProps } from '../../types/auth';
-import { getUserRole, getRedirectUrl } from '../../utils/auth';
+import { getRedirectUrl } from '../../utils/auth';
 
 export function LoginForm({
   onLogin,
@@ -33,18 +33,16 @@ export function LoginForm({
     setIsLoading(true);
 
     try {
-      await onLogin(email, password);
+      // onLogin retourne maintenant l'utilisateur avec son rôle depuis la BDD
+      const user = await onLogin(email, password);
       
-      // Déterminer le rôle de l'utilisateur
-      const userRole = getUserRole(email);
-      
-      // Obtenir l'URL de redirection appropriée
+      // Obtenir l'URL de redirection basée sur le rôle stocké en BDD
       const currentDomain = window.location.hostname;
-      const targetUrl = redirectUrl || getRedirectUrl(userRole, currentDomain);
+      const targetUrl = redirectUrl || getRedirectUrl(user.role, currentDomain);
       
-      console.log(`Redirection utilisateur ${userRole} vers:`, targetUrl);
+      console.log(`Redirection utilisateur ${user.role} (${user.email}) vers:`, targetUrl);
       
-      // Redirection
+      // Redirection vers le dashboard approprié
       window.location.href = targetUrl;
     } catch (err) {
       console.error('Erreur de connexion:', err);

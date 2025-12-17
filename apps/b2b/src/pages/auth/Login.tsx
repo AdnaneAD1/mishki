@@ -20,3 +20,8 @@ export default function Login() {
     />
   );
 }
+
+// Force SSR pour éviter les erreurs de build avec useAuth
+export async function getServerSideProps() {
+  return { props: {} };
+}

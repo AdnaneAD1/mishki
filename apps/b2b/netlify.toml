@@ -1,0 +1,14 @@
+# Configuration B2B pour Netlify avec SSR
+[build]
+  command = "cd ../.. && npm install && npm run build:b2b"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "18"
+  
+# Configuration spécifique pour Next.js avec SSR
+[functions]
+  node_bundler = "esbuild"

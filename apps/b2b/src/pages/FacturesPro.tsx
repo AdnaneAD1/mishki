@@ -343,3 +343,8 @@ export default function FacturesPro() {
     </div>
   );
 }
+
+// Force SSR pour éviter les erreurs de build
+export async function getServerSideProps() {
+  return { props: {} };
+}

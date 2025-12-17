@@ -448,3 +448,8 @@ export default function CataloguePro() {
     </div>
   );
 }
+
+// Force SSR pour éviter les erreurs de build avec useCart/useAuth
+export async function getServerSideProps() {
+  return { props: {} };
+}

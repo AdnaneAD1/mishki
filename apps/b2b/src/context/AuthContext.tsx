@@ -11,11 +11,12 @@ interface User {
   siret: string;
   validated: boolean;
   remise: number;
+  role: 'b2b'; // Utilisateurs B2B ont toujours le rôle 'b2b'
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   logout: () => void;
   register: (data: any, kbisFile?: File | null, pieceIdentiteFile?: File | null) => Promise<void>;
   isLoading: boolean;
@@ -46,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     console.log('AuthContext: Début du login pour', email);
     // Mock login - in production, use real API
+    // En production : l'API retournera l'utilisateur avec son rôle depuis la BDD
     const mockUser: User = {
       id: '1',
       email,
@@ -55,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       siret: '12345678900012',
       validated: true,
       remise: 15,
+      role: 'b2b', // Rôle récupéré depuis la BDD
     };
     
     console.log('AuthContext: Setting user', mockUser);

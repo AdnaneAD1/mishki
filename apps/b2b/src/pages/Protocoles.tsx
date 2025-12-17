@@ -259,3 +259,8 @@ export default function Protocoles() {
     </div>
   );
 }
+
+// Force SSR pour éviter les erreurs de build
+export async function getServerSideProps() {
+  return { props: {} };
+}
