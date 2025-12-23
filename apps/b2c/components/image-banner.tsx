@@ -4,7 +4,7 @@ export function ImageBanner() {
   return (
     <section className="relative w-full h-[400px] md:h-[500px] overflow-hidden">
       <Image
-        src="/teint-produit copy.jpg"
+        src="/b2c/teint-produit copy.jpg"
         alt="Mishki Beauty"
         fill
         className="object-cover"

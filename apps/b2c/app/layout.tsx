@@ -1,9 +1,12 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display, Caveat } from 'next/font/google';
-import { CartProvider } from '@/lib/cart-context';
+import { CartProvider } from '@/apps/b2c/lib/cart-context';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages, getLocale } from 'next-intl/server';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   fallback: ['system-ui', 'arial']
@@ -27,17 +30,23 @@ export const metadata: Metadata = {
   description: 'Révélez une beauté pure et précieuse avec Mishki, soins d\'exception issus de la biodiversité péruvienne.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="fr">
+    <html lang={locale}>
       <body className={`${inter.className} ${playfair.variable} ${caveat.variable}`}>
-        <CartProvider>
-          {children}
-        </CartProvider>
+        <NextIntlClientProvider messages={messages}>
+          <CartProvider>
+            {children}
+            <LanguageSwitcher />
+          </CartProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

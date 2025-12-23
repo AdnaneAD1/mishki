@@ -2,15 +2,49 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { ShoppingBag } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
-import { NewsletterSection } from '@/components/newsletter-section'
-import { useCart } from '@/lib/cart-context'
+import { ShoppingBag, Plus, Minus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { onAuthStateChanged } from 'firebase/auth'
+import { Button } from '@/apps/b2c/components/ui/button'
+import { Header } from '@/apps/b2c/components/header'
+import { Footer } from '@/apps/b2c/components/footer'
+import { NewsletterSection } from '@/apps/b2c/components/newsletter-section'
+import { useCart } from '@/apps/b2c/lib/cart-context'
+import { auth } from '@mishki/firebase'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
 
 export default function CartPage() {
-  const { items, removeFromCart, clearCart } = useCart()
+  const { items, removeFromCart, prepareCheckout, updateQuantity } = useCart()
+  const t = useTranslations('b2c.cart')
+  const locale = useLocale()
+  const router = useRouter()
+  const [isAuth, setIsAuth] = useState(false)
+
+  const formatMoney = useMemo(
+    () =>
+      new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: 'EUR',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    [locale]
+  )
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => setIsAuth(Boolean(user)))
+    return () => unsub()
+  }, [])
+
+  const goToCheckout = (selection = items) => {
+    prepareCheckout(selection)
+    if (!isAuth) {
+      router.push('/login?redirect=/paiement')
+      return
+    }
+    router.push('/paiement')
+  }
 
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
@@ -22,8 +56,8 @@ export default function CartPage() {
           <div className="mb-10">
             <Link href="/produits" className="inline-flex items-center gap-2 mb-8 hover:opacity-80 transition-opacity">
               <Image
-                src="/akar-icons_arrow-back.svg"
-                alt="Retour"
+                src="/b2c/akar-icons_arrow-back.svg"
+                alt={t('back')}
                 width={32}
                 height={32}
               />
@@ -38,7 +72,7 @@ export default function CartPage() {
                   fontWeight: 400,
                 }}
               >
-                Mon panier
+                {t('title')}
               </h2>
             </div>
             <div className="w-full h-[1px] bg-[#235730] mt-2"></div>
@@ -61,8 +95,31 @@ export default function CartPage() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-[#2d2d2d]">{item.name}</h3>
-                    <p className="text-[#235730] font-bold">{item.price} EUR</p>
-                    <p className="text-sm text-gray-500">Quantite: {item.quantity}</p>
+                    <p className="text-[#235730] font-bold">{formatMoney.format(item.price)}</p>
+                    <div className="mt-2 flex items-center gap-3">
+                      <div className="flex items-center border border-gray-200 rounded-sm overflow-hidden">
+                        <button
+                          type="button"
+                          onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                          className="px-3 py-2 text-[#235730] hover:bg-[#235730]/10"
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        <span className="px-4 py-2 text-center min-w-[3rem] text-sm text-[#2d2d2d]">
+                          {item.quantity}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          className="px-3 py-2 text-[#235730] hover:bg-[#235730]/10"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <p className="text-sm text-gray-500">
+                        {t('quantity')}
+                      </p>
+                    </div>
                   </div>
                   <div className="flex items-center gap-3 w-full sm:w-auto">
                     <Button
@@ -70,13 +127,14 @@ export default function CartPage() {
                       className="border-[#8B2323] text-[#8B2323] hover:bg-[#8B2323] hover:text-white rounded-sm text-sm px-4 flex-1 sm:flex-initial"
                       onClick={() => removeFromCart(item.id)}
                     >
-                      Retirer du panier
+                      {t('remove')}
                     </Button>
-                    <Link href="/paiement" className="flex-1 sm:flex-initial">
-                      <Button className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm text-sm px-6 w-full">
-                        Acheter
-                      </Button>
-                    </Link>
+                    <Button
+                      onClick={() => goToCheckout([item])}
+                      className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm text-sm px-6 w-full"
+                    >
+                      {t('buy')}
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -85,21 +143,22 @@ export default function CartPage() {
             {items.length > 0 ? (
               <div className="text-center space-y-4">
                 <p className="text-lg font-bold text-[#2d2d2d]">
-                  TOTAL: {total} EUR
+                  {t('total')}: {formatMoney.format(total)}
                 </p>
-                <Link href="/paiement">
-                  <Button className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm text-base px-8 py-3 h-auto">
-                    <ShoppingBag className="w-5 h-5 mr-2" />
-                    Valider mon panier
-                  </Button>
-                </Link>
+                <Button
+                  onClick={() => goToCheckout(items)}
+                  className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm text-base px-8 py-3 h-auto"
+                >
+                  <ShoppingBag className="w-5 h-5 mr-2" />
+                  {t('checkout')}
+                </Button>
               </div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-gray-500 mb-4">Votre panier est vide</p>
+                <p className="text-gray-500 mb-4">{t('empty')}</p>
                 <Link href="/produits">
                   <Button className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm">
-                    Decouvrir nos produits
+                    {t('discover')}
                   </Button>
                 </Link>
               </div>

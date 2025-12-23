@@ -3,97 +3,79 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ShoppingCart, ZoomIn } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useState } from 'react'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
-import { NewsletterSection } from '@/components/newsletter-section'
-import { useCart } from '@/lib/cart-context'
-
-const categories = ['Tous', 'Soins du visage', 'Soins du corps', 'Soins du cheveu']
-
-const products = [
-  {
-    id: 1,
-    name: 'Gommage corps',
-    category: 'Soins du corps',
-    price: 24,
-    description: 'Exfoliant naturel pour une peau douce et eclatante',
-    image: '/produit-1.png'
-  },
-  {
-    id: 2,
-    name: 'Savon exfoliant',
-    category: 'Soins du corps',
-    price: 12,
-    description: 'Nettoie en profondeur tout en exfoliant delicatement',
-    image: '/produit-2.png'
-  },
-  {
-    id: 3,
-    name: 'Huile de beaute',
-    category: 'Soins du visage',
-    price: 24,
-    description: 'Nourrit et hydrate intensement votre peau',
-    image: '/produit-3.png'
-  },
-  {
-    id: 4,
-    name: 'Lotion de definition',
-    category: 'Soins du cheveu',
-    price: 22,
-    description: 'Definit et sublime vos boucles naturelles',
-    image: '/produit-4.png'
-  },
-  {
-    id: 5,
-    name: 'Creme hydratante',
-    category: 'Soins du visage',
-    price: 28,
-    description: 'Hydratation longue duree pour tous types de peaux',
-    image: '/produit-1.png'
-  },
-  {
-    id: 6,
-    name: 'Creme reparatrice',
-    category: 'Soins du corps',
-    price: 24,
-    description: 'Repare et apaise les peaux seches et abimees',
-    image: '/produit-2.png'
-  },
-  {
-    id: 7,
-    name: 'Eau de toilette',
-    category: 'Soins du visage',
-    price: 16,
-    description: 'Rafraichit et tonifie votre peau en douceur',
-    image: '/produit-3.png'
-  },
-  {
-    id: 8,
-    name: 'Masque en poudre',
-    category: 'Soins du visage',
-    price: 20,
-    description: 'Purifie et revitalise votre peau naturellement',
-    image: '/produit-4.png'
-  }
-]
+import { Button } from '@/apps/b2c/components/ui/button'
+import { Input } from '@/apps/b2c/components/ui/input'
+import { useMemo, useState } from 'react'
+import { Header } from '@/apps/b2c/components/header'
+import { Footer } from '@/apps/b2c/components/footer'
+import { NewsletterSection } from '@/apps/b2c/components/newsletter-section'
+import { useCart } from '@/apps/b2c/lib/cart-context'
+import { useLocale, useTranslations } from 'next-intl'
+import { useProducts } from '@/apps/b2c/hooks/useProducts'
 
 export default function ProduitsPage() {
+  const t = useTranslations('b2c.shop')
+  const locale = useLocale()
   const [selectedCategory, setSelectedCategory] = useState('Tous')
+  const [activeProduct, setActiveProduct] = useState<string | null>(null)
+  const [quantity, setQuantity] = useState(1)
+  const minQty = 1
   const { addToCart } = useCart()
+  const { products, loading, error } = useProducts()
+
+  const formatMoney = useMemo(
+    () =>
+      new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: 'EUR',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    [locale]
+  )
+
+  const categories = useMemo(() => {
+    const map = new Map<string, string>()
+    products.forEach((p) => {
+      if (p.category) {
+        const label = p.categoryLabel || p.category
+        if (!map.has(p.category)) map.set(p.category, label)
+      }
+    })
+    return [{ value: 'Tous', label: t('categories.all') }, ...Array.from(map.entries()).map(([value, label]) => ({ value, label }))]
+  }, [products, t])
 
   const filteredProducts = selectedCategory === 'Tous'
     ? products
     : products.filter(product => product.category === selectedCategory)
 
-  const handleAddToCart = (product: typeof products[0]) => {
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-    })
+  const openQuantityPicker = (slug: string) => {
+    setActiveProduct(slug)
+    setQuantity(minQty)
+  }
+
+  const handleQuantityChange = (value: string) => {
+    const parsed = parseInt(value, 10)
+    setQuantity(Number.isNaN(parsed) ? minQty : parsed)
+  }
+
+  const handleConfirm = (product: typeof products[number]) => {
+    const qty = Math.max(minQty, quantity || minQty)
+    addToCart(
+      {
+        id: product.slug,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+      },
+      qty
+    )
+    setActiveProduct(null)
+  }
+
+  const handleCancel = () => {
+    setActiveProduct(null)
+    setQuantity(minQty)
   }
 
   return (
@@ -102,8 +84,8 @@ export default function ProduitsPage() {
       <div className="min-h-screen">
         <div className="relative h-[300px] md:h-[400px] w-full pt-16 md:pt-20">
           <Image
-            src="/hero-produits.png"
-            alt="Nos produits"
+            src="/b2c/hero-produits.png"
+            alt={t('title')}
             fill
             className="object-cover"
             priority
@@ -111,19 +93,11 @@ export default function ProduitsPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#235730]/80 to-transparent" />
           <div className="absolute inset-0 flex items-center">
             <div className="container mx-auto px-6">
-              {/* <Image
-                src="/mishkilogo_w_2.png"
-                alt="Mishki"
-                width={150}
-                height={75}
-                className="mb-4 drop-shadow-lg"
-                style={{ filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.5))' }}
-              /> */}
               <h1 className="text-white text-4xl md:text-6xl" style={{ fontFamily: 'var(--font-caveat)' }}>
-                Nos Produits
+                {t('title')}
               </h1>
               <p className="text-white/90 mt-4 max-w-xl">
-                Decouvrez nos soins naturels issus de la biodiversite peruvienne
+                {t('subtitle')}
               </p>
             </div>
           </div>
@@ -134,8 +108,8 @@ export default function ProduitsPage() {
             <div className="mb-10">
               <Link href="/" className="inline-flex items-center gap-2 mb-8 hover:opacity-80 transition-opacity">
                 <Image
-                  src="/akar-icons_arrow-back.svg"
-                  alt="Retour"
+                  src="/b2c/akar-icons_arrow-back.svg"
+                  alt={t('back')}
                   width={32}
                   height={32}
                 />
@@ -148,35 +122,40 @@ export default function ProduitsPage() {
                   fontWeight: 400,
                 }}
               >
-                Categories
+                {t('categories_heading')}
               </h2>
               <div className="w-full h-[1px] bg-[#235730]"></div>
             </div>
 
             <div className="flex flex-wrap gap-3 mb-8">
-              {categories.map((category) => (
+              {categories.map((cat) => (
                 <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-6 py-2 text-sm transition-all rounded-sm ${
-                    selectedCategory === category
-                      ? 'bg-[#235730] text-white'
-                      : 'bg-white text-[#235730] border border-[#235730] hover:bg-[#235730] hover:text-white'
-                  }`}
+                  key={cat.value}
+                  onClick={() => setSelectedCategory(cat.value)}
+                  className={`px-6 py-2 text-sm transition-all rounded-sm ${selectedCategory === cat.value
+                    ? 'bg-[#235730] text-white'
+                    : 'bg-white text-[#235730] border border-[#235730] hover:bg-[#235730] hover:text-white'
+                    }`}
                 >
-                  {category}
+                  {cat.label}
                 </button>
               ))}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {filteredProducts.map((product) => (
+            {loading && (
+              <p className="text-gray-500">{t('loading') || 'Chargement...'}</p>
+            )}
+            {error && (
+              <p className="text-red-600 text-sm">Erreur : {error}</p>
+            )}
+            {!loading && !error && filteredProducts.map((product) => (
               <div
-                key={product.id}
+                key={product.slug}
                 className="bg-transparent"
               >
-                <Link href={`/produits/${product.id}`}>
+                <Link href={`/produits/${product.slug}`}>
                   <div className="relative h-72 mb-4 cursor-pointer group">
                     <Image
                       src={product.image}
@@ -192,21 +171,66 @@ export default function ProduitsPage() {
                   </div>
                 </Link>
                 <div className="space-y-3">
-                  <Link href={`/produits/${product.id}`}>
+                  <Link href={`/produits/${product.slug}`}>
                     <h3 className="font-semibold text-base text-[#2d2d2d] hover:text-[#235730] transition-colors cursor-pointer">
                       {product.name}
                     </h3>
                   </Link>
-                  <p className="text-xs text-[#2d2d2d] leading-relaxed">
-                    {product.description}
+                  <p className="text-xs text-[#2d2d2d] leading-relaxed line-clamp-2">
+                    {product.desc}
                   </p>
-                  <Button
-                    onClick={() => handleAddToCart(product)}
-                    className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm text-sm px-6 py-2 h-auto"
-                  >
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    Ajouter au panier
-                  </Button>
+                  <p className="text-[#235730] font-semibold">{formatMoney.format(product.price)}</p>
+                  {activeProduct === product.slug ? (
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                      <div className="flex items-center w-full max-w-[180px] border border-[#235730]/40 rounded-sm overflow-hidden mx-auto">
+                        <button
+                          type="button"
+                          onClick={() => setQuantity((q) => Math.max(minQty, (q || minQty) - 1))}
+                          className="px-2.5 py-2 text-[#235730] hover:bg-[#235730]/10"
+                        >
+                          -
+                        </button>
+                        <Input
+                          type="number"
+                          min={minQty}
+                          value={quantity}
+                          onChange={(e) => handleQuantityChange(e.target.value)}
+                          className="h-10 text-center border-0 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setQuantity((q) => Math.max(minQty, (q || minQty) + 1))}
+                          className="px-2.5 py-2 text-[#235730] hover:bg-[#235730]/10"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => handleConfirm(product)}
+                          className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm text-xs px-3 py-2 h-auto"
+                        >
+                          <ShoppingCart className="w-4 h-4 mr-2" />
+                          {t('add_to_cart')}
+                        </Button>
+                        <Button
+                          onClick={handleCancel}
+                          variant="secondary"
+                          className="bg-white text-[#235730] border border-[#235730] hover:bg-[#235730] hover:text-white rounded-sm text-xs px-3 py-2 h-auto"
+                        >
+                          {t('cancel') ?? 'Annuler'}
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <Button
+                      onClick={() => openQuantityPicker(product.slug)}
+                      className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm text-sm px-6 py-2 h-auto"
+                    >
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      {t('add_to_cart')}
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}

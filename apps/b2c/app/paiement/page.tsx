@@ -3,28 +3,38 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { CreditCard, Check, Info } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useState } from 'react'
-import { Header } from '@/components/header'
-import { Footer } from '@/components/footer'
-import { NewsletterSection } from '@/components/newsletter-section'
+import { Button } from '@/apps/b2c/components/ui/button'
+import { Input } from '@/apps/b2c/components/ui/input'
+import { Label } from '@/apps/b2c/components/ui/label'
+import { useMemo, useState } from 'react'
+import { Header } from '@/apps/b2c/components/header'
+import { Footer } from '@/apps/b2c/components/footer'
+import { NewsletterSection } from '@/apps/b2c/components/newsletter-section'
+import { useCart } from '@/apps/b2c/lib/cart-context'
+import { useTranslations } from 'next-intl'
+import { useLocale } from 'next-intl'
 
-type Step = 'compte' | 'livraison' | 'paiement'
+type Step = 'livraison' | 'paiement'
 
 export default function PaymentPage() {
-  const [currentStep, setCurrentStep] = useState<Step>('compte')
+  const t = useTranslations('b2c.payment')
+  const locale = useLocale()
+  const { items, checkoutItems } = useCart()
+  const selectedItems = checkoutItems.length > 0 ? checkoutItems : items
+  const [currentStep, setCurrentStep] = useState<Step>('livraison')
   const [showConfirmation, setShowConfirmation] = useState(false)
+  const [addressMode, setAddressMode] = useState<'saved' | 'new'>('saved')
+  const [selectedSavedAddress, setSelectedSavedAddress] = useState('123 , Electric avenue')
+  const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal'>('card')
+  const [deliveryError, setDeliveryError] = useState('')
+  const [paymentError, setPaymentError] = useState('')
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
     address: '',
     phone: '',
     city: '',
     postalCode: '',
-    deliveryType: 'Point relais',
+    deliveryType: t('sections.delivery.types.relay'),
     cardName: '',
     cardNumber: '',
     expMonth: '',
@@ -32,18 +42,58 @@ export default function PaymentPage() {
     cvc: '',
   })
 
+  const formatMoney = useMemo(
+    () =>
+      new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: 'EUR',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    [locale]
+  )
+
+  const cartTotal = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+
   const updateFormData = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
+  const validateDelivery = () => {
+    const missing: string[] = []
+    if (!formData.phone.trim()) missing.push('phone')
+    if (!formData.deliveryType.trim()) missing.push('deliveryType')
+    if (addressMode === 'new') {
+      if (!formData.address.trim()) missing.push('address')
+      if (!formData.city.trim()) missing.push('city')
+      if (!formData.postalCode.trim()) missing.push('postalCode')
+    }
+    const hasError = missing.length > 0
+    setDeliveryError(hasError ? 'Merci de remplir les champs requis de livraison.' : '')
+    return !hasError
+  }
+
+  const validatePayment = () => {
+    const missing: string[] = []
+    if (paymentMethod === 'card') {
+      if (!formData.cardName.trim()) missing.push('cardName')
+      if (!formData.cardNumber.trim()) missing.push('cardNumber')
+      if (!formData.expMonth.trim()) missing.push('expMonth')
+      if (!formData.expYear.trim()) missing.push('expYear')
+      if (!formData.cvc.trim()) missing.push('cvc')
+    }
+    const hasError = missing.length > 0
+    setPaymentError(hasError ? 'Merci de remplir les champs requis de paiement.' : '')
+    return !hasError
+  }
+
   const steps: { key: Step; label: string }[] = [
-    { key: 'compte', label: 'Compte' },
-    { key: 'livraison', label: 'Livraison' },
-    { key: 'paiement', label: 'Paiement' },
+    { key: 'livraison', label: t('steps.livraison') },
+    { key: 'paiement', label: t('steps.paiement') },
   ]
 
   const getStepStatus = (stepKey: Step) => {
-    const stepOrder: Step[] = ['compte', 'livraison', 'paiement']
+    const stepOrder: Step[] = ['livraison', 'paiement']
     const currentIndex = stepOrder.indexOf(currentStep)
     const stepIndex = stepOrder.indexOf(stepKey)
 
@@ -53,6 +103,7 @@ export default function PaymentPage() {
   }
 
   const handleValidate = () => {
+    if (!validatePayment()) return
     setShowConfirmation(true)
   }
 
@@ -70,7 +121,7 @@ export default function PaymentPage() {
                 fontWeight: 400,
               }}
             >
-              Commande en<br />cours de validation
+              {t('confirmation.title')}
             </h2>
             <div className="w-24 h-24 mx-auto bg-[#235730] rounded-full flex items-center justify-center" style={{ clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' }}>
               <div className="w-20 h-20 bg-[#235730] rounded-full flex items-center justify-center">
@@ -80,7 +131,7 @@ export default function PaymentPage() {
             <div className="mt-8">
               <Link href="/">
                 <Button className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm px-8">
-                  Retour à l'accueil
+                  {t('confirmation.btn_home')}
                 </Button>
               </Link>
             </div>
@@ -99,8 +150,8 @@ export default function PaymentPage() {
           <div className="mb-10">
             <Link href="/panier" className="inline-flex items-center gap-2 mb-8 hover:opacity-80 transition-opacity">
               <Image
-                src="/akar-icons_arrow-back.svg"
-                alt="Retour"
+                src="/b2c/akar-icons_arrow-back.svg"
+                alt={t('back')}
                 width={32}
                 height={32}
               />
@@ -115,7 +166,7 @@ export default function PaymentPage() {
                   fontWeight: 400,
                 }}
               >
-                Payement
+                {t('title')}
               </h2>
             </div>
             <div className="w-full h-[1px] bg-[#235730] mt-2"></div>
@@ -146,159 +197,153 @@ export default function PaymentPage() {
                 ))}
               </div>
 
-              {currentStep === 'compte' && (
-                <div className="space-y-6">
-                  <h3 className="text-lg font-medium text-[#2d2d2d]">Informations de compte</h3>
-
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="email" className="text-sm text-gray-500">Email address</Label>
-                      <div className="relative">
-                        <Input
-                          id="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) => updateFormData('email', e.target.value)}
-                          placeholder="Email@myemail.com"
-                          className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
-                        />
-                        {formData.email && (
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#235730] rounded-full flex items-center justify-center">
-                            <Check className="w-3 h-3 text-white" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="password" className="text-sm text-gray-500">Password</Label>
-                      <div className="relative">
-                        <Input
-                          id="password"
-                          type="password"
-                          value={formData.password}
-                          onChange={(e) => updateFormData('password', e.target.value)}
-                          placeholder="********"
-                          className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
-                        />
-                        {formData.password && (
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#235730] rounded-full flex items-center justify-center">
-                            <Check className="w-3 h-3 text-white" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-center gap-4 pt-4">
-                    <button className="text-sm text-gray-500 hover:text-[#235730] underline">
-                      Inscription
-                    </button>
-                    <Button className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm px-8">
-                      Connexion
-                    </Button>
-                  </div>
-
-                  <div className="flex items-center justify-center gap-4 pt-8 border-t border-gray-200">
-                    <button className="text-sm text-gray-500 hover:text-[#235730]">
-                      Annuler
-                    </button>
-                    <Button
-                      onClick={() => setCurrentStep('livraison')}
-                      className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm px-6"
-                    >
-                      Informations<br />de livraisons
-                    </Button>
-                  </div>
+              <div className="mb-6 border border-gray-200 rounded-lg p-4 bg-gray-50">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-semibold text-[#2d2d2d]">Résumé de commande</span>
+                  <span className="text-sm text-gray-500">{selectedItems.length} article{selectedItems.length > 1 ? 's' : ''}</span>
                 </div>
-              )}
+                {selectedItems.length === 0 ? (
+                  <p className="text-sm text-gray-500">Votre panier est vide. <Link href="/produits" className="text-[#235730] hover:underline">Retour boutique</Link></p>
+                ) : (
+                  <div className="space-y-2">
+                    {selectedItems.map((item) => (
+                      <div key={item.id} className="flex justify-between text-sm text-gray-700">
+                        <span className="flex-1 pr-3 truncate">
+                          {item.name} × {item.quantity}
+                        </span>
+                        <span className="font-semibold text-[#2d2d2d]">
+                          {formatMoney.format(item.price * item.quantity)}
+                        </span>
+                      </div>
+                    ))}
+                    <div className="pt-3 mt-3 border-t border-gray-200 flex justify-between text-sm font-semibold text-[#2d2d2d]">
+                      <span>Total</span>
+                      <span>{formatMoney.format(cartTotal)}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {currentStep === 'livraison' && (
                 <div className="space-y-6">
-                  <h3 className="text-lg font-medium text-[#2d2d2d]">Informations de livraisons</h3>
+                  <h3 className="text-lg font-medium text-[#2d2d2d]">{t('sections.delivery.title')}</h3>
 
                   <div className="space-y-4">
-                    <div>
-                      <Label className="text-sm text-gray-500">Utiliser l'adresse sauvegarder</Label>
-                      <select className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-[#235730] focus:ring-[#235730]">
-                        <option>123 , Electric avenue</option>
-                      </select>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="radio"
+                        id="addr_saved"
+                        checked={addressMode === 'saved'}
+                        onChange={() => setAddressMode('saved')}
+                        className="w-4 h-4 text-[#235730] focus:ring-[#235730]"
+                      />
+                      <Label htmlFor="addr_saved" className="text-sm text-gray-700">
+                        {t('sections.delivery.use_saved')}
+                      </Label>
+                    </div>
+                    <select
+                      disabled={addressMode !== 'saved'}
+                      value={selectedSavedAddress}
+                      onChange={(e) => setSelectedSavedAddress(e.target.value)}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-[#235730] focus:ring-[#235730] disabled:bg-gray-50 disabled:text-gray-400"
+                    >
+                      <option>123 , Electric avenue</option>
+                      <option>45 Rue des Fleurs, Paris</option>
+                    </select>
+
+                    <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
+                      <input
+                        type="radio"
+                        id="addr_new"
+                        checked={addressMode === 'new'}
+                        onChange={() => setAddressMode('new')}
+                        className="w-4 h-4 text-[#235730] focus:ring-[#235730]"
+                      />
+                      <Label htmlFor="addr_new" className="text-sm text-gray-700">
+                        {t('sections.delivery.address_label')}
+                      </Label>
                     </div>
 
-                    <div>
-                      <Label htmlFor="address" className="text-sm text-gray-500">Adresse</Label>
-                      <div className="relative">
-                        <Input
-                          id="address"
-                          value={formData.address}
-                          onChange={(e) => updateFormData('address', e.target.value)}
-                          placeholder="123"
-                          className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
-                        />
-                        {formData.address && (
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#235730] rounded-full flex items-center justify-center">
-                            <Check className="w-3 h-3 text-white" />
+                    {addressMode === 'new' && (
+                      <>
+                        <div>
+                          <Label htmlFor="address" className="text-sm text-gray-500">{t('sections.delivery.address_label')}</Label>
+                          <div className="relative">
+                            <Input
+                              id="address"
+                              value={formData.address}
+                              onChange={(e) => updateFormData('address', e.target.value)}
+                              placeholder={t('sections.delivery.address_placeholder')}
+                              className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
+                            />
+                            {formData.address && (
+                              <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#235730] rounded-full flex items-center justify-center">
+                                <Check className="w-3 h-3 text-white" />
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    </div>
+                        </div>
 
-                    <div>
-                      <Label htmlFor="phone" className="text-sm text-gray-500">Numéro de téléphone</Label>
-                      <div className="relative">
-                        <Input
-                          id="phone"
-                          value={formData.phone}
-                          onChange={(e) => updateFormData('phone', e.target.value)}
-                          placeholder="+33XXXXXXX"
-                          className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
-                        />
-                        {formData.phone && (
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#235730] rounded-full flex items-center justify-center">
-                            <Check className="w-3 h-3 text-white" />
+                        <div>
+                          <Label htmlFor="city" className="text-sm text-gray-500">{t('sections.delivery.city_label')}</Label>
+                          <div className="relative">
+                            <Input
+                              id="city"
+                              value={formData.city}
+                              onChange={(e) => updateFormData('city', e.target.value)}
+                              placeholder={t('sections.delivery.city_placeholder')}
+                              className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
+                            />
+                            {formData.city && (
+                              <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#235730] rounded-full flex items-center justify-center">
+                                <Check className="w-3 h-3 text-white" />
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    </div>
+                        </div>
 
-                    <div>
-                      <Label htmlFor="city" className="text-sm text-gray-500">Ville</Label>
-                      <div className="relative">
-                        <Input
-                          id="city"
-                          value={formData.city}
-                          onChange={(e) => updateFormData('city', e.target.value)}
-                          placeholder="Electric avenue"
-                          className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
-                        />
-                        {formData.city && (
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#235730] rounded-full flex items-center justify-center">
-                            <Check className="w-3 h-3 text-white" />
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="postalCode" className="text-sm text-gray-500">{t('sections.delivery.zip_label')}</Label>
+                            <Input
+                              id="postalCode"
+                              value={formData.postalCode}
+                              onChange={(e) => updateFormData('postalCode', e.target.value)}
+                              placeholder={t('sections.delivery.zip_placeholder')}
+                              className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
+                            />
                           </div>
-                        )}
-                      </div>
-                    </div>
+                        </div>
+                      </>
+                    )}
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="postalCode" className="text-sm text-gray-500">Code postal</Label>
-                        <Input
-                          id="postalCode"
-                          value={formData.postalCode}
-                          onChange={(e) => updateFormData('postalCode', e.target.value)}
-                          placeholder="ABC - 123"
-                          className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
-                        />
+                        <Label htmlFor="phone" className="text-sm text-gray-500">{t('sections.delivery.phone_label')}</Label>
+                        <div className="relative">
+                          <Input
+                            id="phone"
+                            value={formData.phone}
+                            onChange={(e) => updateFormData('phone', e.target.value)}
+                            placeholder={t('sections.delivery.phone_placeholder')}
+                            className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
+                          />
+                          {formData.phone && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#235730] rounded-full flex items-center justify-center">
+                              <Check className="w-3 h-3 text-white" />
+                            </div>
+                          )}
+                        </div>
                       </div>
                       <div>
-                        <Label className="text-sm text-gray-500">Type de livraison</Label>
+                        <Label className="text-sm text-gray-500">{t('sections.delivery.type_label')}</Label>
                         <select
                           value={formData.deliveryType}
                           onChange={(e) => updateFormData('deliveryType', e.target.value)}
                           className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-[#235730] focus:ring-[#235730]"
                         >
-                          <option>Point relais</option>
-                          <option>Domicile</option>
+                          <option value={t('sections.delivery.types.relay')}>{t('sections.delivery.types.relay')}</option>
+                          <option value={t('sections.delivery.types.home')}>{t('sections.delivery.types.home')}</option>
                         </select>
                       </div>
                     </div>
@@ -306,93 +351,164 @@ export default function PaymentPage() {
 
                   <div className="flex items-center justify-center gap-4 pt-8">
                     <button
-                      onClick={() => setCurrentStep('compte')}
+                      onClick={() => window.location.href = '/panier'}
                       className="text-sm text-gray-500 hover:text-[#235730]"
                     >
-                      Annuler
+                      {t('sections.delivery.cancel')}
                     </button>
                     <Button
-                      onClick={() => setCurrentStep('paiement')}
+                      onClick={() => {
+                        if (validateDelivery()) {
+                          setCurrentStep('paiement')
+                        }
+                      }}
                       className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm px-8"
                     >
-                      Payer
+                      {t('sections.delivery.next')}
                     </Button>
                   </div>
+                  {deliveryError && (
+                    <p className="text-red-600 text-sm text-center pt-2">{deliveryError}</p>
+                  )}
                 </div>
               )}
 
               {currentStep === 'paiement' && (
                 <div className="space-y-6">
-                  <h3 className="text-lg font-medium text-[#2d2d2d]">Infos de paiement</h3>
+                  <h3 className="text-lg font-medium text-[#2d2d2d]">{t('sections.payment.title')}</h3>
 
                   <div className="space-y-4">
-                    <div>
-                      <Label className="text-sm text-gray-500">Utiliser votre carte enregistrer</Label>
-                      <select className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-[#235730] focus:ring-[#235730]">
-                        <option>Mastercard ending 234</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="cardName" className="text-sm text-gray-500">Nom sur la carte</Label>
-                      <div className="relative">
-                        <Input
-                          id="cardName"
-                          value={formData.cardName}
-                          onChange={(e) => updateFormData('cardName', e.target.value)}
-                          placeholder="John Smith"
-                          className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
-                        />
-                        {formData.cardName && (
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#235730] rounded-full flex items-center justify-center">
-                            <Check className="w-3 h-3 text-white" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="cardNumber" className="text-sm text-gray-500">Numéro de carte</Label>
-                      <Input
-                        id="cardNumber"
-                        value={formData.cardNumber}
-                        onChange={(e) => updateFormData('cardNumber', e.target.value)}
-                        placeholder="123 - 456 -"
-                        className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="col-span-2">
-                        <Label className="text-sm text-gray-500">Expiration</Label>
-                        <div className="flex items-center gap-2">
-                          <Input
-                            value={formData.expMonth}
-                            onChange={(e) => updateFormData('expMonth', e.target.value)}
-                            placeholder="03"
-                            className="border-gray-300 focus:border-[#235730] focus:ring-[#235730] text-center"
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod('card')}
+                        className={`w-full border rounded-md px-4 py-3 text-sm flex items-center justify-between transition ${paymentMethod === 'card'
+                            ? 'border-[#235730] bg-[#235730]/5 text-[#235730]'
+                            : 'border-gray-300 text-gray-700 hover:border-[#235730]'
+                          }`}
+                      >
+                        <span className="flex items-center gap-3">
+                          <span className="flex items-center gap-2">
+                            <Image
+                              src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg"
+                              alt="Visa"
+                              width={48}
+                              height={24}
+                              className="h-6 w-auto object-contain"
+                            />
+                            <Image
+                              src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+                              alt="Mastercard"
+                              width={48}
+                              height={24}
+                              className="h-6 w-auto object-contain"
+                            />
+                            <Image
+                              src="/b2c/payments/stripe.svg"
+                              alt="Stripe"
+                              width={64}
+                              height={24}
+                              className="h-10 w-auto object-contain"
+                            />
+                          </span>
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod('paypal')}
+                        className={`w-full border rounded-md px-4 py-3 text-sm flex items-center justify-between transition ${paymentMethod === 'paypal'
+                            ? 'border-[#235730] bg-[#235730]/5 text-[#235730]'
+                            : 'border-gray-300 text-gray-700 hover:border-[#235730]'
+                          }`}
+                      >
+                        <span className="flex items-center gap-3">
+                          <Image
+                            src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
+                            alt="PayPal"
+                            width={80}
+                            height={28}
+                            className="h-7 w-auto object-contain"
                           />
-                          <span className="text-gray-400">/</span>
+                        </span>
+                      </button>
+                    </div>
+                    {paymentError && (
+                      <p className="text-red-600 text-sm">{paymentError}</p>
+                    )}
+
+                    {paymentMethod === 'card' && (
+                      <>
+                        <div>
+                          <Label htmlFor="cardName" className="text-sm text-gray-500">{t('sections.payment.card_name_label')}</Label>
+                          <div className="relative">
+                            <Input
+                              id="cardName"
+                              value={formData.cardName}
+                              onChange={(e) => updateFormData('cardName', e.target.value)}
+                              placeholder={t('sections.payment.card_name_placeholder')}
+                              className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
+                            />
+                            {formData.cardName && (
+                              <div className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 bg-[#235730] rounded-full flex items-center justify-center">
+                                <Check className="w-3 h-3 text-white" />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="cardNumber" className="text-sm text-gray-500">{t('sections.payment.card_number_label')}</Label>
                           <Input
-                            value={formData.expYear}
-                            onChange={(e) => updateFormData('expYear', e.target.value)}
-                            placeholder="24"
-                            className="border-gray-300 focus:border-[#235730] focus:ring-[#235730] text-center"
+                            id="cardNumber"
+                            value={formData.cardNumber}
+                            onChange={(e) => updateFormData('cardNumber', e.target.value)}
+                            placeholder={t('sections.payment.card_number_placeholder')}
+                            className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
                           />
                         </div>
+
+                        <div className="grid grid-cols-3 gap-4">
+                          <div className="col-span-2">
+                            <Label className="text-sm text-gray-500">{t('sections.payment.expiration_label')}</Label>
+                            <div className="flex items-center gap-2">
+                              <Input
+                                value={formData.expMonth}
+                                onChange={(e) => updateFormData('expMonth', e.target.value)}
+                                placeholder="03"
+                                className="border-gray-300 focus:border-[#235730] focus:ring-[#235730] text-center"
+                              />
+                              <span className="text-gray-400">/</span>
+                              <Input
+                                value={formData.expYear}
+                                onChange={(e) => updateFormData('expYear', e.target.value)}
+                                placeholder="24"
+                                className="border-gray-300 focus:border-[#235730] focus:ring-[#235730] text-center"
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <Label className="text-sm text-gray-500 flex items-center gap-1">
+                              {t('sections.payment.cvc_label')} <Info className="w-3 h-3" />
+                            </Label>
+                            <Input
+                              value={formData.cvc}
+                              onChange={(e) => updateFormData('cvc', e.target.value)}
+                              placeholder={t('sections.payment.cvc_placeholder')}
+                              className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {paymentMethod === 'paypal' && (
+                      <div className="p-4 border border-dashed border-[#235730] rounded-md bg-[#235730]/5 text-sm text-[#235730]">
+                        <p className="font-medium mb-1">PayPal</p>
+                        <p className="text-[#235730]/80">
+                          Vous serez redirigé vers PayPal pour finaliser votre paiement en toute sécurité.
+                        </p>
                       </div>
-                      <div>
-                        <Label className="text-sm text-gray-500 flex items-center gap-1">
-                          CVC <Info className="w-3 h-3" />
-                        </Label>
-                        <Input
-                          value={formData.cvc}
-                          onChange={(e) => updateFormData('cvc', e.target.value)}
-                          placeholder="123"
-                          className="border-gray-300 focus:border-[#235730] focus:ring-[#235730]"
-                        />
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   <div className="flex items-center justify-center gap-4 pt-8">
@@ -400,13 +516,13 @@ export default function PaymentPage() {
                       onClick={() => setCurrentStep('livraison')}
                       className="text-sm text-gray-500 hover:text-[#235730]"
                     >
-                      Annuler l'achat
+                      {t('sections.payment.cancel')}
                     </button>
                     <Button
                       onClick={handleValidate}
                       className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm px-8"
                     >
-                      Valider l'achat
+                      {t('sections.payment.next')}
                     </Button>
                   </div>
                 </div>

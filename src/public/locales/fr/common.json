@@ -1,0 +1,1223 @@
+{
+    "test": "Français",
+    "b2b": {
+        "loading": "Chargement...",
+        "redirecting": "Redirection en cours...",
+        "accueil": {
+            "welcome": "Bienvenue",
+            "pro_discount": "Remise professionnelle",
+            "siret": "SIRET",
+            "stats": {
+                "monthly_orders": "Commandes ce mois",
+                "turnover": "Chiffre d'affaires HT",
+                "stock": "Produits en stock",
+                "active_refills": "Réassorts actifs",
+                "active": "Actif"
+            },
+            "quick_access": "Accès rapides",
+            "actions": {
+                "catalogue": "Catalogue",
+                "catalogue_desc": "Parcourir les produits",
+                "quick_order": "Commande Rapide",
+                "quick_order_desc": "Commander par référence",
+                "protocols": "Protocoles",
+                "protocols_desc": "Fiches techniques",
+                "downloads": "Téléchargements",
+                "downloads_desc": "PLV et visuels",
+                "access": "Accéder"
+            },
+            "recent_orders": {
+                "title": "Commandes récentes",
+                "view_all": "Voir tout",
+                "col_id": "Commande",
+                "col_date": "Date",
+                "col_products": "Produits",
+                "col_amount": "Montant HT",
+                "col_status": "Statut",
+                "status_delivered": "Livrée",
+                "status_processing": "En cours"
+            },
+            "notifications": {
+                "title": "Notifications"
+            },
+            "reassort": {
+                "title": "Réassort Auto",
+                "desc": "{count} produits configurés pour réassort automatique",
+                "manage": "Gérer le réassort"
+            },
+            "downloads_widget": {
+                "title": "Téléchargements",
+                "desc": "Accédez à vos PLV et visuels marketing",
+                "library": "Bibliothèque"
+            }
+        },
+        "auth": {
+            "login": {
+                "title": "Connexion Espace Professionnel",
+                "subtitle": "Accédez à votre espace professionnel",
+                "fields": {
+                    "email": "Email professionnel",
+                    "password": "Mot de passe"
+                },
+                "btns": {
+                    "login": "Se connecter",
+                    "logging_in": "Connexion..."
+                },
+                "errors": {
+                    "failed": "Échec de la connexion. Vérifiez vos identifiants."
+                },
+                "info": {
+                    "title": "Espace Professionnel",
+                    "desc": "Accédez aux tarifs pros, commandes rapides et protocoles dédiés aux partenaires Mishki."
+                }
+            },
+            "register": {
+                "title": "Inscription Professionnelle",
+                "subtitle": "Créez votre compte B2B avec tarifs HT et remises exclusives",
+                "title_b2c": "Créer mon compte Mishki",
+                "subtitle_b2c": "Rejoignez la communauté Mishki et profitez d'offres exclusives",
+                "sections": {
+                    "personal": "Informations personnelles",
+                    "connection": "Informations de connexion",
+                    "company": "Informations entreprise",
+                    "documents": "Documents",
+                    "address": "Coordonnées"
+                },
+                "tabs": {
+                    "b2c": "Compte client",
+                    "b2b": "Compte professionnel"
+                },
+                "fields": {
+                    "first_name": "Prénom *",
+                    "last_name": "Nom *",
+                    "email": "Email professionnel *",
+                    "password": "Mot de passe *",
+                    "confirm_password": "Confirmer le mot de passe *",
+                    "company_name": "Raison sociale *",
+                    "siret": "SIRET *",
+                    "activity_type": "Type d'activité *",
+                    "phone": "Téléphone *",
+                    "address": "Adresse *",
+                    "zip_code": "Code postal *",
+                    "city": "Ville *",
+                    "kbis": "KBIS *",
+                    "id_card": "Pièce d'identité *"
+                },
+                "placeholders": {
+                    "first_name": "Marie",
+                    "last_name": "Dupont",
+                    "email": "contact@votrespa.fr",
+                    "password": "••••••••",
+                    "company_name": "Spa Beauté Paris",
+                    "siret": "123 456 789 00012",
+                    "select": "Sélectionner...",
+                    "phone": "01 23 45 67 89",
+                    "address": "123 rue de la Beauté",
+                    "zip_code": "75001",
+                    "city": "Paris"
+                },
+                "activities": {
+                    "spa": "Spa",
+                    "institute": "Institut de beauté",
+                    "salon": "Salon de coiffure",
+                    "center": "Centre de bien-être",
+                    "other": "Autre"
+                },
+                "advantages": {
+                    "title": "Vos avantages B2B :",
+                    "prices": "Prix HT affichés",
+                    "discounts": "Remises professionnelles",
+                    "tools": "Protocoles et fiches techniques",
+                    "auto_reassort": "Réassort automatique",
+                    "marketing": "PLV et visuels marketing",
+                    "support": "Support dédié"
+                },
+                "conditions": "J'accepte les {cgv} et la {privacy}",
+                "cgv": "conditions générales de vente",
+                "privacy": "politique de confidentialité",
+                "btn_submit": "Créer mon compte professionnel",
+                "btn_submit_b2c": "Créer mon compte",
+                "btn_submitting": "Inscription en cours...",
+                "btn_cancel": "Annuler",
+                "footer_info": "Votre compte sera validé sous 24-48h après vérification de vos documents",
+                "errors": {
+                    "password_mismatch": "Les mots de passe ne correspondent pas",
+                    "accept_conditions": "Veuillez accepter les conditions générales",
+                    "missing_kbis": "Veuillez télécharger votre KBIS",
+                    "missing_id": "Veuillez télécharger votre pièce d'identité",
+                    "general_error": "Erreur lors de l'inscription"
+                }
+            },
+            "waiting_validation": {
+                "title": "Compte en attente de validation",
+                "welcome": "Merci pour votre inscription, {name} !",
+                "desc": "Votre compte professionnel est actuellement en cours de validation par notre équipe.",
+                "steps_title": "Étapes de validation :",
+                "step1_title": "Inscription reçue",
+                "step1_desc": "Vos informations ont été enregistrées",
+                "step2_title": "Vérification en cours",
+                "step2_desc": "SIRET et documents professionnels",
+                "step3_title": "Activation du compte",
+                "step3_desc": "Sous 24-48h ouvrées",
+                "cards": {
+                    "email_title": "Confirmation par email",
+                    "email_desc": "Vous recevrez un email de confirmation dès que votre compte sera activé",
+                    "help_title": "Besoin d'aide ?",
+                    "help_desc": "Contactez-nous au 01 23 45 67 89 pour toute question"
+                },
+                "btn_logout": "Se déconnecter",
+                "btn_back": "Retour à la connexion",
+                "footer": {
+                    "email": "Compte enregistré :",
+                    "company": "Société :"
+                }
+            }
+        },
+        "catalogue": {
+            "title": "Catalogue Professionnel",
+            "subtitle": "Formats cabine • Prix HT • Remise {remise}% appliquée",
+            "search_placeholder": "Rechercher par nom ou référence...",
+            "filter_all_cats": "Toutes catégories",
+            "filter_all_formats": "Tous formats",
+            "filter_format_prefix": "Format",
+            "active_filters": "Filtres actifs :",
+            "clear_all": "Effacer tout",
+            "results_count": "{count, plural, =0 {Aucun produit trouvé} =1 {1 produit trouvé} other {# produits trouvés}}",
+            "add_to_cart": "Ajouter au panier",
+            "added_to_cart": "Ajouté au panier",
+            "in_stock": "{count} en stock",
+            "no_results": "Aucun produit trouvé",
+            "no_results_desc": "Essayez de modifier vos filtres de recherche",
+            "reset_filters": "Réinitialiser les filtres",
+            "table": {
+                "col_product": "Produit",
+                "col_ref": "Référence",
+                "col_format": "Format",
+                "col_price": "Prix HT",
+                "col_stock": "Stock",
+                "col_action": "Action",
+                "btn_added": "Ajouté",
+                "btn_add": "Ajouter"
+            }
+        },
+        "protocoles": {
+            "title": "Protocoles & Rituels",
+            "subtitle": "Fiches techniques détaillées et rituels cabine professionnels",
+            "search_placeholder": "Rechercher un protocole...",
+            "filter_all_types": "Tous les types",
+            "filter_all_cats": "Toutes catégories",
+            "results_count": "{count, plural, =0 {Aucun protocole trouvé} =1 {1 protocole disponible} other {# protocoles disponibles}}",
+            "type_fiche": "Fiche Technique",
+            "type_rituel": "Rituel Cabine",
+            "btn_consult": "Consulter",
+            "no_results": "Aucun protocole trouvé",
+            "no_results_desc": "Essayez de modifier vos critères de recherche",
+            "reset_filters": "Réinitialiser les filtres",
+            "cards": {
+                "fiches_title": "Fiches Techniques",
+                "fiches_desc": "Protocoles détaillés avec produits, gestes et timing pour chaque soin",
+                "rituels_title": "Rituels Cabine",
+                "rituels_desc": "Déroulés complets de soins pour vos prestations spa et institut"
+            }
+        },
+        "downloads_page": {
+            "title": "Téléchargements",
+            "subtitle": "PLV, visuels marketing et supports de communication professionnels",
+            "search_placeholder": "Rechercher un fichier...",
+            "filter_all_types": "Tous les types",
+            "filter_favorites": "Favoris",
+            "stats": {
+                "total": "Total fichiers",
+                "images": "Images",
+                "pdf": "PDF",
+                "favorites": "Favoris"
+            },
+            "results_count": "{count, plural, =0 {Aucun fichier trouvé} =1 {1 fichier trouvé} other {# fichiers trouvés}}",
+            "btn_download": "Télécharger",
+            "no_results": "Aucun fichier trouvé",
+            "no_results_desc": "Essayez de modifier vos filtres de recherche",
+            "reset_filters": "Réinitialiser les filtres",
+            "info": {
+                "title": "📌 Informations importantes",
+                "line1": "Tous les fichiers sont en haute résolution et prêts à l'impression",
+                "line2": "Les PLV sont personnalisables avec votre logo (contactez le support)",
+                "line3": "Nouveaux contenus ajoutés régulièrement",
+                "line4": "Utilisez les favoris pour accéder rapidement à vos fichiers préférés"
+            }
+        },
+        "quick_order": {
+            "title": "Commande Rapide",
+            "subtitle": "Commandez directement par référence produit pour un gain de temps maximal",
+            "common_refs": "Références courantes :",
+            "form_title": "Saisie de commande",
+            "table": {
+                "col_ref": "Référence",
+                "col_product": "Produit",
+                "col_price": "Prix HT",
+                "col_qty": "Quantité",
+                "col_total": "Total HT"
+            },
+            "input_placeholder": "Ex: CV-PRO-001",
+            "invalid_ref": "Référence invalide",
+            "add_line": "Ajouter une ligne",
+            "total_label": "Total commande",
+            "btn_validate": "Valider la commande ({count})",
+            "success_msg": "Produits ajoutés au panier avec succès !",
+            "error_msg": "Veuillez vérifier toutes les références avant de valider",
+            "tips": {
+                "tip1_title": "💡 Astuce",
+                "tip1_desc": "Cliquez sur une référence courante pour l'ajouter automatiquement",
+                "tip2_title": "⚡ Gain de temps",
+                "tip2_desc": "Commandez plusieurs produits en une seule fois",
+                "tip3_title": "📋 Format",
+                "tip3_desc": "Les références respectent le format XX-XXX-000"
+            }
+        },
+        "quote_request": {
+            "title": "Demande de Devis Personnalisé",
+            "subtitle": "Obtenez un devis sur mesure pour vos projets professionnels",
+            "success_msg": "Demande de devis envoyée avec succès ! Notre équipe reviendra vers vous sous 24-48h.",
+            "sections": {
+                "general": {
+                    "title": "Informations générales",
+                    "subject_label": "Sujet de la demande *",
+                    "subject_placeholder": "Ex: Commande en gros pour nouveau spa",
+                    "type_label": "Type de projet *",
+                    "type_placeholder": "Sélectionner...",
+                    "types": {
+                        "nouvelle_ouverture": "Nouvelle ouverture",
+                        "renouvellement": "Renouvellement stock",
+                        "evenement": "Événement spécial",
+                        "commande_volume": "Commande en volume",
+                        "autre": "Autre"
+                    },
+                    "description_label": "Description du projet *",
+                    "description_placeholder": "Décrivez votre projet, vos besoins spécifiques, vos contraintes...",
+                    "qty_label": "Quantité estimée (unités)",
+                    "budget_label": "Budget estimé (€ HT)",
+                    "date_label": "Date souhaitée"
+                },
+                "products": {
+                    "title": "Produits souhaités (optionnel)",
+                    "btn_add": "Ajouter des produits",
+                    "selector_title": "Sélectionnez des produits du catalogue :",
+                    "empty": "Aucun produit sélectionné. Décrivez vos besoins dans la description ou ajoutez des produits.",
+                    "total_label": "Total estimatif :"
+                },
+                "docs": {
+                    "title": "Documents joints (optionnel)",
+                    "upload_placeholder": "Glissez vos fichiers ici ou cliquez pour parcourir",
+                    "upload_hint": "PDF, images, documents (max 10 Mo par fichier)",
+                    "browse": "Parcourir",
+                    "files_label": "Fichiers joints :"
+                }
+            },
+            "footer": {
+                "title": "Prêt à envoyer votre demande ?",
+                "subtitle": "Notre équipe commerciale vous répondra sous 24-48h ouvrées",
+                "btn_send": "Envoyer la demande de devis"
+            },
+            "tips": {
+                "tip1_title": "⚡ Réponse rapide",
+                "tip1_desc": "Devis personnalisé sous 24-48h ouvrées",
+                "tip2_title": "💰 Tarifs négociés",
+                "tip2_desc": "Remises spéciales sur les volumes importants",
+                "tip3_title": "🎯 Sur mesure",
+                "tip3_desc": "Accompagnement personnalisé de votre projet"
+            }
+        },
+        "invoices": {
+            "title": "Factures Professionnelles",
+            "subtitle": "Consultez et téléchargez vos factures en quelques clics",
+            "btn_download_all": "Télécharger tout",
+            "stats": {
+                "total_ht": "Total HT (année)",
+                "total_ttc": "Total TTC (année)",
+                "pending": "En attente",
+                "overdue": "En retard"
+            },
+            "search_placeholder": "Rechercher par numéro ou produits...",
+            "filter_all_statuts": "Tous",
+            "filter_all_months": "Tous",
+            "statuts": {
+                "paid": "Payée",
+                "pending": "En attente",
+                "overdue": "En retard"
+            },
+            "results_count": "{count, plural, =0 {Aucune facture trouvée} =1 {1 facture trouvée} other {# factures trouvées}}",
+            "table": {
+                "col_num": "Numéro",
+                "col_date": "Date",
+                "col_products": "Produits",
+                "col_ht": "Montant HT",
+                "col_ttc": "Montant TTC",
+                "col_due": "Échéance",
+                "col_status": "Statut",
+                "col_actions": "Actions"
+            },
+            "no_results": "Aucune facture trouvée",
+            "no_results_desc": "Essayez de modifier vos critères de recherche",
+            "reset_filters": "Réinitialiser les filtres",
+            "info": {
+                "title": "📄 Informations",
+                "line1": "Les factures sont disponibles au format PDF",
+                "line2": "Délai de paiement : 30 jours à réception",
+                "line3": "Vous pouvez télécharger vos factures à tout moment",
+                "line4": "Un récapitulatif annuel est disponible sur demande"
+            }
+        },
+        "cart": {
+            "confirmed": {
+                "title": "Commande validée !",
+                "subtitle": "Votre commande a été enregistrée avec succès. Vous recevrez une confirmation par email.",
+                "redirecting": "Redirection en cours..."
+            },
+            "empty": {
+                "title": "Votre panier est vide",
+                "subtitle": "Ajoutez des produits depuis le catalogue pour commencer votre commande",
+                "btn_browse": "Parcourir le catalogue"
+            },
+            "title": "Mon Panier",
+            "subtitle": "Gérez vos produits",
+            "items_count": "{count, plural, =0 {Aucun produit} =1 {1 produit} other {# produits}}",
+            "remise_label": "Remise {remise}%",
+            "btn_clear": "Vider le panier",
+            "summary": {
+                "title": "Récapitulatif",
+                "subtotal_ht": "Sous-total HT",
+                "remise_pro": "Remise pro ({remise}%)",
+                "total_ht": "Total HT",
+                "tva": "TVA (20%)",
+                "total_ttc": "Total TTC",
+                "btn_validate": "Valider la commande",
+                "btn_continue": "Continuer mes achats",
+                "info_free_delivery": "Livraison offerte dès 200€ HT",
+                "info_secure_payment": "Paiement sécurisé",
+                "info_guarantee": "Garantie satisfait ou remboursé"
+            }
+        },
+        "auto_reassort": {
+            "title": "Réassort Automatique",
+            "subtitle": "Configurez le réapprovisionnement automatique de vos produits essentiels",
+            "btn_new": "Nouveau réassort",
+            "stats": {
+                "active": "Réassorts actifs",
+                "monitored": "Produits surveillés",
+                "next_7_days": "Prochains 7 jours",
+                "threshold_reached": "Seuil atteint"
+            },
+            "configs": {
+                "title": "Configurations de réassort",
+                "table": {
+                    "col_product": "Produit",
+                    "col_min_threshold": "Seuil minimum",
+                    "col_auto_qty": "Quantité auto",
+                    "col_frequency": "Fréquence",
+                    "col_last_reassort": "Dernier réassort",
+                    "col_next": "Prochain",
+                    "col_status": "Statut",
+                    "col_actions": "Actions"
+                },
+                "status_active": "Actif",
+                "status_inactive": "Inactif",
+                "delete_confirm": "Êtes-vous sûr de vouloir supprimer cette configuration ?"
+            },
+            "history": {
+                "title": "Historique des réassorts",
+                "table": {
+                    "col_ref": "Référence",
+                    "col_date": "Date",
+                    "col_product": "Produit",
+                    "col_qty": "Quantité",
+                    "col_amount": "Montant HT",
+                    "col_status": "Statut"
+                },
+                "status_finished": "Terminé",
+                "status_ongoing": "En cours",
+                "status_cancelled": "Annulé"
+            },
+            "tips": {
+                "tip1_title": "⚡ Automatique",
+                "tip1_desc": "Les commandes sont passées automatiquement selon vos paramètres",
+                "tip2_title": "📊 Optimisation",
+                "tip2_desc": "Évitez les ruptures de stock et optimisez votre trésorerie",
+                "tip3_title": "🔔 Notifications",
+                "tip3_desc": "Recevez des alertes avant chaque réassort programmé"
+            }
+        },
+        "layout": {
+            "sidebar": {
+                "nav": {
+                    "home": "Accueil Pro",
+                    "catalogue": "Catalogue",
+                    "cart": "Mon Panier",
+                    "quick_order": "Commande Rapide",
+                    "protocoles": "Protocoles",
+                    "downloads": "Téléchargements",
+                    "auto_reassort": "Réassort Auto",
+                    "invoices": "Factures",
+                    "quotes": "Demande de Devis"
+                },
+                "support": {
+                    "help": "Besoin d'aide ?",
+                    "btn": "Contacter le support"
+                }
+            },
+            "header": {
+                "welcome": "Bienvenue, {name}",
+                "discount": "Remise {count}%",
+                "logout": "Déconnexion"
+            }
+        },
+        "cabinet_ritual": {
+            "back_btn": "Retour aux protocoles",
+            "badge": "Rituel Cabine",
+            "btn_download": "Télécharger PDF",
+            "btn_print": "Imprimer",
+            "stats": {
+                "duration": "Durée totale",
+                "theme": "Thème",
+                "ambiance": "Ambiance",
+                "category": "Catégorie"
+            },
+            "prep": {
+                "cabine": "Préparation Cabine",
+                "materiel": "Matériel",
+                "produits": "Produits"
+            },
+            "steps": {
+                "title": "Déroulement du rituel"
+            },
+            "footer": {
+                "retail_title": "💝 Produits Retail à proposer",
+                "notes_title": "📝 Notes importantes"
+            }
+        },
+        "technical_sheet": {
+            "back_btn": "Retour aux protocoles",
+            "badge": "Fiche Technique",
+            "btn_download": "Télécharger PDF",
+            "btn_print": "Imprimer",
+            "stats": {
+                "reference": "Référence",
+                "volume": "Volume",
+                "category": "Catégorie",
+                "duration": "Durée"
+            },
+            "assets": {
+                "title": "Actifs clés"
+            },
+            "properties": {
+                "title": "Propriétés & Bénéfices"
+            },
+            "usage": {
+                "title": "Conseils d'utilisation",
+                "frequency": "Fréquence",
+                "method": "Méthode d'application"
+            },
+            "specs": {
+                "title": "Caractéristiques",
+                "texture": "Texture",
+                "smell": "Odeur",
+                "ph": "pH",
+                "paot": "PAO"
+            },
+            "expert": {
+                "title": "L'avis de l'expert"
+            }
+        }
+    },
+    "b2c": {
+        "layout": {
+            "header": {
+                "search": "Recherche",
+                "nav": {
+                    "products": "Produits",
+                    "blog": "Blog",
+                    "rituals": "Rituels",
+                    "podcast": "Podcast"
+                },
+                "auth": {
+                    "login_register": "Connexion/Inscription"
+                }
+            },
+            "footer": {
+                "help": {
+                    "title": "Aide",
+                    "contact": "Contact et Assistance",
+                    "terms": "Conditions de service",
+                    "privacy": "Politique de confidentialité",
+                    "shipping": "Livraison et retours"
+                },
+                "about": {
+                    "title": "Qui Nous",
+                    "who_are_we": "Qui sommes-nous",
+                    "sustainable": "Engagement durable",
+                    "news": "Actualités"
+                },
+                "social": {
+                    "title": "Rejoignez-nous ici",
+                    "desc": "Suivez-nous sur nos réseaux sociaux pour découvrir nos dernières actualités et conseils beauté."
+                },
+                "rights": "Mishki. Tous droits réservés."
+            }
+        },
+        "home": {
+            "hero": {
+                "title": "Révélez une beauté pure et précieuse avec Mishki, soins d'exception issus de la biodiversité péruvienne.",
+                "desc": "Plongez au cœur de Mishki, marque de beauté naturelle raffinée, inspirée des plantes sacrées du Pérou et des rituels traditionnels. Nos soins aux ingrédients 100% naturels révèlent l'éclat de votre peau, respectent la biodiversité et vous offrent une expérience sensorielle unique. Beauté, pureté, douceur et élégance, à chaque geste de votre routine.",
+                "cta": "Découvrir nos produits"
+            },
+            "products": {
+                "title": "Nouveautés",
+                "add_to_cart": "Ajouter au panier",
+                "loading": "Chargement..."
+            },
+            "reviews": {
+                "title": "Avis de nos clients",
+                "subtitle": "Clients satisfaits",
+                "stats": "Fondé sur {count} commentaires",
+                "excellent": "Excellent"
+            },
+            "newsletter": {
+                "title": "Abonnez-vous à nos réseaux offres",
+                "desc": "Rejoignez notre communauté et recevez en exclusivité nos dernières nouveautés, conseils beauté et offres spéciales directement dans votre boîte mail.",
+                "placeholder": "Votre adresse e-mail",
+                "btn": "Je m'abonne !"
+            }
+        },
+        "shop": {
+            "title": "Nos Produits",
+            "subtitle": "Découvrez nos soins naturels issus de la biodiversité péruvienne",
+            "loading": "Chargement...",
+            "categories_heading": "Catégories",
+            "categories": {
+                "all": "Tous",
+                "face": "Soins du visage",
+                "body": "Soins du corps",
+                "hair": "Soins du cheveu"
+            },
+            "add_to_cart": "Ajouter au panier",
+            "detail": {
+                "back": "Retour",
+                "reviews": "{count, plural, =0 {Aucun avis} =1 {1 avis} other {# avis}}",
+                "questions": "{count, plural, =0 {Aucune question} =1 {1 question} other {# questions}}",
+                "view_desc": "Voir la description",
+                "in_stock": "EN STOCK",
+                "delivery": "Achetez-le aujourd'hui et\nrecevez-le à partir du",
+                "points": "Vous obtiendrez jusqu'à {count} points !",
+                "tabs": {
+                    "description": "Description",
+                    "reviews": "Avis ({count})",
+                    "questions": "Questions et Réponses ({count})"
+                },
+                "view_more": "Voir plus",
+                "nutrition": "Valeurs nutritionnelles",
+                "specs": "Fiche technique",
+                "video_desc": "Découvrez notre produit en vidéo",
+                "form_review": {
+                    "title": "Laisser un avis",
+                    "label_rating": "Votre note",
+                    "placeholder_name": "Votre nom",
+                    "placeholder_text": "Votre avis...",
+                    "btn_send": "Envoyer mon avis"
+                },
+                "form_question": {
+                    "title": "Poser une question",
+                    "placeholder_name": "Votre nom",
+                    "placeholder_text": "Votre question...",
+                    "btn_send": "Envoyer ma question"
+                },
+                "no_questions": "Aucune question pour le moment. Soyez le premier à poser une question !",
+                "qa_prefix": {
+                    "q": "Q",
+                    "r": "R"
+                }
+            },
+            "back": "Retour",
+            "products": {
+                "p1": {
+                    "name": "Gommage corps",
+                    "desc": "Exfoliant naturel pour une peau douce et éclatante",
+                    "long_desc": "Fruit de la jungle péruvienne, riche en lipides, protéines et vitamines. Grâce à ses acides gras oméga 6, 9 et 3, il apporte une grande contribution nutritive à la peau et accélère la régénération des tissus."
+                },
+                "p2": {
+                    "name": "Savon exfoliant",
+                    "desc": "Nettoie en profondeur tout en exfoliant délicatement",
+                    "long_desc": "Un savon enrichi en ingrédients naturels qui nettoie votre peau en profondeur tout en la laissant douce et hydratée."
+                },
+                "p3": {
+                    "name": "Huile de beauté",
+                    "desc": "Nourrit et hydrate intensément votre peau",
+                    "long_desc": "Fruit de la jungle péruvienne, riche en lipides, protéines et vitamines. Grâce à ses acides gras oméga 6, 9 et 3, il apporte une grande contribution nutritive à la peau et accélère la régénération des tissus."
+                },
+                "p4": {
+                    "name": "Lotion de définition",
+                    "desc": "Définit et sublime vos boucles naturelles",
+                    "long_desc": "Une lotion légère qui définit parfaitement vos boucles sans les alourdir. Enrichie en huiles naturelles pour nourrir vos cheveux en profondeur."
+                },
+                "p5": {
+                    "name": "Crème hydratante",
+                    "desc": "Hydratation longue durée pour tous types de peaux",
+                    "long_desc": "Une crème riche et onctueuse qui hydrate intensément votre peau pendant 24 heures."
+                },
+                "p6": {
+                    "name": "Crème réparatrice",
+                    "desc": "Réparer et apaise les peaux sèches et abimées",
+                    "long_desc": "Une crème réparatrice intensive qui restaure la barrière cutanée et apaise les peaux les plus sensibles."
+                },
+                "p7": {
+                    "name": "Eau de toilette",
+                    "desc": "Rafraichit et tonifie votre peau en douceur",
+                    "long_desc": "Une eau de toilette légère et rafraichissante aux notes florales et boisées."
+                },
+                "p8": {
+                    "name": "Masque en poudre",
+                    "desc": "Purifie et revitalise votre peau naturellement",
+                    "long_desc": "Un masque en poudre à mélanger avec de l'eau pour un soin purifiant et revitalisant."
+                }
+            }
+        },
+        "cart": {
+            "title": "Mon panier",
+            "back": "Retour",
+            "quantity": "Quantité",
+            "remove": "Retirer du panier",
+            "buy": "Acheter",
+            "total": "TOTAL",
+            "checkout": "Valider mon panier",
+            "empty": "Votre panier est vide",
+            "discover": "Découvrir nos produits"
+        },
+        "about": {
+            "title": "À propos",
+            "subtitle": "Découvrez l'histoire et les valeurs qui animent Mishki",
+            "back": "Retour",
+            "history": {
+                "title": "Notre histoire",
+                "p1": "Mishki est né d'une passion pour la beauté naturelle et d'un profond respect pour les traditions ancestrales péruviennes. Notre fondatrice, après plusieurs voyages au Pérou, a été émerveillée par la richesse de la biodiversité locale et les secrets de beauté transmis de mère en fille depuis des générations.",
+                "p2": "En quechua, \"Mishki\" signifie \"doux\" - une référence à la douceur des soins que nous proposons et à notre approche respectueuse envers la nature et les communautés avec lesquelles nous travaillons.",
+                "p3": "Aujourd'hui, Mishki propose une gamme de soins naturels qui allie le meilleur de la tradition péruvienne aux exigences de la cosmétique moderne, pour des produits efficaces, éthiques et respectueux de votre peau."
+            },
+            "values": {
+                "title": "Nos valeurs",
+                "natural": {
+                    "title": "Naturel",
+                    "desc": "Tous nos produits sont formulés à partir d'ingrédients naturels soigneusement sélectionnés."
+                },
+                "authenticity": {
+                    "title": "Authenticité",
+                    "desc": "Nous préservons les recettes ancestrales péruviennes transmises de génération en génération."
+                },
+                "sustainability": {
+                    "title": "Durabilité",
+                    "desc": "Notre engagement pour l'environnement guide chacune de nos décisions et actions."
+                },
+                "community": {
+                    "title": "Communauté",
+                    "desc": "Nous soutenons les communautés locales et les producteurs avec qui nous travaillons."
+                }
+            },
+            "engagement": {
+                "title": "Notre engagement",
+                "intro": "Chez Mishki, nous croyons que la beauté ne devrait jamais se faire au détriment de la planète ou des communautés. C'est pourquoi nous nous engageons à :",
+                "list": {
+                    "ingredients": "Utiliser uniquement des ingrédients naturels et biodégradables",
+                    "fair": "Travailler en partenariat équitable avec les producteurs locaux",
+                    "carbon": "Réduire notre empreinte carbone à chaque étape de production",
+                    "packaging": "Proposer des emballages recyclables et éco-conçus"
+                }
+            },
+            "stats": {
+                "ingredients": "Ingrédients naturels",
+                "families": "Familles soutenues",
+                "animals": "Tests sur animaux"
+            }
+        },
+        "engagement": {
+            "title": "Notre engagement",
+            "subtitle": "Une beauté responsable pour un avenir durable",
+            "back": "Retour",
+            "hero_title": "La beauté au service de la planète",
+            "hero_desc": "Chez Mishki, nous croyons qu'il est possible de prendre soin de soi tout en prenant soin de notre planète. Notre engagement environnemental et social est au cœur de chacune de nos décisions, de la sélection des ingrédients à la livraison de vos commandes.",
+            "commitments": {
+                "ingredients": {
+                    "title": "Ingrédients naturels",
+                    "desc": "100% de nos ingrédients sont d'origine naturelle, issus de l'agriculture biologique ou de cueillette sauvage responsable."
+                },
+                "packaging": {
+                    "title": "Emballages éco-conçus",
+                    "desc": "Nos emballages sont recyclables, biodégradables ou rechargables. Nous minimisons le plastique à usage unique."
+                },
+                "reforestation": {
+                    "title": "Reforestation",
+                    "desc": "Pour chaque commande, nous plantons un arbre au Pérou en partenariat avec des associations locales."
+                },
+                "water": {
+                    "title": "Préservation de l'eau",
+                    "desc": "Nos procédés de fabrication sont optimisés pour minimiser la consommation d'eau."
+                },
+                "fair": {
+                    "title": "Commerce équitable",
+                    "desc": "Nous travaillons en direct avec les producteurs péruviens et leur garantissons des revenus justes."
+                },
+                "energy": {
+                    "title": "Énergie renouvelable",
+                    "desc": "Notre entrepôt et nos bureaux fonctionnent à 100% avec de l'énergie renouvelable."
+                }
+            },
+            "stats": {
+                "title": "Notre impact en chiffres",
+                "trees": "Arbres plantés",
+                "plastic": "Plastique vierge",
+                "families": "Familles soutenues",
+                "carbon": "Empreinte carbone"
+            },
+            "supply": {
+                "title": "Notre chaîne d'approvisionnement",
+                "steps": {
+                    "sourcing": {
+                        "title": "Sourcing responsable",
+                        "desc": "Nous sélectionnons nos ingrédients directement auprès de producteurs péruviens pratiquant une agriculture durable et respectueuse de la biodiversité."
+                    },
+                    "manufacturing": {
+                        "title": "Fabrication éthique",
+                        "desc": "Nos produits sont fabriqués en France dans des ateliers certifiés, avec des procédés respectueux de l'environnement."
+                    },
+                    "packaging": {
+                        "title": "Emballage minimal",
+                        "desc": "Nous utilisons uniquement des matériaux recyclés ou recyclables et éliminons tout emballage superflu."
+                    },
+                    "delivery": {
+                        "title": "Livraison bas carbone",
+                        "desc": "Nous privilégions les transporteurs engagés dans la réduction de leur empreinte carbone et compensons les émissions restantes."
+                    }
+                }
+            },
+            "join": {
+                "title": "Rejoignez le mouvement",
+                "desc": "En choisissant Mishki, vous participez activement à un mode de consommation plus responsable. Ensemble, construisons un avenir où beauté rime avec durabilité.",
+                "cta": "Découvrir nos produits"
+            }
+        },
+        "contact": {
+            "title": "Contactez-nous",
+            "subtitle": "Une question, une suggestion ? Notre équipe est à votre écoute",
+            "back": "Retour",
+            "form": {
+                "title": "Envoyez-nous un message",
+                "first_name": "Prénom",
+                "last_name": "Nom",
+                "email": "Email",
+                "subject": "Sujet",
+                "message": "Message",
+                "placeholder_first_name": "Votre prénom",
+                "placeholder_last_name": "Votre nom",
+                "placeholder_email": "votre@email.com",
+                "placeholder_subject": "Le sujet de votre message",
+                "placeholder_message": "Votre message...",
+                "btn_send": "Envoyer"
+            },
+            "info": {
+                "title": "Nos coordonnées",
+                "email": "Email",
+                "phone": "Téléphone",
+                "address": "Adresse",
+                "hours": {
+                    "title": "Horaires",
+                    "weekdays": "Lundi - Vendredi: 9h - 18h",
+                    "saturday": "Samedi: 10h - 16h"
+                }
+            },
+            "service": {
+                "title": "Service client réactif",
+                "desc": "Notre équipe répond généralement dans les 24 heures ouvrées. Pour les questions urgentes, n'hésitez pas à nous appeler directement."
+            }
+        },
+        "payment": {
+            "title": "Paiement",
+            "back": "Retour",
+            "steps": {
+                "compte": "Compte",
+                "livraison": "Livraison",
+                "paiement": "Paiement"
+            },
+            "sections": {
+                "account": {
+                    "title": "Informations de compte",
+                    "email_label": "Adresse email",
+                    "email_placeholder": "Email@myemail.com",
+                    "password_label": "Mot de passe",
+                    "password_placeholder": "********",
+                    "register": "Inscription",
+                    "login": "Connexion",
+                    "cancel": "Annuler",
+                    "next": "Informations de livraisons"
+                },
+                "delivery": {
+                    "title": "Informations de livraisons",
+                    "use_saved": "Utiliser l'adresse sauvegardée",
+                    "address_label": "Adresse",
+                    "address_placeholder": "123",
+                    "phone_label": "Numéro de téléphone",
+                    "phone_placeholder": "+33XXXXXXX",
+                    "city_label": "Ville",
+                    "city_placeholder": "Electric avenue",
+                    "zip_label": "Code postal",
+                    "zip_placeholder": "ABC - 123",
+                    "type_label": "Type de livraison",
+                    "types": {
+                        "relay": "Point relais",
+                        "home": "Domicile"
+                    },
+                    "cancel": "Annuler",
+                    "next": "Payer"
+                },
+                "payment": {
+                    "title": "Infos de paiement",
+                    "use_saved": "Utiliser votre carte enregistrée",
+                    "card_option": "Payer par carte",
+                    "paypal_option": "Payer avec PayPal",
+                    "card_name_label": "Nom sur la carte",
+                    "card_name_placeholder": "John Smith",
+                    "card_number_label": "Numéro de carte",
+                    "card_number_placeholder": "123 - 456 -",
+                    "expiration_label": "Expiration",
+                    "cvc_label": "CVC",
+                    "cvc_placeholder": "123",
+                    "cancel": "Annuler l'achat",
+                    "next": "Valider l'achat"
+                }
+            },
+            "confirmation": {
+                "title": "Commande en cours de validation",
+                "btn_home": "Retour à l'accueil"
+            }
+        },
+        "rituals": {
+            "title": "Nos Rituels",
+            "subtitle": "Découvrez nos rituels de beauté inspirés des traditions péruviennes pour une peau rayonnante",
+            "back": "Retour",
+            "heading": "Rituels de Beauté",
+            "duration": "Durée",
+            "difficulty": "Difficulté",
+            "steps_title": "Étapes du rituel",
+            "discover": "Découvrir ce rituel",
+            "about": "À propos de ce rituel",
+            "tips_title": "Conseils pratiques",
+            "recommended": "Produits recommandés",
+            "all_products": "Voir tous les produits",
+            "items": {
+                "morning": {
+                    "title": "Rituel du Matin",
+                    "subtitle": "Réveil Lumineux",
+                    "desc": "Commencez votre journée avec un rituel revitalisant qui éveille votre peau et lui donne éclat et énergie pour affronter la journée.",
+                    "full_desc": "Ce rituel matinal est conçu pour préparer votre peau à affronter les agressions quotidiennes. En suivant ces étapes simples mais efficaces, vous offrez à votre peau une protection optimale tout en stimulant son éclat naturel. Les ingrédients actifs de nos produits travaillent en synergie pour hydrater, protéger et illuminer votre teint.",
+                    "duration": "15 min",
+                    "difficulty": "Facile",
+                    "steps": [
+                        {
+                            "name": "Nettoyage doux",
+                            "desc": "Commencez par nettoyer délicatement votre visage avec notre savon exfoliant pour éliminer les impuretés de la nuit."
+                        },
+                        {
+                            "name": "Tonique revitalisant",
+                            "desc": "Appliquez le tonique pour équilibrer le pH de votre peau et la préparer aux soins suivants."
+                        },
+                        {
+                            "name": "Sérum hydratant",
+                            "desc": "Massez quelques gouttes de notre huile de beauté pour nourrir en profondeur."
+                        },
+                        {
+                            "name": "Crème de jour",
+                            "desc": "Terminez avec votre crème hydratante pour sceller l'hydratation et protéger votre peau."
+                        }
+                    ],
+                    "tips": [
+                        "Effectuez ce rituel chaque matin pour des résultats optimaux",
+                        "Prenez le temps de masser votre visage pour stimuler la circulation",
+                        "Attendez quelques minutes entre chaque étape pour une meilleure absorption"
+                    ]
+                },
+                "evening": {
+                    "title": "Rituel du Soir",
+                    "subtitle": "Régénération Nocturne",
+                    "desc": "Un rituel apaisant pour préparer votre peau au renouvellement cellulaire nocturne et vous offrir un moment de détente.",
+                    "full_desc": "La nuit est le moment idéal pour la régénération de votre peau. Ce rituel du soir vous aide à éliminer toutes les impuretés accumulées durant la journée et à préparer votre peau pour sa phase de réparation nocturne. Les actifs de nos soins travaillent pendant votre sommeil pour une peau régénérée au réveil.",
+                    "duration": "20 min",
+                    "difficulty": "Facile",
+                    "steps": [
+                        {
+                            "name": "Démaquillage",
+                            "desc": "Retirez tout maquillage et impuretés avec notre huile démaquillante douce."
+                        },
+                        {
+                            "name": "Nettoyage profond",
+                            "desc": "Utilisez notre savon exfoliant pour un nettoyage en profondeur."
+                        },
+                        {
+                            "name": "Huile nourrissante",
+                            "desc": "Appliquez généreusement notre huile de beauté pour nourrir intensément."
+                        },
+                        {
+                            "name": "Crème de nuit",
+                            "desc": "Scellez avec une crème riche pour une hydratation nocturne optimale."
+                        }
+                    ],
+                    "tips": [
+                        "Effectuez ce rituel au moins 30 minutes avant le coucher",
+                        "Profitez de ce moment pour vous détendre et decompresser",
+                        "Changez régulièrement vos taies d'oreiller pour une peau saine"
+                    ]
+                },
+                "weekly": {
+                    "title": "Rituel Hebdomadaire",
+                    "subtitle": "Soin Intensif",
+                    "desc": "Offrez à votre peau un soin complet une fois par semaine pour maintenir son éclat et sa santé à long terme.",
+                    "full_desc": "Ce rituel hebdomadaire est un véritable moment de spa à domicile. Il permet d'effectuer un nettoyage en profondeur et de traiter votre peau avec des soins intensifs. En le pratiquant régulièrement, vous maintenez l'éclat et la jeunesse de votre peau sur le long terme.",
+                    "duration": "45 min",
+                    "difficulty": "Intermédiaire",
+                    "steps": [
+                        {
+                            "name": "Gommage doux",
+                            "desc": "Exfoliez votre peau avec notre gommage corps pour éliminer les cellules mortes."
+                        },
+                        {
+                            "name": "Bain de vapeur",
+                            "desc": "Ouvrez vos pores avec un bain de vapeur de 5 minutes."
+                        },
+                        {
+                            "name": "Masque purifiant",
+                            "desc": "Appliquez notre masque en poudre et laissez poser 15 minutes."
+                        },
+                        {
+                            "name": "Massage facial",
+                            "desc": "Massez votre visage avec notre huile pour stimuler la circulation."
+                        },
+                        {
+                            "name": "Sérum intensif",
+                            "desc": "Terminez avec un sérum concentré pour des résultats visibles."
+                        }
+                    ],
+                    "tips": [
+                        "Réservez ce moment pour le week-end quand vous avez plus de temps",
+                        "Créez une ambiance relaxante avec de la musique douce",
+                        "Hydratez-vous bien avant et après ce rituel"
+                    ]
+                },
+                "detox": {
+                    "title": "Rituel Détox",
+                    "subtitle": "Purification Profonde",
+                    "desc": "Un rituel de détoxification pour éliminer les impuretés et redonner à votre peau tout son éclat naturel.",
+                    "full_desc": "Exposée à la pollution, au stress et aux agressions quotidiennes, votre peau a besoin d'une détoxification régulière. Ce rituel élimine en profondeur toutes les toxines accumulées et permet à votre peau de retrouver son équilibre naturel et son éclat d'origine.",
+                    "duration": "30 min",
+                    "difficulty": "Intermédiaire",
+                    "steps": [
+                        {
+                            "name": "Nettoyage en profondeur",
+                            "desc": "Double nettoyage pour éliminer toutes les impuretés."
+                        },
+                        {
+                            "name": "Exfoliation",
+                            "desc": "Gommage doux pour désincruster les pores."
+                        },
+                        {
+                            "name": "Masque détox",
+                            "desc": "Application d'un masque purifiant à base d'argile."
+                        },
+                        {
+                            "name": "Hydratation intense",
+                            "desc": "Sérum et crème pour restaurer l'hydratation."
+                        }
+                    ],
+                    "tips": [
+                        "Idéalement à faire après une période de stress ou d'excès",
+                        "Buvez beaucoup d'eau pour accompagner la détox",
+                        "Évitez le maquillage pendant 24h après ce rituel"
+                    ]
+                }
+            }
+        },
+        "blog": {
+            "title": "Notre Blog",
+            "subtitle": "Conseils beauté, rituels ancestraux et secrets de la nature péruvienne",
+            "back": "Retour",
+            "heading": "Articles",
+            "read_more": "Lire la suite",
+            "posts": {
+                "p1": {
+                    "title": "Les bienfaits de l'huile de jojoba pour votre peau",
+                    "excerpt": "Découvrez comment l'huile de jojoba peut transformer votre routine de soins et apporter éclat et hydratation à votre peau.",
+                    "category": "Soins naturels"
+                },
+                "p2": {
+                    "title": "Rituels de beauté péruviens ancestraux",
+                    "excerpt": "Plongez dans les traditions de beauté du Pérou et découvrez des secrets transmis de génération en génération.",
+                    "category": "Héritage"
+                },
+                "p3": {
+                    "title": "Comment choisir le bon soin pour votre type de peau",
+                    "excerpt": "Guide complet pour identifier votre type de peau et sélectionner les produits les plus adaptés à vos besoins.",
+                    "category": "Conseils"
+                },
+                "p4": {
+                    "title": "L'importance de l'hydratation quotidienne",
+                    "excerpt": "Pourquoi hydrater sa peau chaque jour est essentiel et comment intégrer cette habitude dans votre routine.",
+                    "category": "Bien-être"
+                },
+                "p5": {
+                    "title": "Les ingrédients stars de la cosmétique naturelle",
+                    "excerpt": "Focus sur les ingrédients naturels les plus efficaces et leurs propriétés exceptionnelles pour votre peau.",
+                    "category": "Ingrédients"
+                },
+                "p6": {
+                    "title": "Routine du soir: les étapes essentielles",
+                    "excerpt": "Découvrez la routine du soir idéale pour préparer votre peau au renouvellement cellulaire nocturne.",
+                    "category": "Routines"
+                }
+            }
+        },
+        "podcast": {
+            "title": "Notre Podcast",
+            "subtitle": "Écoutez nos experts partager leurs connaissances sur la beauté naturelle et le bien-être",
+            "back": "Retour",
+            "heading": "Épisodes",
+            "info": {
+                "title": "Beauté Naturelle par Mishki",
+                "subtitle": "Un podcast sur la beauté, le bien-être et la nature",
+                "desc": "Chaque semaine, nous invitons des experts pour discuter des secrets de la beauté naturelle, des ingrédients ancestraux et des rituels de soins du monde entier. Abonnez-vous pour ne manquer aucun épisode !",
+                "spotify": "S'abonner sur Spotify",
+                "apple": "S'abonner sur Apple Podcasts"
+            },
+            "episodes": {
+                "e1": {
+                    "title": "Les secrets de la beauté péruvienne",
+                    "description": "Découvrez les ingrédients ancestraux utilisés par les femmes péruviennes depuis des siècles pour maintenir une peau éclatante.",
+                    "guest_title": "Ethnobotaniste"
+                },
+                "e2": {
+                    "title": "L'huile de jojoba: or liquide pour la peau",
+                    "description": "Tout ce que vous devez savoir sur l'huile de jojoba, ses bienfaits et comment l'intégrer dans votre routine beauté.",
+                    "guest_title": "Cosmétologue"
+                },
+                "e3": {
+                    "title": "Beauté naturelle et développement durable",
+                    "description": "Comment concilier beauté et respect de l'environnement ? Notre engagement pour une cosmétique responsable.",
+                    "guest_title": "Expert en développement durable"
+                },
+                "e4": {
+                    "title": "Les rituels de beauté à travers le monde",
+                    "description": "Voyage autour du monde à la découverte des rituels de beauté traditionnels et leurs adaptations modernes.",
+                    "guest_title": "Anthropologue"
+                },
+                "e5": {
+                    "title": "Skincare: mythes et réalités",
+                    "description": "Démystifions les idées reçues sur les soins de la peau avec une dermatologue renommée.",
+                    "guest_title": "Dermatologue"
+                },
+                "e6": {
+                    "title": "L'art du massage facial",
+                    "description": "Techniques de massage facial pour stimuler la circulation et obtenir un teint lumineux naturellement.",
+                    "guest_title": "Spécialiste en soins japonais"
+                }
+            }
+        },
+        "legal": {
+            "back": "Retour",
+            "terms": {
+                "title": "Conditions générales de vente",
+                "update": "Dernière mise à jour: 11 décembre 2024",
+                "s1": {
+                    "title": "1. Objet",
+                    "text": "Les présentes conditions générales de vente régissent les relations contractuelles entre Mishki et toute personne effectuant un achat via notre site internet. Toute commande implique l'acceptation sans réserve de ces conditions."
+                },
+                "s2": {
+                    "title": "2. Produits",
+                    "text": "Les produits proposés sont ceux décrits sur notre site. Les photographies sont les plus fidèles possibles mais ne peuvent assurer une similitude parfaite avec le produit offert. Mishki se réserve le droit de modifier à tout moment la gamme de produits proposée."
+                },
+                "s3": {
+                    "title": "3. Prix",
+                    "text": "Les prix sont indiqués en euros, toutes taxes comprises. Mishki se réserve le droit de modifier ses prix à tout moment mais les produits seront facturés sur la base des tarifs en vigueur au moment de la validation de la commande."
+                },
+                "s4": {
+                    "title": "4. Commande",
+                    "text": "Le client sélectionne les produits qu'il souhaite commander et valide sa commande après avoir pris connaissance des présentes conditions générales. La validation de la commande vaut acceptation de ces conditions. Une confirmation de commande est envoyée par email."
+                },
+                "s5": {
+                    "title": "5. Paiement",
+                    "text": "Le paiement s'effectue en ligne par carte bancaire via une plateforme de paiement sécurisée. La commande est validée après acceptation du paiement par les organismes bancaires."
+                },
+                "s6": {
+                    "title": "6. Livraison",
+                    "text": "Les produits sont livrés à l'adresse indiquée lors de la commande. Les délais de livraison sont donnés à titre indicatif. Tout retard de livraison ne peut donner lieu à des dommages et intérêts ou à l'annulation de la commande."
+                },
+                "s7": {
+                    "title": "7. Droit de rétractation",
+                    "text": "Conformément à la législation en vigueur, le client dispose d'un délai de 14 jours à compter de la réception de sa commande pour exercer son droit de rétractation, sans avoir à justifier de motifs ni à payer de pénalités."
+                },
+                "s8": {
+                    "title": "8. Responsabilité",
+                    "text": "Mishki ne saurait être tenu pour responsable des dommages résultant d'une mauvaise utilisation des produits. Il appartient au client de vérifier l'adéquation du produit à son usage et de respecter les précautions d'emploi."
+                },
+                "s9": {
+                    "title": "9. Litiges",
+                    "text": "Les présentes conditions sont soumises au droit français. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire. À défaut, les tribunaux français seront seuls compétents."
+                },
+                "s10": {
+                    "title": "10. Contact",
+                    "text": "Pour toute question relative aux présentes conditions, vous pouvez nous contacter à l'adresse suivante: contact@mishki.fr"
+                }
+            },
+            "privacy": {
+                "title": "Politique de confidentialité",
+                "update": "Dernière mise à jour: 11 décembre 2024",
+                "intro": "Chez Mishki, nous accordons une grande importance à la protection de vos données personnelles. Cette politique vous explique comment nous collectons et utilisons vos informations.",
+                "s1": {
+                    "title": "1. Collecte des données",
+                    "text": "Nous collectons les informations que vous nous fournissez lors de la création de votre compte, de vos commandes ou de vos échanges avec notre service client (nom, email, adresse, etc.)."
+                },
+                "s2": {
+                    "title": "2. Utilisation des données",
+                    "text": "Vos données sont utilisées pour la gestion de vos commandes, l'amélioration de nos services et, si vous l'avez accepté, l'envoi d'informations sur nos produits et offres."
+                },
+                "s3": {
+                    "title": "3. Partage des données",
+                    "text": "Mishki ne vend pas vos données à des tiers. Nous les partageons uniquement avec nos prestataires techniques nécessaires à l'exécution de vos commandes (transporteurs, plateformes de paiement)."
+                },
+                "s4": {
+                    "title": "4. Vos droits",
+                    "text": "Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition au traitement de vos données personnelles."
+                }
+            },
+            "delivery": {
+                "title": "Livraison et Retours",
+                "update": "Dernière mise à jour: 11 décembre 2024",
+                "s1": {
+                    "title": "Modes de livraison",
+                    "text": "Nous livrons en France Métropolitaine et en Europe via Colissimo et Chronopost. La livraison est offerte en France dès 50€ d'achat."
+                },
+                "s2": {
+                    "title": "Délais de livraison",
+                    "text": "Les commandes sont préparées sous 24h à 48h ouvrées. Le délai de livraison habituel est de 2 à 4 jours ouvrés en France."
+                },
+                "s3": {
+                    "title": "Retours et échanges",
+                    "text": "Vous disposez de 14 jours pour nous retourner un produit non ouvert. Les frais de retour sont à votre charge, sauf en cas de produit défectueux ou d'erreur de notre part."
+                }
+            }
+        },
+        "auth": {
+            "login": {
+                "title": "Connexion",
+                "subtitle": "Accédez à votre compte Mishki pour gérer vos commandes",
+                "back": "Retour",
+                "email": "Email",
+                "password": "Mot de passe",
+                "btn_login": "Se connecter",
+                "forgot": "Mot de passe oublié ?",
+                "no_account": "Pas encore de compte ?",
+                "register": "Créer un compte"
+            }
+        }
+    }
+}

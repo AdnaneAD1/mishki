@@ -1,20 +1,23 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/apps/b2c/components/ui/button"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export function HeroSection() {
+  const t = useTranslations('b2c.home.hero')
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-<div className="absolute inset-0 z-0">
-  <video
-    autoPlay
-    loop
-    muted
-    playsInline
-    className="w-full h-full object-cover"
-  >
-    <source src="/hero-video.mp4" type="video/mp4" />
-  </video>
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+        >
+          <source src="/b2c/hero-video.mp4" type="video/mp4" />
+        </video>
         <div
           className="absolute inset-0"
           style={{
@@ -31,22 +34,17 @@ export function HeroSection() {
               fontFamily: 'var(--font-caveat)',
             }}
           >
-            Révélez une beauté pure et précieuse avec Mishki, soins d'exception issus de la biodiversité péruvienne.
+            {t('title')}
           </h1>
 
           <p className="text-white text-left text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed font-medium max-w-3xl">
-            Plongez au cœur de Mishki, marque de beauté naturelle raffinée,
-            inspirée des plantes sacrées du Pérou et des rituels traditionnels.
-            Nos soins aux ingrédients 100% naturels révèlent l'éclat de votre peau,
-            respectent la biodiversité et vous offrent une expérience sensorielle
-            unique. Beauté, pureté, douceur et élégance, à chaque geste de votre
-            routine.
+            {t('desc')}
           </p>
 
           <div className="pt-2 sm:pt-4">
             <Link href="/produits">
               <Button className="bg-white text-[#235730] hover:bg-white/90 text-sm sm:text-base px-6 sm:px-8 py-4 sm:py-6 rounded-sm font-medium flex items-center gap-2">
-                Découvrir nos produits
+                {t('cta')}
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
             </Link>
