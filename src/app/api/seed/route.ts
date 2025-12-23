@@ -827,13 +827,18 @@ export async function POST() {
   }
 
   try {
-    const batch = adminDb.batch();
+    const db = adminDb;
+    if (!db) {
+      return NextResponse.json({ ok: false, error: 'Admin not configured' }, { status: 500 });
+    }
+
+    const batch = db.batch();
     const b2bData = buildProtocolesB2B();
-  const downloads = buildDownloadsB2B();
+    const downloads = buildDownloadsB2B();
 
     // Products
     for (const product of buildProducts()) {
-      const ref = adminDb.collection('products').doc(product.slug);
+      const ref = db.collection('products').doc(product.slug);
       batch.set(ref, {
         slug: product.slug,
         category: product.category,
@@ -846,7 +851,7 @@ export async function POST() {
 
     // Blog posts
     for (const post of buildBlogPosts()) {
-      const ref = adminDb.collection('blogPosts').doc(post.slug);
+      const ref = db.collection('blogPosts').doc(post.slug);
       batch.set(ref, {
         slug: post.slug,
         image: post.image,
@@ -862,7 +867,7 @@ export async function POST() {
 
     // Rituals
     for (const ritual of buildRituals()) {
-      const ref = adminDb.collection('rituals').doc(ritual.slug);
+      const ref = db.collection('rituals').doc(ritual.slug);
       batch.set(ref, {
         slug: ritual.slug,
         image: ritual.image,
@@ -874,7 +879,7 @@ export async function POST() {
 
     // Podcasts
     for (const pod of buildPodcasts()) {
-      const ref = adminDb.collection('podcasts').doc(pod.slug);
+      const ref = db.collection('podcasts').doc(pod.slug);
       batch.set(ref, {
         slug: pod.slug,
         image: pod.image,
@@ -888,7 +893,7 @@ export async function POST() {
 
     // B2B Rituels détaillés
     for (const rituel of b2bData.rituels) {
-      const ref = adminDb.collection('rituelsB2B').doc(rituel.slug);
+      const ref = db.collection('rituelsB2B').doc(rituel.slug);
       batch.set(ref, {
         slug: rituel.slug,
         reference: rituel.reference,
@@ -908,7 +913,7 @@ export async function POST() {
 
     // B2B Fiches techniques
     for (const fiche of b2bData.fiches) {
-      const ref = adminDb.collection('fichesTechniquesB2B').doc(fiche.slug);
+      const ref = db.collection('fichesTechniquesB2B').doc(fiche.slug);
       batch.set(ref, {
         slug: fiche.slug,
         reference: fiche.reference,
@@ -929,7 +934,7 @@ export async function POST() {
 
     // B2B Téléchargements (assets)
     for (const asset of downloads) {
-      const ref = adminDb.collection('downloadsB2B').doc(asset.slug);
+      const ref = db.collection('downloadsB2B').doc(asset.slug);
       batch.set(ref, {
         slug: asset.slug,
         type: asset.type,
@@ -944,8 +949,9 @@ export async function POST() {
 
     await batch.commit();
     return NextResponse.json({ ok: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Seed error', error);
-    return NextResponse.json({ ok: false, error: error?.message ?? 'Unknown error' }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
 }
