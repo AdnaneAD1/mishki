@@ -12,7 +12,7 @@ type ProductDb = {
   defaultLocale?: string;
   translations?: Record<string, { name?: string; desc?: string; category?: string }>;
   volume?: string;
-  inStock?: boolean;
+  stock?: number;
 };
 
 export type ProductB2B = {
@@ -41,7 +41,7 @@ const mapProduct = (docId: string, data: ProductDb, locale: string): ProductB2B 
     categorie: data.category || 'Divers',
     categoryLabel: trans.category || data.category,
     formatCabine: data.volume || '-',
-    stock: data.inStock ? 100 : 0,
+    stock: data.stock || 0,
     image: data.image,
   };
 };

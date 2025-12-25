@@ -44,6 +44,7 @@ export function ProductDetail({ productId }: { productId: string }) {
   const [questionName, setQuestionName] = useState('')
   const [isPickingQty, setIsPickingQty] = useState(false)
   const [quantity, setQuantity] = useState(1)
+  const [stockMessage, setStockMessage] = useState<string>('')
 
   const minQty = 1
 
@@ -67,7 +68,18 @@ export function ProductDetail({ productId }: { productId: string }) {
 
   const handleConfirmAdd = () => {
     if (!product) return
+    const stock = product.stock ?? 0
     const qty = Math.max(minQty, quantity || minQty)
+    if (stock <= 0) {
+      setStockMessage(td('stock_out') || 'Rupture de stock')
+      return
+    }
+    if (qty > stock) {
+      setStockMessage(td('stock_limited', { max: stock }) || `Stock insuffisant, max ${stock}`)
+      setQuantity(stock)
+      return
+    }
+    setStockMessage('')
     addToCart(
       {
         id: product.slug,
@@ -141,6 +153,8 @@ export function ProductDetail({ productId }: { productId: string }) {
     )
   }
 
+  const stock = product.stock ?? 0;
+
   return (
     <>
       <Header />
@@ -164,7 +178,14 @@ export function ProductDetail({ productId }: { productId: string }) {
             <div className="space-y-6">
               <div>
                 <h1 className="text-2xl font-semibold text-[#2d2d2d] mb-1">{product.name}</h1>
-                {product.volume && <p className="text-sm text-gray-500">{product.volume}</p>}
+                <div className="flex items-center gap-3">
+                  {product.volume && <p className="text-sm text-gray-500">{product.volume}</p>}
+                  <span className="text-xs font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-700">
+                    {stock > 0
+                      ? td('stock_left', { count: stock }) || `Stock : ${stock}`
+                      : td('stock_out') || 'Rupture de stock'}
+                  </span>
+                </div>
               </div>
 
               <div className="flex items-center gap-4">
@@ -191,7 +212,15 @@ export function ProductDetail({ productId }: { productId: string }) {
               </div>
 
               <div className="space-y-2">
-                {product.inStock && <p className="text-sm font-semibold text-[#235730] uppercase">{td('in_stock')}</p>}
+                {stock > 0 ? (
+                  <p className="text-sm font-semibold text-[#235730] uppercase">
+                    {td('in_stock_with_qty', { count: stock }) || td('in_stock') || 'En stock'}
+                  </p>
+                ) : (
+                  <p className="text-sm font-semibold text-red-600 uppercase">
+                    {td('stock_out') || 'Rupture de stock'}
+                  </p>
+                )}
                 <p className="text-sm text-gray-600">
                   {td('delivery')}<br />
                   <span className="font-medium">{product.deliveryDate || ''}</span>
@@ -245,6 +274,7 @@ export function ProductDetail({ productId }: { productId: string }) {
                       {td('cancel') ?? 'Annuler'}
                     </Button>
                   </div>
+                  {stockMessage && <p className="text-xs text-red-600">{stockMessage}</p>}
                 </div>
               ) : (
                 <Button onClick={startQuantityPicker} className="w-full bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm text-base px-8 py-6 h-auto">
@@ -252,6 +282,7 @@ export function ProductDetail({ productId }: { productId: string }) {
                   {td('add_to_cart')}
                 </Button>
               )}
+              {stockMessage && !isPickingQty && <p className="text-xs text-red-600">{stockMessage}</p>}
             </div>
           </div>
 

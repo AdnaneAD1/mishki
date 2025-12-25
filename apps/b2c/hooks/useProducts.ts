@@ -17,6 +17,7 @@ export type ProductDoc = {
   volume?: string;
   oldPrice?: number | string;
   inStock?: boolean;
+  stock?: number;
   deliveryDate?: string;
   loyaltyPoints?: number;
   rating?: number;
@@ -34,6 +35,7 @@ type ProductDb = {
   volume?: string;
   oldPrice?: number | string;
   inStock?: boolean;
+  stock?: number;
   deliveryDate?: string;
   loyaltyPoints?: number;
   rating?: number;
@@ -65,6 +67,7 @@ function mapProduct(
     volume: data.volume,
     oldPrice: data.oldPrice,
     inStock: data.inStock,
+    stock: data.stock,
     deliveryDate: data.deliveryDate,
     loyaltyPoints: data.loyaltyPoints,
     rating: data.rating,

@@ -19,6 +19,7 @@ import {
 import PaypalButton from '@/components/payments/PaypalButton';
 import { useCheckoutB2B } from '../hooks/useCheckoutB2B';
 import PaymentSuccessModal from '../components/PaymentSuccessModal';
+import { useProductsB2B } from '../hooks/useProductsB2B';
 
 export default function Panier() {
   const t = useTranslations('b2b.cart');
@@ -26,6 +27,7 @@ export default function Panier() {
   const { items, removeFromCart, updateQuantity, clearCart, total } = useCart();
   const { user } = useAuth();
   const { createOrderAndPayment } = useCheckoutB2B();
+  const { products } = useProductsB2B();
   const router = useRouter();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paypalError, setPaypalError] = useState('');
@@ -37,6 +39,7 @@ export default function Panier() {
   >([]);
   const [totalsSnapshot, setTotalsSnapshot] = useState<{ subtotalHT: number; tax: number; totalTTC: number; currency: string } | null>(null);
   const minQty = 100;
+  const [stockMessages, setStockMessages] = useState<Record<string, string>>({});
 
   const formatMoney = useMemo(
     () =>
@@ -63,6 +66,34 @@ export default function Panier() {
   const calculateRemise = (prix: number) => {
     const remise = user?.remise || 0;
     return prix - (prix * remise) / 100;
+  };
+
+  const productById = useMemo(() => {
+    const map = new Map<string, { stock?: number }>();
+    products.forEach((p) => map.set(p.id, { stock: p.stock }));
+    return map;
+  }, [products]);
+
+  const applyQuantity = async (itemId: string, nextQtyRaw: number) => {
+    const productInfo = productById.get(itemId);
+    const stock = productInfo?.stock;
+    const nextQty = Math.max(minQty, nextQtyRaw);
+    if (stock !== undefined) {
+      if (stock <= 0) {
+        setStockMessages((prev) => ({ ...prev, [itemId]: t('stock.out') || 'Stock épuisé' }));
+        return;
+      }
+      if (nextQty > stock) {
+        setStockMessages((prev) => ({
+          ...prev,
+          [itemId]: t('stock.limited', { max: stock }) || `Stock max: ${stock}`,
+        }));
+        await updateQuantity(itemId, stock);
+        return;
+      }
+    }
+    setStockMessages((prev) => ({ ...prev, [itemId]: '' }));
+    await updateQuantity(itemId, nextQty);
   };
 
   const totalHT = items.reduce((sum, item) => {
@@ -260,7 +291,7 @@ export default function Panier() {
                       <div className="flex items-center gap-3">
                         <div className="flex items-center border border-gray-200 rounded-lg">
                           <button
-                            onClick={() => updateQuantity(item.id, Math.max(minQty, item.quantite - 1))}
+                            onClick={() => applyQuantity(item.id, item.quantite - 1)}
                             className="p-2 hover:bg-gray-50 transition-colors rounded-l-lg"
                             style={{ color: '#235730' }}
                             disabled={item.quantite <= minQty}
@@ -271,7 +302,7 @@ export default function Panier() {
                             {item.quantite}
                           </span>
                           <button
-                            onClick={() => updateQuantity(item.id, item.quantite + 1)}
+                            onClick={() => applyQuantity(item.id, item.quantite + 1)}
                             className="p-2 hover:bg-gray-50 transition-colors rounded-r-lg"
                             style={{ color: '#235730' }}
                           >
@@ -282,6 +313,9 @@ export default function Panier() {
                           <p className="text-gray-900">{formatMoney.format(sousTotal)}</p>
                         </div>
                       </div>
+                      {stockMessages[item.id] && (
+                        <p className="text-xs text-red-600 mt-1">{stockMessages[item.id]}</p>
+                      )}
                     </div>
                   </div>
                 </div>

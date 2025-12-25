@@ -1,6 +1,6 @@
 'use client';
 
-import { addDoc, collection, db } from '@mishki/firebase';
+import { addDoc, collection, db, doc, runTransaction } from '@mishki/firebase';
 import { serverTimestamp } from 'firebase/firestore';
 import { useCallback } from 'react';
 
@@ -41,6 +41,37 @@ type CreateOrderAndPaymentParams = {
 export function useCheckoutB2B() {
   const createOrderAndPayment = useCallback(
     async ({ user, lines, totals, paymentProvider, paymentId = null, status = 'payee' }: CreateOrderAndPaymentParams) => {
+      // Vérifier stock et décrémenter via transaction
+      await runTransaction(db, async (trx) => {
+        // Lire tous les stocks avant toute écriture (contrainte Firestore transactions).
+        const stockSnapshots = await Promise.all(
+          lines.map(async (l) => {
+            if (!l.reference) return null;
+            const ref = doc(db, 'products', l.reference);
+            const snap = await trx.get(ref);
+            return { line: l, ref, snap };
+          })
+        );
+
+        // Validation stocks
+        for (const entry of stockSnapshots) {
+          if (!entry || !entry.snap.exists()) continue;
+          const data = entry.snap.data() as { stock?: number };
+          if (typeof data.stock === 'number' && data.stock < entry.line.quantity) {
+            throw new Error(`Stock insuffisant pour ${entry.line.reference}`);
+          }
+        }
+
+        // Ecritures après validation
+        for (const entry of stockSnapshots) {
+          if (!entry || !entry.snap.exists()) continue;
+          const data = entry.snap.data() as { stock?: number };
+          if (typeof data.stock === 'number') {
+            trx.update(entry.ref, { stock: data.stock - entry.line.quantity });
+          }
+        }
+      });
+
       const orderDoc = await addDoc(collection(db, 'orders'), {
         userId: user?.id ?? null,
         userEmail: user?.email ?? null,

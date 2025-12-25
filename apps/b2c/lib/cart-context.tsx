@@ -1,7 +1,7 @@
 'use client'
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from '@mishki/firebase'
+import { auth, db, doc, getDoc } from '@mishki/firebase'
 
 interface CartItem {
   id: string
@@ -14,8 +14,8 @@ interface CartItem {
 interface CartContextType {
   items: CartItem[]
   itemCount: number
-  addToCart: (item: Omit<CartItem, 'quantity'>, quantity?: number) => void
-  updateQuantity: (id: string, quantity: number) => void
+  addToCart: (item: Omit<CartItem, 'quantity'>, quantity?: number) => Promise<void>
+  updateQuantity: (id: string, quantity: number) => Promise<void>
   removeFromCart: (id: string) => void
   removeItems: (ids: string[]) => void
   clearCart: () => void
@@ -75,6 +75,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (typeof window === 'undefined') return
     localStorage.setItem(storageKey(userId), JSON.stringify(items))
+    // Pas de persistance distante côté B2C
   }, [items, userId])
 
   const itemCount = items.reduce((total, item) => total + item.quantity, 0)
@@ -83,27 +84,54 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCheckoutItems(selection)
   }
 
-  const addToCart = (newItem: Omit<CartItem, 'quantity'>, quantity: number = 1) => {
-    setItems(currentItems => {
-      const existingItem = currentItems.find(item => item.id === newItem.id)
+  const fetchStock = async (productId: string): Promise<number | null> => {
+    try {
+      const snap = await getDoc(doc(db, 'products', productId))
+      if (!snap.exists()) return null
+      const data = snap.data() as { stock?: number }
+      if (typeof data.stock === 'number') return data.stock
+      return null
+    } catch {
+      return null
+    }
+  }
+
+  const addToCart = async (newItem: Omit<CartItem, 'quantity'>, quantity: number = 1) => {
+    const desiredQty = Math.max(1, quantity)
+    const currentItem = items.find((i) => i.id === newItem.id)
+    const currentQty = currentItem?.quantity ?? 0
+    const stock = await fetchStock(newItem.id)
+    if (stock !== null && currentQty + desiredQty > stock) {
+      const allowed = Math.max(0, stock - currentQty)
+      if (allowed <= 0) {
+        console.warn('Stock insuffisant pour ce produit')
+        return
+      }
+      setItems((current) =>
+        current.map((item) =>
+          item.id === newItem.id ? { ...item, quantity: currentQty + allowed } : item
+        )
+      )
+      return
+    }
+    setItems((currentItems) => {
+      const existingItem = currentItems.find((item) => item.id === newItem.id)
       if (existingItem) {
-        return currentItems.map(item =>
-          item.id === newItem.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
+        return currentItems.map((item) =>
+          item.id === newItem.id ? { ...item, quantity: item.quantity + desiredQty } : item
         )
       }
-      return [...currentItems, { ...newItem, quantity }]
+      return [...currentItems, { ...newItem, quantity: desiredQty }]
     })
   }
 
-  const updateQuantity = (id: string, quantity: number) => {
+  const updateQuantity = async (id: string, quantity: number) => {
     const min = 1
     const nextQty = Math.max(min, quantity)
-    setItems(currentItems =>
-      currentItems.map(item =>
-        item.id === id ? { ...item, quantity: nextQty } : item
-      )
+    const stock = await fetchStock(id)
+    const clamped = stock !== null ? Math.min(nextQty, stock) : nextQty
+    setItems((currentItems) =>
+      currentItems.map((item) => (item.id === id ? { ...item, quantity: clamped } : item))
     )
   }
 
@@ -123,25 +151,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const setCartOwner = (newUserId: string | null) => {
     // Si on passe sur un compte, on fusionne le guest puis on vide le guest pour éviter des re-fusions ultérieures.
-    if (newUserId) {
-      const guestCart = loadCart(null)
-      const userCart = loadCart(newUserId)
-      const merged = mergeCarts(guestCart, userCart.length ? userCart : items)
-      setUserId(newUserId)
-      setItems(merged)
+    const assign = async () => {
+      if (newUserId) {
+        const guestCart = loadCart(null)
+        const userLocalCart = loadCart(newUserId)
+        // Merge uniquement local (pas de remote)
+        const merged = mergeCarts(mergeCarts(guestCart, userLocalCart.length ? userLocalCart : items), [])
+        setUserId(newUserId)
+        setItems(merged)
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(storageKey(newUserId), JSON.stringify(merged))
+          localStorage.setItem(storageKey(null), JSON.stringify([]))
+        }
+        return
+      }
+
+      // Si on revient invité (logout), on repart sur un panier vide pour éviter de réinjecter l'ancien panier user.
+      setUserId(null)
+      setItems([])
       if (typeof window !== 'undefined') {
-        localStorage.setItem(storageKey(newUserId), JSON.stringify(merged))
         localStorage.setItem(storageKey(null), JSON.stringify([]))
       }
-      return
     }
-
-    // Si on revient invité (logout), on repart sur un panier vide pour éviter de réinjecter l'ancien panier user.
-    setUserId(null)
-    setItems([])
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(storageKey(null), JSON.stringify([]))
-    }
+    void assign()
   }
 
   return (

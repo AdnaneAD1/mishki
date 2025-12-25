@@ -27,7 +27,7 @@ export default function AccueilPro() {
     error,
     formatAmount,
     formatDate,
-  } = useProDashboardB2B();
+  } = useProDashboardB2B(user?.id);
 
   const quickActions = [
     {

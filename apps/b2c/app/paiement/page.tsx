@@ -17,7 +17,7 @@ import PaypalButton from '@/components/payments/PaypalButton'
 import { useCheckout } from '@/apps/b2c/hooks/useCheckout'
 import InvoiceDownloadButton from '@/components/invoice/InvoiceDownloadButton'
 import { InvoiceData } from '@/lib/invoice/types'
-import { auth } from '@mishki/firebase'
+import { auth, db, doc, getDoc } from '@mishki/firebase'
 import { onAuthStateChanged } from 'firebase/auth'
 
 type Step = 'livraison' | 'paiement'
@@ -31,7 +31,8 @@ export default function PaymentPage() {
   const [currentStep, setCurrentStep] = useState<Step>('livraison')
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [addressMode, setAddressMode] = useState<'saved' | 'new'>('saved')
-  const [selectedSavedAddress, setSelectedSavedAddress] = useState('123 , Electric avenue')
+  const [selectedSavedAddress, setSelectedSavedAddress] = useState('')
+  const [savedProfile, setSavedProfile] = useState<{ address?: string | null; city?: string | null; postalCode?: string | null; phone?: string | null; firstName?: string | null; lastName?: string | null } | null>(null)
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal'>('card')
   const [deliveryError, setDeliveryError] = useState('')
   const [paymentError, setPaymentError] = useState('')
@@ -57,10 +58,44 @@ export default function PaymentPage() {
     cvc: '',
   })
 
-  // Capture userId for order persistence
+  // Capture userId for order persistence and fetch saved address
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
       setUserId(user?.uid ?? null)
+      if (user?.uid) {
+        try {
+          const snap = await getDoc(doc(db, 'users', user.uid))
+          if (snap.exists()) {
+            const data = snap.data() as { address?: string | null; city?: string | null; postalCode?: string | null; phone?: string | null; firstName?: string | null; lastName?: string | null }
+            setSavedProfile({
+              address: data.address ?? null,
+              city: data.city ?? null,
+              postalCode: data.postalCode ?? null,
+              phone: data.phone ?? null,
+              firstName: data.firstName ?? null,
+              lastName: data.lastName ?? null,
+            })
+            const parts = [data.address, data.city, data.postalCode].filter(Boolean).join(', ')
+            setSelectedSavedAddress(parts || '')
+            // Pré-remplir formulaire pour affichage
+            setFormData((prev) => ({
+              ...prev,
+              address: data.address ?? prev.address,
+              city: data.city ?? prev.city,
+              postalCode: data.postalCode ?? prev.postalCode,
+              phone: data.phone ?? prev.phone,
+            }))
+          } else {
+            setAddressMode('new')
+          }
+        } catch (e) {
+          console.error('PaymentPage: failed to load saved address', e)
+        }
+      } else {
+        setSavedProfile(null)
+        setSelectedSavedAddress('')
+        setAddressMode('new')
+      }
     })
     return () => unsub()
   }, [])
@@ -101,12 +136,16 @@ export default function PaymentPage() {
 
   const validateDelivery = () => {
     const missing: string[] = []
-    if (!formData.phone.trim()) missing.push('phone')
+    const phone = formData.phone.trim() || savedProfile?.phone?.trim() || ''
+    if (!phone) missing.push('phone')
     if (!formData.deliveryType.trim()) missing.push('deliveryType')
     if (addressMode === 'new') {
       if (!formData.address.trim()) missing.push('address')
       if (!formData.city.trim()) missing.push('city')
       if (!formData.postalCode.trim()) missing.push('postalCode')
+    }
+    if (addressMode === 'saved' && !savedProfile?.address && !savedProfile?.city && !savedProfile?.postalCode) {
+      missing.push('savedAddress')
     }
     const hasError = missing.length > 0
     setDeliveryError(hasError ? 'Merci de remplir les champs requis de livraison.' : '')
@@ -169,6 +208,24 @@ export default function PaymentPage() {
       total: round2(totalTTC),
       currency: 'EUR',
     }
+    const fullName = [savedProfile?.firstName, savedProfile?.lastName].filter(Boolean).join(' ') || null
+    const shipping = addressMode === 'saved'
+      ? {
+          address: savedProfile?.address ?? null,
+          city: savedProfile?.city ?? null,
+          postalCode: savedProfile?.postalCode ?? null,
+          phone: formData.phone || savedProfile?.phone || null,
+          fullName,
+          deliveryType: formData.deliveryType || null,
+        }
+      : {
+        address: formData.address || null,
+        city: formData.city || null,
+        postalCode: formData.postalCode || null,
+        phone: formData.phone || null,
+        fullName,
+        deliveryType: formData.deliveryType || null,
+      }
     setSaving(true)
     try {
       const id = await createOrderAndPayment({
@@ -178,6 +235,7 @@ export default function PaymentPage() {
         paymentProvider: provider,
         paymentId,
         status: 'payee',
+        shipping,
       })
       setOrderId(id)
       setOrderLinesSnapshot(linesSnapshot)
@@ -214,6 +272,8 @@ export default function PaymentPage() {
     if (!orderId || !orderLinesSnapshot.length || !totalsSnapshot) return null
     const issueDate = new Date()
     const buyerAddress = addressMode === 'saved' ? selectedSavedAddress : formData.address
+    const buyerName = [savedProfile?.firstName, savedProfile?.lastName].filter(Boolean).join(' ') || 'Client B2C'
+    const buyerPhone = formData.phone || savedProfile?.phone || undefined
     const invoiceNumber = `INV-${orderId.slice(0, 8)}`
     return {
       locale: userRegion,
@@ -221,9 +281,9 @@ export default function PaymentPage() {
       orderNumber: orderId,
       issueDate: issueDate.toLocaleDateString('fr-FR'),
       buyer: {
-        name: 'Client B2C',
+        name: buyerName,
         addressLines: [buyerAddress || 'Adresse client', formData.city || '', formData.postalCode || ''].filter(Boolean),
-        phone: formData.phone || undefined,
+        phone: buyerPhone,
       },
       seller: {
         name: 'MISHKI LAB',
@@ -248,7 +308,22 @@ export default function PaymentPage() {
         currency: 'EUR',
       },
     }
-  }, [orderId, orderLinesSnapshot, totalsSnapshot, addressMode, formData.address, formData.city, formData.postalCode, formData.phone, userRegion, selectedSavedAddress, taxRate])
+  }, [
+    orderId,
+    orderLinesSnapshot,
+    totalsSnapshot,
+    addressMode,
+    formData.address,
+    formData.city,
+    formData.postalCode,
+    formData.phone,
+    userRegion,
+    selectedSavedAddress,
+    taxRate,
+    savedProfile?.firstName,
+    savedProfile?.lastName,
+    savedProfile?.phone,
+  ])
 
   if (showConfirmation) {
     return (
@@ -405,14 +480,24 @@ export default function PaymentPage() {
                       </Label>
                     </div>
                     <select
-                      disabled={addressMode !== 'saved'}
+                      disabled={addressMode !== 'saved' || !savedProfile}
                       value={selectedSavedAddress}
                       onChange={(e) => setSelectedSavedAddress(e.target.value)}
                       className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:border-[#235730] focus:ring-[#235730] disabled:bg-gray-50 disabled:text-gray-400"
                     >
-                      <option>123 , Electric avenue</option>
-                      <option>45 Rue des Fleurs, Paris</option>
+                      {savedProfile ? (
+                        <option value={selectedSavedAddress || ''}>
+                          {[savedProfile.address, savedProfile.city, savedProfile.postalCode].filter(Boolean).join(', ')}
+                        </option>
+                      ) : (
+                        <option value="">{t('sections.delivery.no_saved_address')}</option>
+                      )}
                     </select>
+                    {savedProfile && (
+                      <p className="text-xs text-gray-500">
+                        {t('sections.delivery.saved_hint')}
+                      </p>
+                    )}
 
                     <div className="flex items-center gap-3 pt-4 border-t border-gray-200">
                       <input

@@ -17,6 +17,7 @@ export function ProductsSection() {
   const { products, loading, error } = useProducts()
   const [activeProduct, setActiveProduct] = useState<string | null>(null)
   const [quantity, setQuantity] = useState(1)
+  const [stockMessages, setStockMessages] = useState<Record<string, string>>({})
   const minQty = 1
   const limitedProducts = products.slice(0, 4)
 
@@ -42,7 +43,23 @@ export function ProductsSection() {
   }
 
   const handleConfirm = (product: typeof products[number]) => {
+    const stock = typeof product.stock === 'number' ? product.stock : null
     const qty = Math.max(minQty, quantity || minQty)
+    if (stock !== null) {
+      if (stock <= 0) {
+        setStockMessages((prev) => ({ ...prev, [product.slug]: t('stock_out') || 'Rupture de stock' }))
+        return
+      }
+      if (qty > stock) {
+        setStockMessages((prev) => ({
+          ...prev,
+          [product.slug]: t('stock_limited', { max: stock }) || `Stock insuffisant, max ${stock}`,
+        }))
+        setQuantity(stock)
+        return
+      }
+    }
+    setStockMessages((prev) => ({ ...prev, [product.slug]: '' }))
     addToCart(
       {
         id: product.slug,
@@ -117,7 +134,14 @@ export function ProductsSection() {
                 <p className="text-xs text-[#2d2d2d] leading-relaxed">
                   {product.desc || product.long_desc || ''}
                 </p>
-                <p className="text-[#235730] font-semibold">{formatMoney.format(product.price)}</p>
+                <div className="flex items-center justify-between">
+                  <p className="text-[#235730] font-semibold">{formatMoney.format(product.price)}</p>
+                  <span className="text-[11px] font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-700">
+                    {typeof product.stock === 'number' && product.stock > 0
+                      ? t('stock_left', { count: product.stock }) || `Stock : ${product.stock}`
+                      : t('stock_out') || 'Rupture'}
+                  </span>
+                </div>
                 {activeProduct === product.slug ? (
                   <div className="flex flex-wrap items-center justify-center gap-2">
                     <div className="flex items-center w-full max-w-[180px] border border-[#235730]/40 rounded-sm overflow-hidden mx-auto">
@@ -159,6 +183,9 @@ export function ProductsSection() {
                         {t('cancel') ?? 'Annuler'}
                       </Button>
                     </div>
+                    {stockMessages[product.slug] && (
+                      <p className="w-full text-center text-[11px] text-red-600">{stockMessages[product.slug]}</p>
+                    )}
                   </div>
                 ) : (
                   <Button
@@ -168,6 +195,9 @@ export function ProductsSection() {
                     <ShoppingCart className="w-4 h-4 mr-2" />
                     {t('add_to_cart')}
                   </Button>
+                )}
+                {stockMessages[product.slug] && activeProduct !== product.slug && (
+                  <p className="text-[11px] text-red-600">{stockMessages[product.slug]}</p>
                 )}
               </div>
             </div>

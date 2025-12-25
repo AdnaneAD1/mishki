@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useLocale } from 'next-intl';
-import { collection, db, getDocs } from '@mishki/firebase';
+import { collection, db, getDocs, query, where } from '@mishki/firebase';
 
 type OrderLine = {
   name?: string;
@@ -56,7 +56,7 @@ export type DashboardNotification = {
   type: 'info' | 'warning' | 'success';
 };
 
-export function useProDashboardB2B() {
+export function useProDashboardB2B(userId?: string | null) {
   const locale = useLocale();
   const [stats, setStats] = useState<Stats>({
     monthlyOrders: 0,
@@ -81,18 +81,32 @@ export function useProDashboardB2B() {
       setLoading(true);
       setError(null);
       try {
+        if (!userId) {
+          setStats({
+            monthlyOrders: 0,
+            turnover: 0,
+            stockCount: 0,
+            activeRefills: 0,
+          });
+          setRecentOrders([]);
+          setNotifications([]);
+          return;
+        }
+
+        const ordersQ = query(collection(db, 'orders'), where('userId', '==', userId));
+        const paymentsQ = query(collection(db, 'payments'), where('userId', '==', userId));
+
         const [ordersSnap, paymentsSnap, reassortSnap, notificationsSnap] = await Promise.all([
-          getDocs(collection(db, 'orders')),
-          getDocs(collection(db, 'payments')),
+          getDocs(ordersQ),
+          getDocs(paymentsQ),
           getDocs(collection(db, 'reassortConfigsB2B')),
-          getDocs(collection(db, 'notificationsB2B')),
+          getDocs(query(collection(db, 'notificationsB2B'), where('userId', '==', userId))),
         ]);
         if (!mounted) return;
 
         const orders = ordersSnap.docs.map((d) => ({ id: d.id, ...(d.data() as OrderDoc) }));
         const payments = paymentsSnap.docs.map((d) => d.data() as PaymentDoc);
-
-        const turnover = payments.reduce((sum, p) => sum + (p.amountTTC ?? 0), 0);
+        const turnover = payments.reduce((sum, p) => sum + (p.amountHT ?? p.amountTTC ?? 0), 0);
         const monthlyOrders = orders.length;
         const activeRefills = reassortSnap.docs.filter((d) => {
           const data = d.data() as Partial<ReassortConfigDoc>;
@@ -116,7 +130,7 @@ export function useProDashboardB2B() {
               id: o.id,
               date: date ? date.toISOString() : '',
               products,
-              amount: o.amountTTC ?? o.amountHT ?? 0,
+              amount: o.amountHT ?? o.amountTTC ?? 0,
               status: o.status || 'en_cours',
             };
           })
@@ -153,7 +167,7 @@ export function useProDashboardB2B() {
     return () => {
       mounted = false;
     };
-  }, [locale]);
+  }, [locale, userId]);
 
   const formatAmount = useMemo(
     () =>

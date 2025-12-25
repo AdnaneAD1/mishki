@@ -51,6 +51,7 @@ export default function InvoiceFR({ data }: { data: InvoiceData }) {
               {buyer.addressLines.map((l: string, i: number) => (
                 <Text key={i}>{l}</Text>
               ))}
+              {buyer.phone && <Text>Tél : {buyer.phone}</Text>}
             </View>
           </View>
         </View>

@@ -51,6 +51,8 @@ export default function CommandeRapide() {
     { description: string; code?: string; qty: number; unitPrice: number }[]
   >([]);
   const [totalsSnapshot, setTotalsSnapshot] = useState<{ subtotalHT: number; tax: number; totalTTC: number; currency: string } | null>(null);
+  const [stockMessages, setStockMessages] = useState<Record<string, string>>({});
+  const hasStockError = useMemo(() => Object.values(stockMessages).some(Boolean), [stockMessages]);
   const {} = useCart(); // cart not used here
   const { products, loading, error } = useProductsB2B();
   const { user } = useAuth();
@@ -195,6 +197,47 @@ export default function CommandeRapide() {
     ]);
   };
 
+  const hasStockIssues = () => {
+    let issue = false;
+    orderLines.forEach((line) => {
+      const product = validatedProducts.get(line.id);
+      if (!product) {
+        issue = true;
+        return;
+      }
+      const stock = product.stock;
+      if (typeof stock === 'number') {
+        if (stock <= 0) {
+          setStockMessages((prev) => ({ ...prev, [line.id]: t('stock.out') || 'Stock épuisé' }));
+          issue = true;
+          return;
+        }
+        if (stock < MIN_QTY) {
+          setStockMessages((prev) => ({
+            ...prev,
+            [line.id]: t('stock.min', { min: MIN_QTY, stock }) || `Stock insuffisant (min ${MIN_QTY}, dispo ${stock})`,
+          }));
+          setOrderLines((prev) =>
+            prev.map((l) => (l.id === line.id ? { ...l, quantite: stock } : l))
+          );
+          issue = true;
+          return;
+        }
+        if (line.quantite > stock) {
+          setStockMessages((prev) => ({
+            ...prev,
+            [line.id]: t('stock.limited', { max: stock }) || `Stock max: ${stock}`,
+          }));
+          setOrderLines((prev) =>
+            prev.map((l) => (l.id === line.id ? { ...l, quantite: stock } : l))
+          );
+          issue = true;
+        }
+      }
+    });
+    return issue;
+  };
+
   const removeLine = (id: string) => {
     if (orderLines.length > 1) {
       setOrderLines(orderLines.filter((line) => line.id !== id));
@@ -202,6 +245,11 @@ export default function CommandeRapide() {
         const newMap = new Map(prev);
         newMap.delete(id);
         return newMap;
+      });
+      setStockMessages((prev) => {
+        const next = { ...prev };
+        delete next[id];
+        return next;
       });
     }
   };
@@ -217,25 +265,111 @@ export default function CommandeRapide() {
     const product = productByRef.get(normalized);
     if (product) {
       setValidatedProducts((prev) => new Map(prev).set(id, product));
+      enforceStockForLine(id, product);
     } else {
       setValidatedProducts((prev) => {
         const newMap = new Map(prev);
         newMap.delete(id);
         return newMap;
       });
+      setStockMessages((prev) => {
+        const next = { ...prev };
+        delete next[id];
+        return next;
+      });
     }
   };
 
-  const updateQuantity = (id: string, quantite: number) => {
-    const next = Math.max(MIN_QTY, quantite);
+  const enforceStockForLine = (id: string, product: ProductB2B) => {
+    const stock = product?.stock;
     setOrderLines((prev) =>
-      prev.map((line) => (line.id === id ? { ...line, quantite: next } : line))
+      prev.map((line) => {
+        if (line.id !== id) return line;
+        const current = line.quantite;
+        if (typeof stock === 'number') {
+          if (stock <= 0) {
+            setStockMessages((prevMsg) => ({ ...prevMsg, [id]: t('stock.out') || 'Stock épuisé' }));
+            return { ...line, quantite: Math.max(0, Math.min(MIN_QTY, stock)) };
+          }
+          if (stock < MIN_QTY) {
+            setStockMessages((prevMsg) => ({
+              ...prevMsg,
+              [id]: t('stock.min', { min: MIN_QTY, stock }) || `Stock insuffisant (min ${MIN_QTY}, dispo ${stock})`,
+            }));
+            return { ...line, quantite: stock };
+          }
+          if (current > stock) {
+            setStockMessages((prevMsg) => ({
+              ...prevMsg,
+              [id]: t('stock.limited', { max: stock }) || `Stock max: ${stock}`,
+            }));
+            return { ...line, quantite: stock };
+          }
+        }
+        setStockMessages((prevMsg) => ({ ...prevMsg, [id]: '' }));
+        return line;
+      })
+    );
+  };
+
+  const updateQuantity = (id: string, quantite: number) => {
+    const product = validatedProducts.get(id);
+    const stock = product?.stock;
+    const requested = Math.max(MIN_QTY, quantite);
+    if (typeof stock === 'number') {
+      if (stock <= 0) {
+        setStockMessages((prev) => ({ ...prev, [id]: t('stock.out') || 'Stock épuisé' }));
+        setOrderLines((prev) =>
+          prev.map((line) => (line.id === id ? { ...line, quantite: Math.max(0, Math.min(MIN_QTY, stock)) } : line))
+        );
+        return;
+      }
+      if (requested > stock) {
+        setStockMessages((prev) => ({
+          ...prev,
+          [id]: t('stock.limited', { max: stock }) || `Stock max: ${stock}`,
+        }));
+        setOrderLines((prev) =>
+          prev.map((line) => (line.id === id ? { ...line, quantite: stock } : line))
+        );
+        return;
+      }
+    }
+    setStockMessages((prev) => ({ ...prev, [id]: '' }));
+    const finalQty = typeof stock === 'number' ? Math.min(requested, stock) : requested;
+    setOrderLines((prev) =>
+      prev.map((line) => (line.id === id ? { ...line, quantite: finalQty } : line))
     );
   };
 
   const handleQuickPick = (product: ProductB2B) => {
     const ref = product.reference;
     const displayedRef = ref.toUpperCase();
+    const stock = product.stock;
+    // Ne pas insérer si stock insuffisant (< MIN_QTY ou 0)
+    if (typeof stock === 'number' && stock < MIN_QTY) {
+      // cible une ligne vide si existante pour afficher le message
+      const emptyLine = orderLines.find((line) => !line.reference);
+      const targetId = emptyLine?.id;
+      if (targetId) {
+        setStockMessages((prev) => ({
+          ...prev,
+          [targetId]: t('stock.min', { min: MIN_QTY, stock }) || `Stock insuffisant (min ${MIN_QTY}, dispo ${stock})`,
+        }));
+      } else {
+        const newId = Date.now().toString();
+        setOrderLines((prev) => [
+          ...prev,
+          { id: newId, reference: '', nom: '', quantite: MIN_QTY, prixHT: 0, image: '' },
+        ]);
+        setStockMessages((prev) => ({
+          ...prev,
+          [newId]: t('stock.min', { min: MIN_QTY, stock }) || `Stock insuffisant (min ${MIN_QTY}, dispo ${stock})`,
+        }));
+      }
+      return;
+    }
+
     setOrderLines((prev) => {
       const emptyLine = prev.find((line) => !line.reference);
       if (emptyLine) {
@@ -247,6 +381,7 @@ export default function CommandeRapide() {
           map.set(emptyLine.id, product);
           return map;
         });
+        enforceStockForLine(emptyLine.id, product);
         return updated;
       }
 
@@ -263,7 +398,9 @@ export default function CommandeRapide() {
         map.set(newLine.id, product);
         return map;
       });
-      return [...prev, newLine];
+      const next = [...prev, newLine];
+      enforceStockForLine(newLine.id, product);
+      return next;
     });
   };
 
@@ -281,7 +418,8 @@ export default function CommandeRapide() {
         return;
       }
     });
-    if (hasError || validatedProducts.size === 0) {
+    const stockIssue = hasStockIssues();
+    if (hasError || validatedProducts.size === 0 || stockIssue) {
       setFeedback({ type: 'error', message: t('error_msg') });
       return;
     }
@@ -504,6 +642,9 @@ export default function CommandeRapide() {
                           <Plus className="w-4 h-4" />
                         </button>
                       </div>
+                      {stockMessages[line.id] && (
+                        <p className="text-xs text-red-600 mt-1">{stockMessages[line.id]}</p>
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       {isValid ? (
@@ -546,7 +687,7 @@ export default function CommandeRapide() {
               </div>
               <button
                 onClick={handleOpenPaymentModal}
-                disabled={validatedProducts.size === 0}
+                disabled={validatedProducts.size === 0 || hasStockError}
                 className="flex items-center gap-2 px-6 py-3 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ backgroundColor: '#235730' }}
                 onMouseEnter={(e) => validatedProducts.size > 0 && (e.currentTarget.style.backgroundColor = '#1a4023')}

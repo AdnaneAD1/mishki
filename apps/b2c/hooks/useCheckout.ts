@@ -1,6 +1,6 @@
 'use client';
 
-import { addDoc, collection, db } from '@mishki/firebase';
+import { addDoc, collection, db, doc, runTransaction } from '@mishki/firebase';
 import { serverTimestamp } from 'firebase/firestore';
 import { useCallback } from 'react';
 
@@ -18,6 +18,15 @@ type Totals = {
   currency: string;
 };
 
+type ShippingInfo = {
+  address?: string | null;
+  city?: string | null;
+  postalCode?: string | null;
+  phone?: string | null;
+  deliveryType?: string | null;
+  fullName?: string | null;
+};
+
 type CreateOrderAndPaymentParams = {
   userId?: string | null;
   lines: CheckoutLine[];
@@ -25,11 +34,43 @@ type CreateOrderAndPaymentParams = {
   paymentProvider: 'paypal' | 'card';
   paymentId?: string | null;
   status?: 'payee' | 'en_attente' | 'retard';
+  shipping?: ShippingInfo;
 };
 
 export function useCheckout() {
   const createOrderAndPayment = useCallback(
-    async ({ userId = null, lines, totals, paymentProvider, paymentId = null, status = 'payee' }: CreateOrderAndPaymentParams) => {
+    async ({ userId = null, lines, totals, paymentProvider, paymentId = null, status = 'payee', shipping }: CreateOrderAndPaymentParams) => {
+      // Vérifier stock et décrémenter via transaction
+      await runTransaction(db, async (trx) => {
+        // Lire tous les stocks avant toute écriture (contrainte Firestore transactions).
+        const stockSnapshots = await Promise.all(
+          lines.map(async (l) => {
+            if (!l.slug) return null;
+            const ref = doc(db, 'products', l.slug);
+            const snap = await trx.get(ref);
+            return { line: l, ref, snap };
+          })
+        );
+
+        // Validation stocks
+        for (const entry of stockSnapshots) {
+          if (!entry || !entry.snap.exists()) continue;
+          const data = entry.snap.data() as { stock?: number };
+          if (typeof data.stock === 'number' && data.stock < entry.line.quantity) {
+            throw new Error(`Stock insuffisant pour ${entry.line.slug}`);
+          }
+        }
+
+        // Ecritures après validation
+        for (const entry of stockSnapshots) {
+          if (!entry || !entry.snap.exists()) continue;
+          const data = entry.snap.data() as { stock?: number };
+          if (typeof data.stock === 'number') {
+            trx.update(entry.ref, { stock: data.stock - entry.line.quantity });
+          }
+        }
+      });
+
       const orderDoc = await addDoc(collection(db, 'orders'), {
         userId,
         createdAt: serverTimestamp(),
@@ -45,6 +86,7 @@ export function useCheckout() {
         paymentStatus: status,
         paymentProvider,
         paymentId,
+        shipping: shipping ?? null,
       });
 
       await addDoc(collection(db, 'payments'), {
@@ -53,10 +95,11 @@ export function useCheckout() {
         amountTTC: totals.total,
         tax: totals.tax,
         currency: totals.currency,
-        status,
-        provider: paymentProvider,
+        paymentProvider,
         paymentId,
-        createdAt: serverTimestamp(),
+        status,
+        userId,
+        shipping: shipping ?? null,
       });
 
       return orderDoc.id;

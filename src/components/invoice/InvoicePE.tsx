@@ -65,6 +65,7 @@ export default function InvoicePE({ data }: { data: InvoiceData }) {
               {buyer.addressLines.map((l: string, i: number) => (
                 <Text key={i}>{l}</Text>
               ))}
+              {buyer.phone && <Text>Teléfono: {buyer.phone}</Text>}
             </View>
           </View>
           <View style={{ width: '36%', gap: 3 }}>

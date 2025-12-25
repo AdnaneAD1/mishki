@@ -9,7 +9,19 @@ import {
 } from "firebase/auth"
 import { doc, serverTimestamp, setDoc } from "firebase/firestore"
 import { auth, db } from "./client"
-export { collection, doc, doc as fsDoc, getDoc, getDocs, addDoc, query, where } from "firebase/firestore"
+export {
+  collection,
+  doc,
+  doc as fsDoc,
+  getDoc,
+  getDocs,
+  addDoc,
+  query,
+  where,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore"
+export { updateDoc, runTransaction, increment } from "firebase/firestore"
 
 export type SignupB2CInput = {
   email: string

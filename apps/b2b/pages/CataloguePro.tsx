@@ -16,6 +16,7 @@ export default function CataloguePro() {
   const [addedProducts, setAddedProducts] = useState<Set<string>>(new Set());
   const [qtyInputs, setQtyInputs] = useState<Record<string, number>>({});
   const [openQty, setOpenQty] = useState<string | null>(null);
+  const [stockMessage, setStockMessage] = useState<Record<string, string>>({});
 
   const { addToCart } = useCart();
   const { user } = useAuth();
@@ -89,7 +90,22 @@ export default function CataloguePro() {
   const minQty = user ? 100 : 1;
 
   const handleConfirmQty = (product: ProductB2B) => {
-    const qty = Math.max(minQty, qtyInputs[product.id] ?? minQty);
+    const requested = Math.max(minQty, qtyInputs[product.id] ?? minQty);
+    if (typeof product.stock === 'number') {
+      if (product.stock <= 0) {
+        setStockMessage((prev) => ({ ...prev, [product.id]: t('stock.out') || 'Stock épuisé' }));
+        return;
+      }
+      if (requested > product.stock) {
+        setStockMessage((prev) => ({
+          ...prev,
+          [product.id]: t('stock.limited', { max: product.stock }) || `Stock max: ${product.stock}`,
+        }));
+        setQtyInputs((prev) => ({ ...prev, [product.id]: product.stock }));
+        return;
+      }
+    }
+    setStockMessage((prev) => ({ ...prev, [product.id]: '' }));
     addToCart(
       {
         id: product.id,
@@ -98,7 +114,7 @@ export default function CataloguePro() {
         prixHT: product.prixHT,
         image: product.image,
       },
-      qty
+      requested
     );
     setAddedProducts((prev) => new Set(prev).add(product.id));
     setOpenQty(null);
@@ -280,26 +296,35 @@ export default function CataloguePro() {
                       <h3 className="text-gray-900">{product.nom}</h3>
                       <p className="text-xs text-gray-500 mb-1">{product.reference}</p>
                     </div>
+                    <div className="text-xs font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-700">
+                      {product.stock > 0
+                        ? t('stock.label', { count: product.stock }) || `Stock : ${product.stock}`
+                        : t('stock.out') || 'Rupture'}
+                    </div>
                   </div>
                   <p className="text-sm text-gray-600 mb-3">{product.description}</p>
                   <div className="flex items-end justify-between mb-3">
                     <div>
                       {user?.remise ? (
-                        <>
+                        <div>
                           <p className="text-xs text-gray-400 line-through">
                             {formatMoney.format(product.prixHT)}
                           </p>
                           <p className="text-lg text-gray-900">
                             {formatMoney.format(prixRemise)} <span className="text-sm">{htLabel}</span>
                           </p>
-                        </>
+                        </div>
                       ) : (
                         <p className="text-lg text-gray-900">
                           {formatMoney.format(product.prixHT)} <span className="text-sm">{htLabel}</span>
                         </p>
                       )}
                     </div>
-                    <span className="text-xs text-gray-500">{t('in_stock', { count: product.stock })}</span>
+                    <span className="text-xs text-gray-500">
+                      {product.stock > 0
+                        ? t('stock.in_stock', { count: product.stock }) || t('stock.label', { count: product.stock }) || `Stock : ${product.stock}`
+                        : t('stock.out') || 'Rupture'}
+                    </span>
                   </div>
                   {openQty === product.id ? (
                     <div className="w-full space-y-2">
@@ -356,6 +381,9 @@ export default function CataloguePro() {
                           {t('cancel') ?? 'Annuler'}
                         </button>
                       </div>
+                      {stockMessage[product.id] && (
+                        <p className="text-xs text-red-600">{stockMessage[product.id]}</p>
+                      )}
                     </div>
                   ) : (
                     <button
@@ -438,7 +466,11 @@ export default function CataloguePro() {
                           <p className="text-sm text-gray-900">{formatMoney.format(product.prixHT)} {htLabel}</p>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{product.stock}</td>
+                      <td className="px-6 py-4 text-sm text-gray-600">
+                        {product.stock > 0
+                          ? t('stock.label', { count: product.stock }) || `Stock : ${product.stock}`
+                          : t('stock.out') || 'Rupture'}
+                      </td>
                       <td className="px-6 py-4">
                         {openQty === product.id ? (
                           <div className="flex items-center gap-1 flex-nowrap">
@@ -519,6 +551,9 @@ export default function CataloguePro() {
                               </>
                             )}
                           </button>
+                        )}
+                        {stockMessage[product.id] && (
+                          <p className="text-xs text-red-600 mt-1">{stockMessage[product.id]}</p>
                         )}
                       </td>
                     </tr>
