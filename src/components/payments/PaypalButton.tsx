@@ -30,12 +30,18 @@ export default function PaypalButton({
     if (!clientId) {
       const msg = 'NEXT_PUBLIC_PAYPAL_CLIENT_ID manquant';
       setError(msg);
-      onError?.(msg);
       return null;
     }
     return loadScript({ clientId, currency });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currency]);
+
+  // Notify parent of initialization errors
+  useEffect(() => {
+    if (error) {
+      onError?.(error);
+    }
+  }, [error, onError]);
 
   useEffect(() => {
     if (disabled) return;

@@ -34,18 +34,18 @@ export default function Protocoles() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-gray-900 mb-2">{t('title')}</h1>
-        <p className="text-gray-600">
+        <h1 className="text-gray-900 mb-2 text-lg md:text-xl lg:text-2xl">{t('title')}</h1>
+        <p className="text-xs md:text-sm text-gray-600">
           {t('subtitle')}
         </p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4">
-        <div className="flex flex-col lg:flex-row gap-4">
+      <div className="bg-white rounded-xl border border-gray-200 p-3 md:p-4">
+        <div className="flex flex-col lg:flex-row gap-3 md:gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">

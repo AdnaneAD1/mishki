@@ -190,6 +190,7 @@
             "in_stock": "{count} en stock",
             "stock": {
                 "label": "Stock : {count}",
+                "in_stock": "{count} en stock",
                 "out": "Rupture"
             },
             "no_results": "Aucun produit trouvé",
@@ -363,7 +364,8 @@
                 "col_ttc": "Montant TTC",
                 "col_due": "Échéance",
                 "col_status": "Statut",
-                "col_actions": "Actions"
+                "col_actions": "Actions",
+                "action_download": "Télécharger la facture"
             },
             "no_results": "Aucune facture trouvée",
             "no_results_desc": "Essayez de modifier vos critères de recherche",
@@ -783,7 +785,7 @@
                 },
                 "authenticity": {
                     "title": "Authenticité",
-                    "desc": "Nous préservons les recettes ancestrales péruviennes transmises de génération en génération."
+"desc": "Nous préservons les recettes ancestrales péruviennes transmises de génération en génération."
                 },
                 "sustainability": {
                     "title": "Durabilité",

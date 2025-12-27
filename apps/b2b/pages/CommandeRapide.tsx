@@ -504,15 +504,15 @@ export default function CommandeRapide() {
       )}
 
       {/* References Table */}
-      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200">
-        <h3 className="text-gray-900 mb-3">{t('common_refs')}</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg-grid-cols-6 gap-2 text-sm">
-          {loading && <span className="text-gray-500 text-sm">{t('loading') || 'Chargement...'}</span>}
-          {error && <span className="text-red-600 text-sm">{error}</span>}
+      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-4 md:p-6 border border-blue-200">
+        <h3 className="text-base md:text-lg text-gray-900 mb-3">{t('common_refs')}</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-sm">
+          {loading && <span className="text-gray-500 text-xs md:text-sm">{t('loading') || 'Chargement...'}</span>}
+          {error && <span className="text-red-600 text-xs md:text-sm">{error}</span>}
           {!loading && !error && commonProducts.map((product) => (
             <div
               key={product.id}
-              className="bg-white rounded-lg px-3 py-2 text-gray-700 hover:bg-blue-100 transition-colors cursor-pointer"
+              className="bg-white rounded-lg px-2 py-2 md:px-3 text-xs md:text-sm text-gray-700 hover:bg-blue-100 transition-colors cursor-pointer text-center"
               onClick={() => handleQuickPick(product)}
             >
               {product.reference}
@@ -523,11 +523,11 @@ export default function CommandeRapide() {
 
       {/* Order Form */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center justify-between">
-            <h2 className="text-gray-900">{t('form_title')}</h2>
+        <div className="p-4 md:p-6 border-b border-gray-200">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <h2 className="text-base md:text-lg text-gray-900">{t('form_title')}</h2>
             {remise > 0 && (
-              <span className="text-sm text-gray-700">
+              <span className="text-xs md:text-sm text-gray-700">
                 Remise pro : <span className="font-semibold text-[#235730]">{remise}%</span>
               </span>
             )}
@@ -535,15 +535,15 @@ export default function CommandeRapide() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full min-w-[700px]">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_ref')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_product')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_price')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_qty')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_total')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600"></th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_ref')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600 hidden md:table-cell">{t('table.col_product')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_price')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_qty')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_total')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -554,13 +554,13 @@ export default function CommandeRapide() {
 
                 return (
                   <tr key={line.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-4">
                       <input
                         type="text"
                         value={line.reference}
                         onChange={(e) => updateReference(line.id, e.target.value)}
                         placeholder={t('input_placeholder')}
-                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${hasReference && !isValid
+                        className={`w-full px-2 md:px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 text-xs md:text-sm ${hasReference && !isValid
                           ? 'border-red-300 focus:ring-red-500 bg-red-50'
                           : isValid
                             ? 'border-green-300 focus:ring-green-500 bg-green-50'
@@ -571,7 +571,7 @@ export default function CommandeRapide() {
                         <p className="text-xs text-red-600 mt-1">{t('invalid_ref')}</p>
                       )}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-4 hidden md:table-cell">
                       {isValid ? (
                         <div className="flex items-center gap-2">
                           <Image
@@ -579,36 +579,36 @@ export default function CommandeRapide() {
                             alt={product.nom}
                             width={40}
                             height={40}
-                            className="w-10 h-10 rounded-lg object-cover"
+                            className="w-8 h-8 md:w-10 md:h-10 rounded-lg object-cover flex-shrink-0"
                           />
-                          <span className="text-sm text-gray-900">{product.nom}</span>
+                          <span className="text-xs md:text-sm text-gray-900 truncate">{product.nom}</span>
                         </div>
                       ) : (
-                        <span className="text-sm text-gray-400">-</span>
+                        <span className="text-xs md:text-sm text-gray-400">-</span>
                       )}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-4">
                       {isValid ? (
-                        <div className="text-sm text-gray-900 space-y-1">
+                        <div className="text-xs md:text-sm text-gray-900 space-y-1">
                           {remise > 0 && (
                             <p className="text-xs text-gray-400 line-through">
                               {formatMoney.format(product.prixHT)} {htLabel}
                             </p>
                           )}
-                          <p>{formatMoney.format(priceWithRemise(product))} {htLabel}</p>
+                          <p className="whitespace-nowrap">{formatMoney.format(priceWithRemise(product))} {htLabel}</p>
                         </div>
                       ) : (
-                        <span className="text-sm text-gray-400">-</span>
+                        <span className="text-xs md:text-sm text-gray-400">-</span>
                       )}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
+                    <td className="px-3 md:px-6 py-4">
+                      <div className="flex items-center gap-1 md:gap-2">
                         <button
                           onClick={() => updateQuantity(line.id, line.quantite - 1)}
                           disabled={line.quantite <= MIN_QTY}
-                          className="p-2 rounded-lg border border-gray-200 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                          className="p-1.5 md:p-2 rounded-lg border border-gray-200 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
                         >
-                          <Minus className="w-4 h-4" />
+                          <Minus className="w-3 h-3 md:w-4 md:h-4" />
                         </button>
                         <input
                           type="number"
@@ -616,42 +616,42 @@ export default function CommandeRapide() {
                           step={1}
                           value={line.quantite}
                           onChange={(e) => updateQuantity(line.id, parseInt(e.target.value) || MIN_QTY)}
-                          className="w-24 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-16 md:w-24 px-2 md:px-3 py-1.5 md:py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs md:text-sm text-center"
                         />
                         <button
                           onClick={() => updateQuantity(line.id, line.quantite + 1)}
-                          className="p-2 rounded-lg border border-gray-200 hover:bg-gray-100"
+                          className="p-1.5 md:p-2 rounded-lg border border-gray-200 hover:bg-gray-100 flex-shrink-0"
                         >
-                          <Plus className="w-4 h-4" />
+                          <Plus className="w-3 h-3 md:w-4 md:h-4" />
                         </button>
                       </div>
                       {stockMessages[line.id] && (
                         <p className="text-xs text-red-600 mt-1">{stockMessages[line.id]}</p>
                       )}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-4">
                       {isValid ? (
-                        <div className="text-sm text-gray-900 space-y-1 text-right">
+                        <div className="text-xs md:text-sm text-gray-900 space-y-1 text-right">
                           {remise > 0 && (
-                            <p className="text-xs text-gray-400 line-through">
+                            <p className="text-xs text-gray-400 line-through whitespace-nowrap">
                               {formatMoney.format(product.prixHT * line.quantite)} {htLabel}
                             </p>
                           )}
-                          <p>
+                          <p className="whitespace-nowrap">
                             {formatMoney.format(priceWithRemise(product) * line.quantite)} {htLabel}
                           </p>
                         </div>
                       ) : (
-                        <span className="text-sm text-gray-400">-</span>
+                        <span className="text-xs md:text-sm text-gray-400">-</span>
                       )}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-4">
                       <button
                         onClick={() => removeLine(line.id)}
                         disabled={orderLines.length === 1}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="p-1.5 md:p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-3 h-3 md:w-4 md:h-4" />
                       </button>
                     </td>
                   </tr>
@@ -661,29 +661,29 @@ export default function CommandeRapide() {
           </table>
         </div>
 
-        <div className="p-6 bg-gray-50 border-t border-gray-200">
-          <div className="flex items-center justify-between">
+        <div className="p-4 md:p-6 bg-gray-50 border-t border-gray-200">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
             <button
               onClick={addLine}
-              className="flex items-center gap-2 px-4 py-2 hover:bg-blue-50 rounded-lg transition-colors"
+              className="flex items-center justify-center md:justify-start gap-2 px-4 py-2 hover:bg-blue-50 rounded-lg transition-colors text-sm md:text-base"
             >
               <Plus className="w-4 h-4" />
               {t('add_line')}
             </button>
-            <div className="flex items-center gap-6">
-              <div className="text-right">
-                <p className="text-sm text-gray-600">{t('total_label')}</p>
-                <p className="text-2xl text-gray-900">{formatMoney.format(calculateTotal())} {htLabel}</p>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <div className="text-center sm:text-right">
+                <p className="text-xs md:text-sm text-gray-600">{t('total_label')}</p>
+                <p className="text-xl md:text-2xl text-gray-900">{formatMoney.format(calculateTotal())} {htLabel}</p>
               </div>
               <button
                 onClick={goToPaymentPage}
                 disabled={validatedProducts.size === 0 || hasStockError}
-                className="flex items-center gap-2 px-6 py-3 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center justify-center gap-2 px-4 md:px-6 py-3 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
                 style={{ backgroundColor: '#235730' }}
                 onMouseEnter={(e) => validatedProducts.size > 0 && (e.currentTarget.style.backgroundColor = '#1a4023')}
                 onMouseLeave={(e) => validatedProducts.size > 0 && (e.currentTarget.style.backgroundColor = '#235730')}
               >
-                <ShoppingCart className="w-5 h-5" />
+                <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" />
                 {t('btn_validate', { count: validatedProducts.size })}
               </button>
             </div>
@@ -692,10 +692,10 @@ export default function CommandeRapide() {
       </div>
 
       {/* Tips */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
         <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-          <h4 className="text-gray-900 mb-2">{t('tips.tip1_title')}</h4>
-          <p className="text-sm text-gray-600">
+          <h4 className="text-sm md:text-base text-gray-900 mb-2">{t('tips.tip1_title')}</h4>
+          <p className="text-xs md:text-sm text-gray-600">
             {t('tips.tip1_desc')}
           </p>
         </div>

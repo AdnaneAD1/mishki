@@ -278,17 +278,17 @@ export default function FacturesPro() {
       {/* Factures Table */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full min-w-[900px]">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_num')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_date')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_products')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_ht')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_ttc')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_due')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_status')}</th>
-                <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_actions')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_num')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_date')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600 hidden lg:table-cell">{t('table.col_products')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600 hidden sm:table-cell">{t('table.col_ht')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_ttc')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600 hidden md:table-cell">{t('table.col_due')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_status')}</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -296,31 +296,31 @@ export default function FacturesPro() {
                 const pdfUrl = selectPdfUrl(facture);
                 return (
                   <tr key={facture.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-gray-400" />
-                        <span className="text-sm text-gray-900">{facture.numero}</span>
+                        <FileText className="w-3 h-3 md:w-4 md:h-4 text-gray-400 flex-shrink-0" />
+                        <span className="text-xs md:text-sm text-gray-900">{facture.numero}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{formatDate(facture.date)}</td>
-                    <td className="px-6 py-4">
-                      <span className="text-sm text-gray-600 max-w-xs truncate block">
+                    <td className="px-3 md:px-6 py-4 text-xs md:text-sm text-gray-600">{formatDate(facture.date)}</td>
+                    <td className="px-3 md:px-6 py-4 hidden lg:table-cell">
+                      <span className="text-xs md:text-sm text-gray-600 max-w-xs truncate block">
                         {facture.produits}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
+                    <td className="px-3 md:px-6 py-4 text-xs md:text-sm text-gray-900 hidden sm:table-cell">
                       {formatMoney.format(facture.montantHT ?? 0)}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
+                    <td className="px-3 md:px-6 py-4 text-xs md:text-sm text-gray-900">
                       {formatMoney.format(facture.montantTTC ?? 0)}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-1 text-sm text-gray-600">
+                    <td className="px-3 md:px-6 py-4 hidden md:table-cell">
+                      <div className="flex items-center gap-1 text-xs md:text-sm text-gray-600">
                         <Calendar className="w-3 h-3" />
                         {formatDate(facture.dateEcheance)}
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-4">
                       <span
                         className={`inline-block px-3 py-1 rounded-full text-xs ${getStatutBadge(
                           facture.statut
@@ -329,34 +329,34 @@ export default function FacturesPro() {
                         {getStatutLabel(facture.statut)}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
+                    <td className="px-3 md:px-6 py-4">
+                      <div className="flex items-center gap-1 md:gap-2">
                         {pdfUrl ? (
                           <>
                             <a
                               href={pdfUrl}
                               target="_blank"
                               rel="noreferrer"
-                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors inline-flex"
+                              className="p-1.5 md:p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors inline-flex"
                               title={t('table.action_view')}
                             >
-                              <Eye className="w-4 h-4" />
+                              <Eye className="w-3 h-3 md:w-4 md:h-4" />
                             </a>
                             <a
                               href={pdfUrl}
                               download
-                              className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors inline-flex"
+                              className="p-1.5 md:p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors inline-flex"
                               title={t('table.action_download')}
                             >
-                              <Download className="w-4 h-4" />
+                              <Download className="w-3 h-3 md:w-4 md:h-4" />
                             </a>
                           </>
                         ) : facture.invoiceData ? (
                           <InvoiceDownloadButton
                             data={facture.invoiceData}
-                            className="p-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors inline-flex"
+                            className="p-1.5 md:p-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors inline-flex"
                             fileName={`facture-${facture.numero}.pdf`}
-                            label={<Download className="w-4 h-4" aria-label={t('table.action_download')} />}
+                            label={<Download className="w-3 h-3 md:w-4 md:h-4" aria-label={t('table.action_download')} />}
                             templateOverride={facture.locale}
                           />
                         ) : (

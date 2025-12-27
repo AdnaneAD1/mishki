@@ -415,15 +415,15 @@ export default function CataloguePro() {
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[900px]">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_product')}</th>
-                  <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_ref')}</th>
-                  <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_format')}</th>
-                  <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_price')}</th>
-                  <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_stock')}</th>
-                  <th className="px-6 py-3 text-left text-xs text-gray-600">{t('table.col_action')}</th>
+                  <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_product')}</th>
+                  <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600 hidden sm:table-cell">{t('table.col_ref')}</th>
+                  <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_format')}</th>
+                  <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_price')}</th>
+                  <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600 hidden lg:table-cell">{t('table.col_stock')}</th>
+                  <th className="px-3 md:px-6 py-3 text-left text-xs text-gray-600">{t('table.col_action')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -433,48 +433,48 @@ export default function CataloguePro() {
 
                   return (
                     <tr key={product.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4">
+                      <td className="px-3 md:px-6 py-4">
                         <div className="flex items-center gap-3">
                           <Image
                             src={product.image}
                             alt={product.nom}
                             width={48}
                             height={48}
-                            className="w-12 h-12 rounded-lg object-cover"
+                            className="w-10 h-10 md:w-12 md:h-12 rounded-lg object-cover flex-shrink-0"
                           />
-                          <div>
-                            <p className="text-sm text-gray-900">{product.nom}</p>
-                            <p className="text-xs text-gray-500">{product.description}</p>
+                          <div className="min-w-0">
+                            <p className="text-xs md:text-sm text-gray-900 truncate">{product.nom}</p>
+                            <p className="text-xs text-gray-500 truncate hidden md:block">{product.description}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{product.reference}</td>
-                      <td className="px-6 py-4">
-                        <span className="px-2 py-1 text-xs rounded text-white" style={{ backgroundColor: '#235730' }}>
+                      <td className="px-3 md:px-6 py-4 text-xs md:text-sm text-gray-600 hidden sm:table-cell">{product.reference}</td>
+                      <td className="px-3 md:px-6 py-4">
+                        <span className="px-2 py-1 text-xs rounded text-white whitespace-nowrap" style={{ backgroundColor: '#235730' }}>
                           {formatVolume(product.formatCabine)}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 md:px-6 py-4">
                         {user?.remise ? (
                           <div>
                             <p className="text-xs text-gray-400 line-through">
                               {formatMoney.format(product.prixHT)}
                             </p>
-                            <p className="text-sm text-gray-900">{formatMoney.format(prixRemise)} {htLabel}</p>
+                            <p className="text-xs md:text-sm text-gray-900 whitespace-nowrap">{formatMoney.format(prixRemise)} {htLabel}</p>
                           </div>
                         ) : (
-                          <p className="text-sm text-gray-900">{formatMoney.format(product.prixHT)} {htLabel}</p>
+                          <p className="text-xs md:text-sm text-gray-900 whitespace-nowrap">{formatMoney.format(product.prixHT)} {htLabel}</p>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-3 md:px-6 py-4 text-xs md:text-sm text-gray-600 hidden lg:table-cell">
                         {product.stock > 0
                           ? t('stock.label', { count: product.stock }) || `Stock : ${product.stock}`
                           : t('stock.out') || 'Rupture'}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 md:px-6 py-4">
                         {openQty === product.id ? (
-                          <div className="flex items-center gap-1 flex-nowrap">
-                            <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden max-w-[120px]">
+                          <div className="flex items-center gap-1 flex-wrap md:flex-nowrap">
+                            <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden w-full md:w-auto md:max-w-[120px]">
                               <button
                                 type="button"
                                 className="px-2 py-1.5 text-gray-700 hover:bg-gray-50"
@@ -497,7 +497,7 @@ export default function CataloguePro() {
                                     [product.id]: Math.max(minQty, Number(e.target.value) || minQty),
                                   }))
                                 }
-                                className="w-full text-center px-2 py-1.5 text-sm focus:outline-none"
+                                className="w-full text-center px-2 py-1.5 text-xs md:text-sm focus:outline-none"
                               />
                               <button
                                 type="button"
@@ -512,17 +512,17 @@ export default function CataloguePro() {
                                 <Plus className="w-4 h-4" aria-label="plus" />
                               </button>
                             </div>
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-1 w-full md:w-auto justify-end">
                               <button
                                 onClick={() => handleConfirmQty(product)}
-                                className="w-9 h-9 rounded-lg text-white flex items-center justify-center"
+                                className="w-8 h-8 md:w-9 md:h-9 rounded-lg text-white flex items-center justify-center flex-shrink-0"
                                 style={{ backgroundColor: '#235730' }}
                               >
                                 <ShoppingCart className="w-4 h-4" aria-label="add" />
                               </button>
                               <button
                                 onClick={() => setOpenQty(null)}
-                                className="w-9 h-9 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 flex items-center justify-center"
+                                className="w-8 h-8 md:w-9 md:h-9 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 flex items-center justify-center flex-shrink-0"
                               >
                                 <Plus className="w-4 h-4 rotate-45" aria-label="close" />
                               </button>
@@ -531,7 +531,7 @@ export default function CataloguePro() {
                         ) : (
                           <button
                             onClick={() => handleOpenQty(product)}
-                            className={`px-4 py-2 rounded-lg transition-all text-sm flex items-center gap-2 ${isAdded
+                            className={`px-3 md:px-4 py-2 rounded-lg transition-all text-xs md:text-sm flex items-center gap-2 whitespace-nowrap ${isAdded
                               ? 'bg-green-100 text-green-700'
                               : 'text-white'
                               }`}
@@ -542,12 +542,12 @@ export default function CataloguePro() {
                             {isAdded ? (
                               <>
                                 <Check className="w-4 h-4" />
-                                {t('table.btn_added')}
+                                <span className="hidden sm:inline">{t('table.btn_added')}</span>
                               </>
                             ) : (
                               <>
                                 <Plus className="w-4 h-4" />
-                                {t('table.btn_add')}
+                                <span className="hidden sm:inline">{t('table.btn_add')}</span>
                               </>
                             )}
                           </button>

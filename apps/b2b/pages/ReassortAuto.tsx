@@ -96,17 +96,17 @@ export default function ReassortAuto() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-start justify-between">
+      <div className="space-y-4 md:space-y-6">
+        <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
           <div>
-            <h1 className="text-gray-900 mb-2 flex items-center gap-2">
-              <RotateCcw className="w-7 h-7 text-orange-600" />
+            <h1 className="text-gray-900 mb-2 flex items-center gap-2 text-lg md:text-xl lg:text-2xl">
+              <RotateCcw className="w-6 h-6 md:w-7 md:h-7 text-orange-600" />
               {t('title')}
             </h1>
-            <p className="text-gray-600">{t('subtitle')}</p>
+            <p className="text-xs md:text-sm text-gray-600">{t('subtitle')}</p>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-6 text-center text-gray-700">
+        <div className="bg-white rounded-xl border border-gray-200 p-4 md:p-6 text-center text-sm md:text-base text-gray-700">
           {t('loading', { defaultMessage: 'Chargement...' })}
         </div>
       </div>
@@ -115,17 +115,17 @@ export default function ReassortAuto() {
 
   if (error) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-start justify-between">
+      <div className="space-y-4 md:space-y-6">
+        <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
           <div>
-            <h1 className="text-gray-900 mb-2 flex items-center gap-2">
-              <RotateCcw className="w-7 h-7 text-orange-600" />
+            <h1 className="text-gray-900 mb-2 flex items-center gap-2 text-lg md:text-xl lg:text-2xl">
+              <RotateCcw className="w-6 h-6 md:w-7 md:h-7 text-orange-600" />
               {t('title')}
             </h1>
-            <p className="text-gray-600">{t('subtitle')}</p>
+            <p className="text-xs md:text-sm text-gray-600">{t('subtitle')}</p>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-red-200 p-6 text-center text-red-700">
+        <div className="bg-white rounded-xl border border-red-200 p-4 md:p-6 text-center text-sm md:text-base text-red-700">
           {error}
         </div>
       </div>

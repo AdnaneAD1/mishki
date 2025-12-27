@@ -327,26 +327,26 @@ export default function PaiementB2B() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-6 py-10">
-        <div className="flex items-center gap-3 mb-6">
+      <div className="container mx-auto px-4 md:px-6 py-6 md:py-10">
+        <div className="flex items-center gap-3 mb-4 md:mb-6">
           <div>
-            <h1 className="text-xl md:text-2xl text-gray-900">{tr('title', 'Paiement')}</h1>
-            <p className="text-sm text-gray-600">{tr('subtitle', 'Validation de votre commande B2B')}</p>
+            <h1 className="text-lg md:text-xl lg:text-2xl text-gray-900">{tr('title', 'Paiement')}</h1>
+            <p className="text-xs md:text-sm text-gray-600">{tr('subtitle', 'Validation de votre commande B2B')}</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <section className="bg-white rounded-lg border border-gray-200 p-6 space-y-4">
-              <h2 className="text-gray-900 text-lg">{tr('orderSummary.title', 'Résumé de commande')}</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="lg:col-span-2 space-y-4 md:space-y-6">
+            <section className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 space-y-4">
+              <h2 className="text-gray-900 text-base md:text-lg">{tr('orderSummary.title', 'Résumé de commande')}</h2>
               {user?.remise ? (
-                <p className="text-sm text-gray-700">
+                <p className="text-xs md:text-sm text-gray-700">
                   {tr('orderSummary.discount', 'Remise professionnelle appliquée :')}{' '}
                   <span className="font-semibold text-[#235730]">{user.remise}%</span>
                 </p>
               ) : null}
               {baseLines.length === 0 ? (
-                <p className="text-sm text-gray-600">{tr('orderSummary.empty', 'Aucun article dans votre commande.')}</p>
+                <p className="text-xs md:text-sm text-gray-600">{tr('orderSummary.empty', 'Aucun article dans votre commande.')}</p>
               ) : (
                 <div className="space-y-3">
                   {baseLines.map((line, idx) => (
