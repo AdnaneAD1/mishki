@@ -1,4 +1,3 @@
-
 import "./globals.css";
 
 import { AuthProvider } from "@/apps/b2b/context/AuthContext";
@@ -7,6 +6,9 @@ import { Caveat, Inter, Playfair_Display } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { auth, db, doc, getDoc } from '@mishki/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import RoleRedirector from '@/components/RoleRedirector';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -43,6 +45,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
             <CartProvider>
+              <RoleRedirector />
               {children}
               <LanguageSwitcher />
             </CartProvider>

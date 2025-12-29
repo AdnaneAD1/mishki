@@ -656,6 +656,7 @@
             "products": {
                 "title": "Novedades",
                 "add_to_cart": "Añadir al carrito",
+                "cancel": "Cancelar",
                 "loading": "Cargando...",
                 "stock_left": "Stock: {count}",
                 "stock_out": "Agotado",

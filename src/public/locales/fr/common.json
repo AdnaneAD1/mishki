@@ -656,6 +656,7 @@
             "products": {
                 "title": "Nouveautés",
                 "add_to_cart": "Ajouter au panier",
+                "cancel": "Annuler",
                 "loading": "Chargement...",
                 "stock_left": "Stock : {count}",
                 "stock_out": "Rupture",

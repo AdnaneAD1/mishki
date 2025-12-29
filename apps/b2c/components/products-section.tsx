@@ -108,7 +108,7 @@ export function ProductsSection() {
           {limitedProducts.map((product) => (
             <div
               key={product.slug}
-              className="bg-transparent"
+              className="bg-transparent flex flex-col"
             >
               <Link href={`/produits/${product.slug}`}>
                 <div className="relative h-72 mb-4 cursor-pointer group">
@@ -125,16 +125,16 @@ export function ProductsSection() {
                   </div>
                 </div>
               </Link>
-              <div className="space-y-3">
+              <div className="flex flex-col flex-grow">
                 <Link href={`/produits/${product.slug}`}>
-                  <h3 className="font-semibold text-base text-[#2d2d2d] hover:text-[#235730] transition-colors cursor-pointer">
+                  <h3 className="font-semibold text-base text-[#2d2d2d] hover:text-[#235730] transition-colors cursor-pointer min-h-[3rem] line-clamp-2 mb-2">
                     {product.name}
                   </h3>
                 </Link>
-                <p className="text-xs text-[#2d2d2d] leading-relaxed">
+                <p className="text-xs text-[#2d2d2d] leading-relaxed min-h-[3rem] line-clamp-2 mb-2">
                   {product.desc || product.long_desc || ''}
                 </p>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-2 mt-auto">
                   <p className="text-[#235730] font-semibold">{formatMoney.format(product.price)}</p>
                   <span className="text-[11px] font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-700">
                     {typeof product.stock === 'number' && product.stock > 0

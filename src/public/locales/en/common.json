@@ -656,6 +656,7 @@
             "products": {
                 "title": "New Arrivals",
                 "add_to_cart": "Add to cart",
+                "cancel": "Cancel",
                 "loading": "Loading...",
                 "stock_left": "Stock: {count}",
                 "stock_out": "Out of stock",
