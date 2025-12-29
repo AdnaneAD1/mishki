@@ -35,14 +35,14 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           </button>
 
           {/* Welcome Text */}
-          <div className="flex-1 min-w-0 max-w-[180px] sm:max-w-[260px]">
+          {/* <div className="flex-1 min-w-0 max-w-[180px] sm:max-w-[260px]">
             <h2 className="text-white truncate text-xs md:text-sm font-normal leading-tight max-w-full">
               {t('welcome', { name: user?.prenom ?? '' })}
             </h2>
             <p className="text-xs text-white/80 truncate hidden sm:block max-w-full">
               {user?.societe || ''}
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
