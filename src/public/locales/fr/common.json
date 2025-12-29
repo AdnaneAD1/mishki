@@ -145,7 +145,8 @@
                     "accept_conditions": "Veuillez accepter les conditions générales",
                     "missing_kbis": "Veuillez télécharger votre KBIS",
                     "missing_id": "Veuillez télécharger votre pièce d'identité",
-                    "general_error": "Erreur lors de l'inscription"
+                    "general_error": "Erreur lors de l'inscription",
+                    "file_too_large": "Fichier trop volumineux (max 10 Mo)."
                 }
             },
             "waiting_validation": {
@@ -191,7 +192,8 @@
             "stock": {
                 "label": "Stock : {count}",
                 "in_stock": "{count} en stock",
-                "out": "Rupture"
+                "out": "Rupture",
+                "limited": "Stock max: {max}"
             },
             "no_results": "Aucun produit trouvé",
             "no_results_desc": "Essayez de modifier vos filtres de recherche",
@@ -273,6 +275,11 @@
             "btn_validate": "Valider la commande ({count})",
             "success_msg": "Produits ajoutés au panier avec succès !",
             "error_msg": "Veuillez vérifier toutes les références avant de valider",
+            "stock": {
+                "out": "Stock épuisé",
+                "min": "Stock insuffisant (min {min}, dispo {stock})",
+                "limited": "Stock max: {max}"
+            },
             "tips": {
                 "tip1_title": "💡 Astuce",
                 "tip1_desc": "Cliquez sur une référence courante pour l'ajouter automatiquement",
@@ -365,7 +372,9 @@
                 "col_due": "Échéance",
                 "col_status": "Statut",
                 "col_actions": "Actions",
-                "action_download": "Télécharger la facture"
+                "action_view": "Voir la facture",
+                "action_download": "Télécharger la facture",
+                "no_pdf": "Pas de PDF"
             },
             "no_results": "Aucune facture trouvée",
             "no_results_desc": "Essayez de modifier vos critères de recherche",
@@ -649,7 +658,10 @@
                 "add_to_cart": "Ajouter au panier",
                 "loading": "Chargement...",
                 "stock_left": "Stock : {count}",
-                "stock_out": "Rupture"
+                "stock_out": "Rupture",
+                "stock_limited": "Stock insuffisant, max {max}",
+                "empty": "Aucun produit.",
+                "cancel": "Annuler"
             },
             "reviews": {
                 "title": "Avis de nos clients",
@@ -676,6 +688,10 @@
                 "hair": "Soins du cheveu"
             },
             "add_to_cart": "Ajouter au panier",
+            "stock_out": "Rupture",
+            "stock_limited": "Stock insuffisant, max {max}",
+            "stock_left": "Stock : {count}",
+            "cancel": "Annuler",
             "detail": {
                 "back": "Retour",
                 "reviews": "{count, plural, =0 {Aucun avis} =1 {1 avis} other {# avis}}",
@@ -684,6 +700,16 @@
                 "in_stock": "EN STOCK",
                 "delivery": "Achetez-le aujourd'hui et\nrecevez-le à partir du",
                 "points": "Vous obtiendrez jusqu'à {count} points !",
+                "stock_out": "Rupture de stock",
+                "stock_limited": "Stock insuffisant, max {max}",
+                "stock_left": "Stock : {count}",
+                "in_stock_with_qty": "En stock ({count})",
+                "add_to_cart": "Ajouter au panier",
+                "loading_product": "Chargement du produit...",
+                "product_not_found": "Produit introuvable",
+                "anonymous": "Anonyme",
+                "review_error": "Impossible d'enregistrer l'avis. Veuillez réessayer.",
+                "question_error": "Impossible d'enregistrer la question. Veuillez réessayer.",
                 "tabs": {
                     "description": "Description",
                     "reviews": "Avis ({count})",
@@ -785,7 +811,7 @@
                 },
                 "authenticity": {
                     "title": "Authenticité",
-"desc": "Nous préservons les recettes ancestrales péruviennes transmises de génération en génération."
+                    "desc": "Nous préservons les recettes ancestrales péruviennes transmises de génération en génération."
                 },
                 "sustainability": {
                     "title": "Durabilité",
@@ -1124,6 +1150,18 @@
             "back": "Retour",
             "heading": "Articles",
             "read_more": "Lire la suite",
+            "detail": {
+                "loading_article": "Chargement de l'article...",
+                "back_to_articles": "Retour aux articles",
+                "share_article": "Partager cet article",
+                "similar_articles": "Articles similaires",
+                "no_related": "Aucun article lié.",
+                "article_prefix": "Article",
+                "newsletter_title": "Newsletter",
+                "newsletter_desc": "Recevez nos conseils beauté et nos dernières actualités directement dans votre boîte mail.",
+                "newsletter_cta": "S'inscrire",
+                "read_time_suffix": "de lecture"
+            },
             "posts": {
                 "p1": {
                     "title": "Les bienfaits de l'huile de jojoba pour votre peau",

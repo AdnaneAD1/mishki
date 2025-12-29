@@ -9,7 +9,7 @@
             "siret": "SIRET",
             "stats": {
                 "monthly_orders": "Orders this month",
-                "turnover": "Turnover (excluding tax)",
+                "turnover": "Turnover (excl. tax)",
                 "stock": "Products in stock",
                 "active_refills": "Active Refills",
                 "active": "Active"
@@ -74,11 +74,18 @@
             "register": {
                 "title": "Professional Registration",
                 "subtitle": "Create your B2B account with exclusive tax-exclusive pricing and discounts",
+                "title_b2c": "Create my Mishki account",
+                "subtitle_b2c": "Join the Mishki community and enjoy exclusive offers",
                 "sections": {
                     "personal": "Personal information",
                     "connection": "Login information",
                     "company": "Company information",
-                    "documents": "Documents"
+                    "documents": "Documents",
+                    "address": "Contact details"
+                },
+                "tabs": {
+                    "b2c": "Customer account",
+                    "b2b": "Professional account"
                 },
                 "fields": {
                     "first_name": "First Name *",
@@ -129,6 +136,7 @@
                 "cgv": "terms and conditions of sale",
                 "privacy": "privacy policy",
                 "btn_submit": "Create my professional account",
+                "btn_submit_b2c": "Create my account",
                 "btn_submitting": "Registration in progress...",
                 "btn_cancel": "Cancel",
                 "footer_info": "Your account will be validated within 24-48 hours after verification of your documents",
@@ -137,7 +145,8 @@
                     "accept_conditions": "Please accept the terms and conditions",
                     "missing_kbis": "Please upload your KBIS",
                     "missing_id": "Please upload your ID document",
-                    "general_error": "Registration error"
+                    "general_error": "Registration error",
+                    "file_too_large": "File too large (max 10 MB)."
                 }
             },
             "waiting_validation": {
@@ -182,7 +191,9 @@
             "in_stock": "{count} in stock",
             "stock": {
                 "label": "Stock: {count}",
-                "out": "Out of stock"
+                "in_stock": "{count} in stock",
+                "out": "Out of stock",
+                "limited": "Max stock: {max}"
             },
             "no_results": "No products found",
             "no_results_desc": "Try modifying your search filters",
@@ -264,6 +275,11 @@
             "btn_validate": "Validate order ({count})",
             "success_msg": "Products successfully added to cart!",
             "error_msg": "Please verify all references before validating",
+            "stock": {
+                "out": "Out of stock",
+                "min": "Insufficient stock (min {min}, available {stock})",
+                "limited": "Max stock: {max}"
+            },
             "tips": {
                 "tip1_title": "💡 Tip",
                 "tip1_desc": "Click on a common reference to add it automatically",
@@ -355,7 +371,10 @@
                 "col_ttc": "Amount incl. tax",
                 "col_due": "Due date",
                 "col_status": "Status",
-                "col_actions": "Actions"
+                "col_actions": "Actions",
+                "action_view": "View invoice",
+                "action_download": "Download invoice",
+                "no_pdf": "No PDF"
             },
             "no_results": "No invoices found",
             "no_results_desc": "Try modifying your search criteria",
@@ -445,19 +464,19 @@
                 "tip2_title": "📊 Optimization",
                 "tip2_desc": "Avoid stockouts and optimize your cash flow",
                 "tip3_title": "🔔 Notifications",
-                "tip3_desc": "Receive alerts before each scheduled restock"
+                "tip3_desc": "Receive alerts before each scheduled replenishment"
             }
         },
         "payment": {
             "title": "Payment",
-            "subtitle": "Validate your B2B order",
+            "subtitle": "B2B order validation",
             "orderSummary": {
                 "title": "Order summary",
                 "discount": "Professional discount applied:",
                 "empty": "No items in your order.",
                 "ref": "Ref: {ref}",
                 "qty": "Quantity: {qty}",
-                "ht": "excl. VAT",
+                "ht": "excl. tax",
                 "total": "Total: {amount}"
             },
             "shipping": {
@@ -481,7 +500,7 @@
             },
             "payment": {
                 "title": "Payment",
-                "paypalLabel": "PayPal (pro) – amount incl. VAT: {amount}",
+                "paypalLabel": "PayPal (pro) – amount incl. tax: {amount}",
                 "processing": "Processing...",
                 "cardCta": "Pay by card (simulation)"
             },
@@ -489,17 +508,33 @@
                 "title": "Summary",
                 "subtotal": "Subtotal {ht}",
                 "tax": "VAT (20%)",
-                "total": "Total incl. VAT",
+                "total": "Total incl. tax",
                 "badgeSecure": "Secure payment",
-                "badgeShipping": "Tracked shipping",
+                "badgeShipping": "Tracked delivery",
                 "badgeSupport": "Dedicated pro support"
+            },
+            "success": {
+                "title": "Payment successful",
+                "desc": "Your payment is confirmed. You can download the invoice now.",
+                "error": "Unable to prepare the invoice.",
+                "ctaHome": "Pro home",
+                "ctaClose": "Close",
+                "invoice": {
+                    "title": "Invoice details",
+                    "order": "Order: {order}",
+                    "total": "Amount incl. tax: {amount}",
+                    "email": "The invoice will also be sent by email."
+                },
+                "billing": {
+                    "title": "Billing details"
+                }
             }
         },
         "layout": {
             "sidebar": {
                 "nav": {
                     "home": "Pro Home",
-                    "catalogue": "Catalogue",
+                    "catalogue": "Catalog",
                     "cart": "My Cart",
                     "quick_order": "Quick Order",
                     "protocoles": "Protocols",
@@ -623,7 +658,10 @@
                 "add_to_cart": "Add to cart",
                 "loading": "Loading...",
                 "stock_left": "Stock: {count}",
-                "stock_out": "Out of stock"
+                "stock_out": "Out of stock",
+                "stock_limited": "Insufficient stock, max {max}",
+                "empty": "No products.",
+                "cancel": "Cancel"
             },
             "reviews": {
                 "title": "Customer Reviews",
@@ -650,6 +688,10 @@
                 "hair": "Hair care"
             },
             "add_to_cart": "Add to cart",
+            "stock_out": "Out of stock",
+            "stock_limited": "Insufficient stock, max {max}",
+            "stock_left": "Stock: {count}",
+            "cancel": "Cancel",
             "detail": {
                 "back": "Back",
                 "reviews": "{count, plural, =0 {No reviews} =1 {1 review} other {# reviews}}",
@@ -658,6 +700,16 @@
                 "in_stock": "IN STOCK",
                 "delivery": "Buy it today and\nreceive it from",
                 "points": "You will get up to {count} points!",
+                "stock_out": "Out of stock",
+                "stock_limited": "Insufficient stock, max {max}",
+                "stock_left": "Stock: {count}",
+                "in_stock_with_qty": "In stock ({count})",
+                "add_to_cart": "Add to cart",
+                "loading_product": "Loading product...",
+                "product_not_found": "Product not found",
+                "anonymous": "Anonymous",
+                "review_error": "Unable to save review. Please try again.",
+                "question_error": "Unable to save question. Please try again.",
                 "tabs": {
                     "description": "Description",
                     "reviews": "Reviews ({count})",
@@ -928,6 +980,8 @@
                 "payment": {
                     "title": "Payment info",
                     "use_saved": "Use your saved card",
+                    "card_option": "Pay by card",
+                    "paypal_option": "Pay with PayPal",
                     "card_name_label": "Name on card",
                     "card_name_placeholder": "John Smith",
                     "card_number_label": "Card number",
@@ -1096,6 +1150,18 @@
             "back": "Back",
             "heading": "Articles",
             "read_more": "Read more",
+            "detail": {
+                "loading_article": "Loading article...",
+                "back_to_articles": "Back to articles",
+                "share_article": "Share this article",
+                "similar_articles": "Similar articles",
+                "no_related": "No related articles.",
+                "article_prefix": "Article",
+                "newsletter_title": "Newsletter",
+                "newsletter_desc": "Receive our beauty tips and latest news directly in your inbox.",
+                "newsletter_cta": "Subscribe",
+                "read_time_suffix": "reading time"
+            },
             "posts": {
                 "p1": {
                     "title": "The benefits of jojoba oil for your skin",

@@ -6,18 +6,19 @@ import { ShoppingCart, Star, Play, Send } from 'lucide-react'
 import { Button } from '@/apps/b2c/components/ui/button'
 import { Input } from '@/apps/b2c/components/ui/input'
 import { Textarea } from '@/apps/b2c/components/ui/textarea'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Header } from '@/apps/b2c/components/header'
 import { Footer } from '@/apps/b2c/components/footer'
 import { NewsletterSection } from '@/apps/b2c/components/newsletter-section'
 import { useCart } from '@/apps/b2c/lib/cart-context'
 import { useTranslations } from 'next-intl'
 import { useProduct } from '@/apps/b2c/hooks/useProducts'
+import { addDoc, collection, db, getDocs, query, serverTimestamp, where } from '@mishki/firebase'
 
 type Tab = 'Description' | 'Reviews' | 'Questions'
 
 interface Review {
-  id: number
+  id: string | number
   author: string
   rating: number
   text: string
@@ -25,7 +26,7 @@ interface Review {
 }
 
 interface Question {
-  id: number
+  id: string | number
   author: string
   question: string
   answer?: string
@@ -45,16 +46,67 @@ export function ProductDetail({ productId }: { productId: string }) {
   const [isPickingQty, setIsPickingQty] = useState(false)
   const [quantity, setQuantity] = useState(1)
   const [stockMessage, setStockMessage] = useState<string>('')
+  const [submittingReview, setSubmittingReview] = useState(false)
+  const [submittingQuestion, setSubmittingQuestion] = useState(false)
+  const [reviewError, setReviewError] = useState<string>('')
+  const [questionError, setQuestionError] = useState<string>('')
 
   const minQty = 1
 
-  const [reviews, setReviews] = useState<Review[]>([
-    { id: 1, author: 'Marie L.', rating: 5, text: 'Produit exceptionnel, ma peau est transformée!', date: '10/12/2024' },
-    { id: 2, author: 'Sophie D.', rating: 4, text: 'Très satisfaite de ce produit, je recommande.', date: '05/12/2024' }
-  ])
+  const [reviews, setReviews] = useState<Review[]>([])
   const [questions, setQuestions] = useState<Question[]>([])
 
   const { product, loading, error } = useProduct(productId)
+
+  useEffect(() => {
+    let mounted = true
+    const fetchData = async () => {
+      try {
+        const [revSnap, qSnap] = await Promise.all([
+          getDocs(query(collection(db, 'productReviews'), where('productId', '==', productId))),
+          getDocs(query(collection(db, 'productQuestions'), where('productId', '==', productId)))
+        ])
+
+        if (!mounted) return
+
+        const mappedReviews: Review[] = revSnap.docs.map((d) => {
+          const data = d.data() as Record<string, unknown>
+          const createdAt =
+            (data.createdAt as { toDate?: () => Date } | undefined)?.toDate?.() ?? null
+          return {
+            id: d.id,
+            author: (data.author as string) || 'Anonyme',
+            rating: (data.rating as number) || 0,
+            text: (data.text as string) || '',
+            date: createdAt ? createdAt.toLocaleDateString('fr-FR') : ''
+          }
+        })
+
+        const mappedQuestions: Question[] = qSnap.docs.map((d) => {
+          const data = d.data() as Record<string, unknown>
+          const createdAt =
+            (data.createdAt as { toDate?: () => Date } | undefined)?.toDate?.() ?? null
+          return {
+            id: d.id,
+            author: (data.author as string) || 'Anonyme',
+            question: (data.question as string) || '',
+            answer: data.answer as string | undefined,
+            date: createdAt ? createdAt.toLocaleDateString('fr-FR') : ''
+          }
+        })
+
+        setReviews(mappedReviews)
+        setQuestions(mappedQuestions)
+      } catch {
+        // silencieux pour éviter de bloquer l'affichage produit
+      }
+    }
+
+    fetchData()
+    return () => {
+      mounted = false
+    }
+  }, [productId])
 
   const startQuantityPicker = () => {
     setIsPickingQty(true)
@@ -97,35 +149,74 @@ export function ProductDetail({ productId }: { productId: string }) {
     setQuantity(minQty)
   }
 
-  const handleSubmitReview = (e: React.FormEvent) => {
+  const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (reviewText && reviewName) {
-      const newReview: Review = {
-        id: reviews.length + 1,
-        author: reviewName,
-        rating: reviewRating,
-        text: reviewText,
-        date: new Date().toLocaleDateString('fr-FR')
-      }
-      setReviews([newReview, ...reviews])
-      setReviewText('')
-      setReviewName('')
-      setReviewRating(5)
+    if (!reviewText || !reviewName) return
+    setSubmittingReview(true)
+    setReviewError('')
+    const createdAt = new Date()
+    const optimisticId = `tmp-${Date.now()}`
+    const optimistic: Review = {
+      id: optimisticId,
+      author: reviewName,
+      rating: reviewRating,
+      text: reviewText,
+      date: createdAt.toLocaleDateString('fr-FR')
+    }
+    setReviews((prev) => [optimistic, ...prev])
+    setReviewText('')
+    setReviewName('')
+    setReviewRating(5)
+
+    try {
+      const ref = await addDoc(collection(db, 'productReviews'), {
+        productId,
+        author: optimistic.author,
+        rating: optimistic.rating,
+        text: optimistic.text,
+        createdAt: serverTimestamp()
+      })
+      setReviews((prev) =>
+        prev.map((r) => (r.id === optimisticId ? { ...r, id: ref.id } : r))
+      )
+    } catch {
+      setReviewError('Impossible d’enregistrer l’avis. Veuillez réessayer.')
+    } finally {
+      setSubmittingReview(false)
     }
   }
 
-  const handleSubmitQuestion = (e: React.FormEvent) => {
+  const handleSubmitQuestion = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (questionText && questionName) {
-      const newQuestion: Question = {
-        id: questions.length + 1,
-        author: questionName,
-        question: questionText,
-        date: new Date().toLocaleDateString('fr-FR')
-      }
-      setQuestions([newQuestion, ...questions])
-      setQuestionText('')
-      setQuestionName('')
+    if (!questionText || !questionName) return
+    setSubmittingQuestion(true)
+    setQuestionError('')
+    const createdAt = new Date()
+    const optimisticId = `tmp-${Date.now()}`
+    const optimistic: Question = {
+      id: optimisticId,
+      author: questionName,
+      question: questionText,
+      date: createdAt.toLocaleDateString('fr-FR')
+    }
+    setQuestions((prev) => [optimistic, ...prev])
+    setQuestionText('')
+    setQuestionName('')
+
+    try {
+      const ref = await addDoc(collection(db, 'productQuestions'), {
+        productId,
+        author: optimistic.author,
+        question: optimistic.question,
+        createdAt: serverTimestamp()
+      })
+      setQuestions((prev) =>
+        prev.map((q) => (q.id === optimisticId ? { ...q, id: ref.id } : q))
+      )
+    } catch {
+      setQuestionError('Impossible d’enregistrer la question. Veuillez réessayer.')
+    } finally {
+      setSubmittingQuestion(false)
     }
   }
 
@@ -154,6 +245,11 @@ export function ProductDetail({ productId }: { productId: string }) {
   }
 
   const stock = product.stock ?? 0;
+  const reviewCount = reviews.length > 0 ? reviews.length : product.reviews ?? 0
+  const ratingValue =
+    reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length
+      : product.rating ?? 0
 
   return (
     <>
@@ -191,10 +287,10 @@ export function ProductDetail({ productId }: { productId: string }) {
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className={`w-4 h-4 ${i < (product.rating ?? 0) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
+                    <Star key={i} className={`w-4 h-4 ${i < ratingValue ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
                   ))}
                 </div>
-                <span className="text-sm text-gray-600">{td('reviews', { count: product.reviews ?? 0 })}</span>
+                <span className="text-sm text-gray-600">{td('reviews', { count: reviewCount })}</span>
                 <span className="text-sm text-[#235730] underline cursor-pointer">{td('questions', { count: questions.length })}</span>
               </div>
 
@@ -393,10 +489,15 @@ export function ProductDetail({ productId }: { productId: string }) {
                       onChange={(e) => setReviewText(e.target.value)}
                       className="border-gray-300 min-h-[100px]"
                     />
-                    <Button type="submit" className="bg-[#235730] hover:bg-[#1d4626] text-white">
+                    <Button
+                      type="submit"
+                      className="bg-[#235730] hover:bg-[#1d4626] text-white disabled:opacity-60"
+                      disabled={submittingReview}
+                    >
                       <Send className="w-4 h-4 mr-2" />
-                      {td('form_review.btn_send')}
+                      {submittingReview ? td('loading') || 'Envoi...' : td('form_review.btn_send')}
                     </Button>
+                    {reviewError && <p className="text-sm text-red-600">{reviewError}</p>}
                   </form>
                 </div>
 
@@ -437,10 +538,15 @@ export function ProductDetail({ productId }: { productId: string }) {
                       onChange={(e) => setQuestionText(e.target.value)}
                       className="border-gray-300 min-h-[100px]"
                     />
-                    <Button type="submit" className="bg-[#235730] hover:bg-[#1d4626] text-white">
+                    <Button
+                      type="submit"
+                      className="bg-[#235730] hover:bg-[#1d4626] text-white disabled:opacity-60"
+                      disabled={submittingQuestion}
+                    >
                       <Send className="w-4 h-4 mr-2" />
-                      {td('form_question.btn_send')}
+                      {submittingQuestion ? td('loading') || 'Envoi...' : td('form_question.btn_send')}
                     </Button>
+                    {questionError && <p className="text-sm text-red-600">{questionError}</p>}
                   </form>
                 </div>
 
