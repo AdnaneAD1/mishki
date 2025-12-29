@@ -25,7 +25,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
     <header className="border-b border-gray-200 px-4 md:px-6 py-3 md:py-4" style={{ backgroundColor: '#235730' }}>
       <div className="flex items-center justify-between">
         {/* Mobile Menu Button + Welcome */}
-        <div className="flex items-center gap-3 flex-1">
+        <div className="flex items-center gap-3 flex-1 min-w-0">
           {/* Mobile Menu Toggle */}
           <button
             onClick={onToggleSidebar}
@@ -35,11 +35,11 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           </button>
 
           {/* Welcome Text */}
-          <div className="flex-1 min-w-0">
-            <h2 className="text-white truncate text-sm md:text-base">
+          <div className="flex-1 min-w-0 max-w-[180px] sm:max-w-[260px]">
+            <h2 className="text-white truncate text-xs md:text-sm font-normal leading-tight max-w-full">
               {t('welcome', { name: user?.prenom ?? '' })}
             </h2>
-            <p className="text-xs text-white/80 truncate hidden sm:block">
+            <p className="text-xs text-white/80 truncate hidden sm:block max-w-full">
               {user?.societe || ''}
             </p>
           </div>

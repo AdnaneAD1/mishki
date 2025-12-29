@@ -168,15 +168,15 @@ export default function FacturesPro() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-gray-900 mb-2">{t('title')}</h1>
-          <p className="text-gray-600">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-gray-900 mb-2 text-lg md:text-xl lg:text-2xl">{t('title')}</h1>
+          <p className="text-gray-600 text-sm md:text-base">
             {t('subtitle')}
           </p>
         </div>
         <button
-          className="flex items-center gap-2 px-6 py-3 text-white rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 text-white rounded-lg transition-colors w-full sm:w-auto justify-center"
           style={{ backgroundColor: '#235730' }}
           onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a4023')}
           onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#235730')}
@@ -185,7 +185,7 @@ export default function FacturesPro() {
           }}
         >
           <Download className="w-5 h-5" />
-          {t('btn_download_all')}
+          <span className="truncate">{t('btn_download_all')}</span>
         </button>
       </div>
 

@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+    setIsSidebarOpen((open) => !open);
   };
 
   const closeSidebar = () => {
@@ -16,11 +16,11 @@ export default function Layout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="flex h-screen" style={{ backgroundColor: '#F7F0E0' }}>
+    <div className="flex min-h-screen bg-[#F7F0E0]">
       <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
-      <div className="flex-1 flex flex-col overflow-hidden w-full lg:w-auto">
+      <div className="flex-1 flex flex-col overflow-hidden w-full">
         <Header onToggleSidebar={toggleSidebar} />
-        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">
+        <main className="flex-1 overflow-y-auto p-2 sm:p-3 md:p-4 lg:p-6 max-w-full">
           {children}
         </main>
       </div>

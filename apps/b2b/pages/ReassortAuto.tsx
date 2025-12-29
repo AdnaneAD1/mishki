@@ -135,22 +135,22 @@ export default function ReassortAuto() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-gray-900 mb-2 flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-gray-900 mb-2 flex items-center gap-2 text-lg md:text-xl lg:text-2xl">
             <RotateCcw className="w-7 h-7 text-orange-600" />
             {t('title')}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-sm md:text-base">
             {t('subtitle')}
           </p>
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+          className="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors w-full sm:w-auto justify-center"
         >
           <Plus className="w-5 h-5" />
-          {t('btn_new')}
+          <span className="truncate">{t('btn_new')}</span>
         </button>
       </div>
 

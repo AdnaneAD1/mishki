@@ -43,7 +43,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       {/* Mobile backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-40 block lg:hidden"
           onClick={onClose}
         ></div>
       )}
@@ -52,19 +52,23 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       <aside
         className={`
           fixed lg:static inset-y-0 left-0 z-50
-          w-64 bg-white border-r border-gray-200 flex flex-col
+          w-64 max-w-[80vw] bg-white border-r border-gray-200 flex flex-col
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+          h-full lg:h-auto
         `}
+        style={{
+          boxShadow: isOpen ? '0 0 0 9999px rgba(0,0,0,0.01)' : undefined,
+        }}
       >
         {/* Header with Logo */}
-        <div className="p-4 md:px-6 py-3 border-b border-gray-200 flex items-center justify-between" style={{ backgroundColor: '#235730' }}>
+        <div className="p-3 sm:p-4 border-b border-gray-200 flex items-center justify-between bg-[#235730]">
           <div className="flex-1 flex items-center justify-center">
             <Image
               src="/b2b/images/logo-mishki.png"
               alt="Mishki B2B"
-              width={130}
-              height={40}
+              width={110}
+              height={36}
               className="object-contain"
             />
           </div>
@@ -72,13 +76,14 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           <button
             onClick={onClose}
             className="lg:hidden p-2 text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-colors absolute right-4"
+            aria-label="Fermer le menu"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-3 md:p-4 space-y-1 overflow-y-auto">
+        <nav className="flex-1 p-2 sm:p-3 md:p-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
             const isActive = pathname === item.to || pathname?.startsWith(item.to + '/');
             return (
@@ -86,7 +91,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                 key={item.to}
                 href={item.to}
                 onClick={onClose}
-                className={`flex items-center gap-3 px-3 md:px-4 py-2.5 md:py-3 rounded-lg transition-colors ${
+                className={`flex items-center gap-2 sm:gap-3 px-2 sm:px-3 md:px-4 py-2 md:py-2.5 lg:py-3 rounded-lg transition-colors text-sm sm:text-base ${
                   isActive
                     ? 'bg-[#235730] text-white'
                     : 'text-gray-600 hover:bg-gray-50'
@@ -100,11 +105,11 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
         </nav>
 
         {/* Support Section */}
-        <div className="p-3 md:p-4 border-t border-gray-200">
-          <div className="rounded-lg p-3 md:p-4" style={{ backgroundColor: '#F7F0E0' }}>
+        <div className="p-2 sm:p-3 md:p-4 border-t border-gray-200">
+          <div className="rounded-lg p-2 sm:p-3 md:p-4" style={{ backgroundColor: '#F7F0E0' }}>
             <p className="text-xs text-gray-600 mb-2">{t('support.help')}</p>
             <button
-              className="w-full px-3 py-2 bg-white rounded-md text-xs md:text-sm hover:bg-gray-50 transition-colors"
+              className="w-full px-2 py-2 bg-white rounded-md text-xs sm:text-sm hover:bg-gray-50 transition-colors"
               style={{ color: '#235730' }}
             >
               {t('support.btn')}
