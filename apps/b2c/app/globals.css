@@ -84,6 +84,9 @@
     @apply text-foreground;
     background-color: #f7f0e0;
   }
+  input {
+    color: #111 !important;
+  }
   .font-serif {
     font-family: var(--font-playfair), serif;
   }
