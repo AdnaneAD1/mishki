@@ -605,7 +605,7 @@ export function ProductDetail({ productId }: { productId: string }) {
           <div className="mb-16">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden">
-                <Image src="/b2c/femme-mishki.png" alt="Femme utilisant un produit Mishki" fill className="object-cover" />
+                <Image src="/b2c/femme-mishki.png" alt="Femme utilisant un produit Mishki " fill className="object-cover" />
               </div>
               <div className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden">
                 <Image src="/b2c/huile.png" alt="Huile naturelle" fill className="object-cover" />
