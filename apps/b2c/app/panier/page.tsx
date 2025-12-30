@@ -124,7 +124,7 @@ export default function CartPage() {
                   <div className="flex items-center gap-3 w-full sm:w-auto">
                     <Button
                       variant="outline"
-                      className="border-[#8B2323] text-[#8B2323] hover:bg-[#8B2323] hover:text-white rounded-sm text-sm px-4 flex-1 sm:flex-initial"
+                      className="border-red-200 text-red-500 bg-red-50 hover:bg-red-100 hover:text-red-600 rounded-sm text-sm px-4 flex-1 sm:flex-initial transition-colors duration-200"
                       onClick={() => removeFromCart(item.id)}
                     >
                       {t('remove')}
