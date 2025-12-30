@@ -2,6 +2,9 @@
     "test": "English",
     "b2b": {
         "loading": "Loading...",
+        "downloads_page": {
+            "loading": "Loading..."
+        },
         "redirecting": "Redirecting...",
         "accueil": {
             "welcome": "Welcome",
