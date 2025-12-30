@@ -14,11 +14,14 @@ export type ProductDoc = {
   name: string;
   desc: string;
   long_desc?: string;
+  usage?: string;
+  ingredient_base?: string;
   volume?: string;
   oldPrice?: number | string;
   inStock?: boolean;
   stock?: number;
   deliveryDate?: string;
+  deliveryDays?: { min: number; max: number };
   loyaltyPoints?: number;
   rating?: number;
   reviews?: number;
@@ -28,7 +31,14 @@ export type ProductDoc = {
 type ProductDb = {
   slug: string;
   category: string;
-  translations?: Record<string, { name?: string; desc?: string; long_desc?: string; category?: string }>;
+  translations?: Record<string, {
+    name?: string;
+    desc?: string;
+    long_desc?: string;
+    category?: string;
+    usage?: string;
+    ingredient_base?: string;
+  }>;
   price: number;
   image: string;
   defaultLocale?: string;
@@ -37,6 +47,7 @@ type ProductDb = {
   inStock?: boolean;
   stock?: number;
   deliveryDate?: string;
+  deliveryDays?: { min: number; max: number };
   loyaltyPoints?: number;
   rating?: number;
   reviews?: number;
@@ -64,11 +75,14 @@ function mapProduct(
     name: trans?.name || data.slug || docId,
     desc: trans?.desc || '',
     long_desc: trans?.long_desc || trans?.desc || '',
+    usage: trans?.usage || '',
+    ingredient_base: trans?.ingredient_base || '',
     volume: data.volume,
     oldPrice: data.oldPrice,
     inStock: data.inStock,
     stock: data.stock,
     deliveryDate: data.deliveryDate,
+    deliveryDays: data.deliveryDays,
     loyaltyPoints: data.loyaltyPoints,
     rating: data.rating,
     reviews: data.reviews,

@@ -54,7 +54,7 @@ export default function BlogPage() {
               <p className="text-gray-500">{t('loading') || 'Chargement...'}</p>
             )}
             {error && (
-              <p className="text-red-600 text-sm">Erreur : {error}</p>
+              <p className="text-red-600 text-sm">{error}</p>
             )}
             {!loading && !error && blogPosts.map((post) => (
               <article key={post.id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">

@@ -60,9 +60,9 @@ export default function InvoiceFR({ data }: { data: InvoiceData }) {
         <View style={[styles.section, styles.table]}>
           <View style={[styles.row, { backgroundColor: '#f2f2f2' }]}>
             <Text style={[styles.th, { width: '8%' }]}>QTE</Text>
-            <Text style={[styles.th, { width: '14%' }]}>PU HT €</Text>
+            <Text style={[styles.th, { width: '14%' }]}>PU HT</Text>
             <Text style={[styles.th, { width: '12%' }]}>REMISE</Text>
-            <Text style={[styles.th, { width: '18%' }]}>PRIX HT €</Text>
+            <Text style={[styles.th, { width: '18%' }]}>PRIX HT</Text>
             <Text style={[styles.th, { width: '48%' }]}>DESIGNATION</Text>
           </View>
           {lines.map((line: InvoiceLine, idx: number) => {
@@ -86,16 +86,16 @@ export default function InvoiceFR({ data }: { data: InvoiceData }) {
         <View style={[styles.section, { alignItems: 'flex-end' }]}>
           <View style={styles.totals}>
             <View style={[styles.row, { borderBottomWidth: 0.5 }]}>
-              <Text style={[styles.td, { width: '60%' }]}>TOTAL HT €</Text>
-              <Text style={[styles.td, { width: '40%' }]}>{totals.subtotal.toFixed(2)}</Text>
+              <Text style={[styles.td, { width: '60%' }]}>TOTAL HT</Text>
+              <Text style={[styles.td, { width: '40%' }]}>{currency(totals.subtotal, totals.currency)}</Text>
             </View>
             <View style={[styles.row, { borderBottomWidth: 0.5 }]}>
-              <Text style={[styles.td, { width: '60%' }]}>TVA</Text>
-              <Text style={[styles.td, { width: '40%' }]}>{totals.taxAmount.toFixed(2)}</Text>
+              <Text style={[styles.td, { width: '60%' }]}>{totals.taxLabel || 'TVA'}</Text>
+              <Text style={[styles.td, { width: '40%' }]}>{currency(totals.taxAmount, totals.currency)}</Text>
             </View>
             <View style={styles.row}>
-              <Text style={[styles.td, { width: '60%', fontWeight: 700 }]}>NET A PAYER €</Text>
-              <Text style={[styles.td, { width: '40%', fontWeight: 700 }]}>{totals.total.toFixed(2)}</Text>
+              <Text style={[styles.td, { width: '60%', fontWeight: 700 }]}>NET A PAYER</Text>
+              <Text style={[styles.td, { width: '40%', fontWeight: 700 }]}>{currency(totals.total, totals.currency)}</Text>
             </View>
           </View>
         </View>

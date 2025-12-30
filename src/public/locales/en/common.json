@@ -5,16 +5,16 @@
         "redirecting": "Redirecting...",
         "accueil": {
             "welcome": "Welcome",
-            "pro_discount": "Professional Discount",
+            "pro_discount": "Professional discount",
             "siret": "SIRET",
             "stats": {
                 "monthly_orders": "Orders this month",
                 "turnover": "Turnover (excl. tax)",
                 "stock": "Products in stock",
-                "active_refills": "Active Refills",
+                "active_refills": "Active refills",
                 "active": "Active"
             },
-            "quick_access": "Quick Access",
+            "quick_access": "Quick access",
             "actions": {
                 "catalogue": "Catalog",
                 "catalogue_desc": "Browse products",
@@ -27,7 +27,7 @@
                 "access": "Access"
             },
             "recent_orders": {
-                "title": "Recent Orders",
+                "title": "Recent orders",
                 "view_all": "View all",
                 "col_id": "Order",
                 "col_date": "Date",
@@ -41,7 +41,7 @@
                 "title": "Notifications"
             },
             "reassort": {
-                "title": "Auto-Replenishment",
+                "title": "Auto Replenishment",
                 "desc": "{count} products configured for automatic replenishment",
                 "manage": "Manage replenishment"
             },
@@ -88,20 +88,20 @@
                     "b2b": "Professional account"
                 },
                 "fields": {
-                    "first_name": "First Name *",
-                    "last_name": "Last Name *",
-                    "email": "Professional Email *",
+                    "first_name": "First name *",
+                    "last_name": "Last name *",
+                    "email": "Professional email *",
                     "password": "Password *",
-                    "confirm_password": "Confirm Password *",
-                    "company_name": "Company Name *",
+                    "confirm_password": "Confirm password *",
+                    "company_name": "Company name *",
                     "siret": "SIRET *",
-                    "activity_type": "Activity Type *",
+                    "activity_type": "Activity type *",
                     "phone": "Phone *",
                     "address": "Address *",
-                    "zip_code": "Postal Code *",
+                    "zip_code": "Postal code *",
                     "city": "City *",
                     "kbis": "KBIS *",
-                    "id_card": "ID Document *"
+                    "id_card": "ID document *"
                 },
                 "placeholders": {
                     "first_name": "Marie",
@@ -125,7 +125,7 @@
                 },
                 "advantages": {
                     "title": "Your B2B advantages:",
-                    "prices": "Tax-exclusive pricing displayed",
+                    "prices": "Tax-exclusive prices displayed",
                     "discounts": "Professional discounts",
                     "tools": "Protocols and technical data sheets",
                     "auto_reassort": "Automatic replenishment",
@@ -421,6 +421,8 @@
             "title": "Auto-Replenishment",
             "subtitle": "Configure automatic replenishment of your essential products",
             "loading": "Loading...",
+            "coming_soon_title": "Coming Soon",
+            "coming_soon_desc": "The auto-replenishment feature will be available soon. Check back later!",
             "btn_new": "New replenishment",
             "stats": {
                 "active": "Active replenishments",
@@ -469,7 +471,7 @@
         },
         "payment": {
             "title": "Payment",
-            "subtitle": "B2B order validation",
+            "subtitle": "Validation of your B2B order",
             "orderSummary": {
                 "title": "Order summary",
                 "discount": "Professional discount applied:",
@@ -480,7 +482,7 @@
                 "total": "Total: {amount}"
             },
             "shipping": {
-                "title": "Shipping address",
+                "title": "Delivery address",
                 "useSaved": "Use saved address",
                 "newAddress": "Enter a new address",
                 "noSaved": "No saved address.",
@@ -516,7 +518,7 @@
             "success": {
                 "title": "Payment successful",
                 "desc": "Your payment is confirmed. You can download the invoice now.",
-                "error": "Unable to prepare the invoice.",
+                "error": "Unable to prepare invoice.",
                 "ctaHome": "Pro home",
                 "ctaClose": "Close",
                 "invoice": {
@@ -661,8 +663,7 @@
                 "stock_left": "Stock: {count}",
                 "stock_out": "Out of stock",
                 "stock_limited": "Insufficient stock, max {max}",
-                "empty": "No products.",
-                "cancel": "Cancel"
+                "empty": "No products."
             },
             "reviews": {
                 "title": "Customer Reviews",
@@ -737,51 +738,14 @@
                 "qa_prefix": {
                     "q": "Q",
                     "r": "R"
-                }
+                },
+                "usage_title": "Usage instructions",
+                "ingredient_title": "Base ingredient",
+                "currency": "EUR",
+                "no_description": "No description available for this product.",
+                "cancel": "Cancel"
             },
-            "back": "Back",
-            "products": {
-                "p1": {
-                    "name": "Body scrub",
-                    "desc": "Natural exfoliant for soft and radiant skin",
-                    "long_desc": "A fruit from the Peruvian jungle, rich in lipids, proteins, and vitamins. Thanks to its omega 6, 9, and 3 fatty acids, it provides significant nutritional contribution to the skin and accelerates tissue regeneration."
-                },
-                "p2": {
-                    "name": "Exfoliating soap",
-                    "desc": "Deeply cleanses while gently exfoliating",
-                    "long_desc": "A soap enriched with natural ingredients that deeply cleanses your skin while leaving it soft and hydrated."
-                },
-                "p3": {
-                    "name": "Beauty oil",
-                    "desc": "Intensely nourishes and hydrates your skin",
-                    "long_desc": "A fruit from the Peruvian jungle, rich in lipids, proteins, and vitamins. Thanks to its omega 6, 9, and 3 fatty acids, it provides significant nutritional contribution to the skin and accelerates tissue regeneration."
-                },
-                "p4": {
-                    "name": "Definition lotion",
-                    "desc": "Defines and enhances your natural curls",
-                    "long_desc": "A light lotion that perfectly defines your curls without weighing them down. Enriched with natural oils to deeply nourish your hair."
-                },
-                "p5": {
-                    "name": "Moisturizing cream",
-                    "desc": "Long-lasting hydration for all skin types",
-                    "long_desc": "A rich and creamy lotion that intensely hydrates your skin for 24 hours."
-                },
-                "p6": {
-                    "name": "Repair cream",
-                    "desc": "Repairs and soothes dry and damaged skin",
-                    "long_desc": "An intensive repair cream that restores the skin barrier and soothes even the most sensitive skin."
-                },
-                "p7": {
-                    "name": "Eau de toilette",
-                    "desc": "Refreshes and tones your skin gently",
-                    "long_desc": "A light and refreshing eau de toilette with floral and woody notes."
-                },
-                "p8": {
-                    "name": "Powder mask",
-                    "desc": "Purifies and revitalizes your skin naturally",
-                    "long_desc": "A powder mask to mix with water for a purifying and revitalizing treatment."
-                }
-            }
+            "back": "Back"
         },
         "cart": {
             "title": "My cart",
@@ -991,12 +955,25 @@
                     "cvc_label": "CVC",
                     "cvc_placeholder": "123",
                     "cancel": "Cancel purchase",
-                    "next": "Confirm purchase"
+                    "next": "Confirm purchase",
+                    "paypal_redirect": "You will be redirected to PayPal to complete your payment securely.",
+                    "processing": "Processing...",
+                    "pay": "Pay"
                 }
             },
             "confirmation": {
                 "title": "Order being validated",
-                "btn_home": "Back to home"
+                "btn_home": "Back to home",
+                "download_invoice": "Download invoice"
+            },
+            "order_summary": {
+                "title": "Order summary",
+                "items_count": "{count, plural, =1 {1 item} other {# items}}",
+                "empty": "Your cart is empty.",
+                "back_to_shop": "Back to shop",
+                "subtotal_ht": "Subtotal excl. tax",
+                "tax": "VAT (20%)",
+                "total_ttc": "Total incl. tax"
             }
         },
         "rituals": {
@@ -1013,136 +990,8 @@
             "tips_title": "Practical tips",
             "recommended": "Recommended products",
             "all_products": "View all products",
-            "items": {
-                "morning": {
-                    "title": "Morning Ritual",
-                    "subtitle": "Luminous Awakening",
-                    "desc": "Start your day with a revitalizing ritual that awakens your skin and gives it radiance and energy to face the day.",
-                    "full_desc": "This morning ritual is designed to prepare your skin to face daily aggressions. By following these simple yet effective steps, you provide optimal protection while stimulating its natural radiance. The active ingredients in our products work in synergy to hydrate, protect, and illuminate your complexion.",
-                    "duration": "15 min",
-                    "difficulty": "Easy",
-                    "steps": [
-                        {
-                            "name": "Gentle cleansing",
-                            "desc": "Start by gently cleansing your face with our exfoliating soap to remove nighttime impurities."
-                        },
-                        {
-                            "name": "Revitalizing toner",
-                            "desc": "Apply toner to balance your skin's pH and prepare it for the following treatments."
-                        },
-                        {
-                            "name": "Hydrating serum",
-                            "desc": "Massage a few drops of our beauty oil to deeply nourish."
-                        },
-                        {
-                            "name": "Day cream",
-                            "desc": "Finish with your moisturizing cream to seal in hydration and protect your skin."
-                        }
-                    ],
-                    "tips": [
-                        "Perform this ritual every morning for optimal results",
-                        "Take time to massage your face to stimulate circulation",
-                        "Wait a few minutes between each step for better absorption"
-                    ]
-                },
-                "evening": {
-                    "title": "Evening Ritual",
-                    "subtitle": "Nocturnal Regeneration",
-                    "desc": "A soothing ritual to prepare your skin for nighttime cellular renewal and offer you a moment of relaxation.",
-                    "full_desc": "Nighttime is ideal for your skin's regeneration. This evening ritual helps eliminate all impurities accumulated during the day and prepares your skin for its nighttime repair phase. The actives in our treatments work during your sleep for regenerated skin upon waking.",
-                    "duration": "20 min",
-                    "difficulty": "Easy",
-                    "steps": [
-                        {
-                            "name": "Makeup removal",
-                            "desc": "Remove all makeup and impurities with our gentle cleansing oil."
-                        },
-                        {
-                            "name": "Deep cleansing",
-                            "desc": "Use our exfoliating soap for deep cleansing."
-                        },
-                        {
-                            "name": "Nourishing oil",
-                            "desc": "Apply our beauty oil generously for intensive nourishment."
-                        },
-                        {
-                            "name": "Night cream",
-                            "desc": "Seal with a rich cream for optimal nighttime hydration."
-                        }
-                    ],
-                    "tips": [
-                        "Perform this ritual at least 30 minutes before bedtime",
-                        "Enjoy this moment to relax and unwind",
-                        "Change your pillowcases regularly for healthy skin"
-                    ]
-                },
-                "weekly": {
-                    "title": "Weekly Ritual",
-                    "subtitle": "Intensive Treatment",
-                    "desc": "Give your skin a complete treatment once a week to maintain its radiance and long-term health.",
-                    "full_desc": "This weekly ritual is a true at-home spa moment. It allows deep cleansing and treating your skin with intensive care. Practiced regularly, you maintain your skin's radiance and youthfulness in the long term.",
-                    "duration": "45 min",
-                    "difficulty": "Intermediate",
-                    "steps": [
-                        {
-                            "name": "Gentle scrub",
-                            "desc": "Exfoliate your skin with our body scrub to remove dead cells."
-                        },
-                        {
-                            "name": "Steam bath",
-                            "desc": "Open your pores with a 5-minute steam bath."
-                        },
-                        {
-                            "name": "Purifying mask",
-                            "desc": "Apply our powder mask and leave on for 15 minutes."
-                        },
-                        {
-                            "name": "Facial massage",
-                            "desc": "Massage your face with our oil to stimulate circulation."
-                        },
-                        {
-                            "name": "Intensive serum",
-                            "desc": "Finish with a concentrated serum for visible results."
-                        }
-                    ],
-                    "tips": [
-                        "Reserve this moment for the weekend when you have more time",
-                        "Create a relaxing ambiance with soft music",
-                        "Stay well hydrated before and after this ritual"
-                    ]
-                },
-                "detox": {
-                    "title": "Detox Ritual",
-                    "subtitle": "Deep Purification",
-                    "desc": "A detoxification ritual to eliminate impurities and restore your skin's natural radiance.",
-                    "full_desc": "Exposed to pollution, stress, and daily aggressions, your skin needs regular detoxification. This ritual deeply eliminates all accumulated toxins and allows your skin to regain its natural balance and original radiance.",
-                    "duration": "30 min",
-                    "difficulty": "Intermediate",
-                    "steps": [
-                        {
-                            "name": "Deep cleansing",
-                            "desc": "Double cleansing to remove all impurities."
-                        },
-                        {
-                            "name": "Exfoliation",
-                            "desc": "Gentle scrub to unclog pores."
-                        },
-                        {
-                            "name": "Detox mask",
-                            "desc": "Application of a purifying clay-based mask."
-                        },
-                        {
-                            "name": "Intense hydration",
-                            "desc": "Serum and cream to restore hydration."
-                        }
-                    ],
-                    "tips": [
-                        "Ideal to do after a period of stress or excess",
-                        "Drink plenty of water to accompany the detox",
-                        "Avoid makeup for 24 hours after this ritual"
-                    ]
-                }
-            }
+            "empty": "No recommended products",
+            "currency": "EUR"
         },
         "blog": {
             "title": "Our Blog",
@@ -1161,39 +1010,9 @@
                 "newsletter_title": "Newsletter",
                 "newsletter_desc": "Receive our beauty tips and latest news directly in your inbox.",
                 "newsletter_cta": "Subscribe",
-                "read_time_suffix": "reading time"
-            },
-            "posts": {
-                "p1": {
-                    "title": "The benefits of jojoba oil for your skin",
-                    "excerpt": "Discover how jojoba oil can transform your skincare routine and bring radiance and hydration to your skin.",
-                    "category": "Natural care"
-                },
-                "p2": {
-                    "title": "Ancestral Peruvian beauty rituals",
-                    "excerpt": "Dive into Peru's beauty traditions and discover secrets passed down from generation to generation.",
-                    "category": "Heritage"
-                },
-                "p3": {
-                    "title": "How to choose the right treatment for your skin type",
-                    "excerpt": "Complete guide to identify your skin type and select the products best suited to your needs.",
-                    "category": "Tips"
-                },
-                "p4": {
-                    "title": "The importance of daily hydration",
-                    "excerpt": "Why daily skin hydration is essential and how to integrate this habit into your routine.",
-                    "category": "Well-being"
-                },
-                "p5": {
-                    "title": "Star ingredients of natural cosmetics",
-                    "excerpt": "Focus on the most effective natural ingredients and their exceptional properties for your skin.",
-                    "category": "Ingredients"
-                },
-                "p6": {
-                    "title": "Evening routine: essential steps",
-                    "excerpt": "Discover the ideal evening routine to prepare your skin for nighttime cellular renewal.",
-                    "category": "Routines"
-                }
+                "subscribe": "Subscribe",
+                "share": "Share this article",
+                "read_time_suffix": "read time"
             }
         },
         "podcast": {
@@ -1208,38 +1027,6 @@
                 "desc": "Each week, we invite experts to discuss natural beauty secrets, ancestral ingredients, and care rituals from around the world. Subscribe so you don't miss an episode!",
                 "spotify": "Subscribe on Spotify",
                 "apple": "Subscribe on Apple Podcasts"
-            },
-            "episodes": {
-                "e1": {
-                    "title": "Secrets of Peruvian beauty",
-                    "description": "Discover the ancestral ingredients used by Peruvian women for centuries to maintain radiant skin.",
-                    "guest_title": "Ethnobotanist"
-                },
-                "e2": {
-                    "title": "Jojoba oil: liquid gold for the skin",
-                    "description": "Everything you need to know about jojoba oil, its benefits, and how to integrate it into your beauty routine.",
-                    "guest_title": "Cosmetologist"
-                },
-                "e3": {
-                    "title": "Natural beauty and sustainable development",
-                    "description": "How to reconcile beauty and environmental respect? Our commitment to responsible cosmetics.",
-                    "guest_title": "Sustainable development expert"
-                },
-                "e4": {
-                    "title": "Beauty rituals around the world",
-                    "description": "Travel around the world discovering traditional beauty rituals and their modern adaptations.",
-                    "guest_title": "Anthropologist"
-                },
-                "e5": {
-                    "title": "Skincare: myths and realities",
-                    "description": "Demystifying misconceptions about skincare with a renowned dermatologist.",
-                    "guest_title": "Dermatologist"
-                },
-                "e6": {
-                    "title": "The art of facial massage",
-                    "description": "Facial massage techniques to stimulate circulation and achieve a naturally luminous complexion.",
-                    "guest_title": "Japanese skincare specialist"
-                }
             }
         },
         "legal": {

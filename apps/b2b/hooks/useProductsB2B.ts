@@ -10,7 +10,13 @@ type ProductDb = {
   price: number;
   image: string;
   defaultLocale?: string;
-  translations?: Record<string, { name?: string; desc?: string; category?: string }>;
+  translations?: Record<string, {
+    name?: string;
+    desc?: string;
+    category?: string;
+    usage?: string;
+    ingredient_base?: string;
+  }>;
   volume?: string;
   stock?: number;
 };
@@ -20,6 +26,8 @@ export type ProductB2B = {
   nom: string;
   reference: string;
   description: string;
+  usage?: string;
+  ingredient_base?: string;
   prixHT: number;
   categorie: string;
   categoryLabel?: string;
@@ -37,6 +45,8 @@ const mapProduct = (docId: string, data: ProductDb, locale: string): ProductB2B 
     nom: trans.name || data.slug || docId,
     reference: data.slug || docId,
     description: trans.desc || '',
+    usage: trans.usage || '',
+    ingredient_base: trans.ingredient_base || '',
     prixHT: data.price,
     categorie: data.category || 'Divers',
     categoryLabel: trans.category || data.category,

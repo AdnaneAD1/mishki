@@ -421,6 +421,8 @@
             "title": "Réassort Automatique",
             "subtitle": "Configurez le réapprovisionnement automatique de vos produits essentiels",
             "loading": "Chargement...",
+            "coming_soon_title": "Bientôt Disponible",
+            "coming_soon_desc": "La fonctionnalité de réassort automatique sera bientôt disponible. Revenez prochainement !",
             "btn_new": "Nouveau réassort",
             "stats": {
                 "active": "Réassorts actifs",
@@ -661,8 +663,7 @@
                 "stock_left": "Stock : {count}",
                 "stock_out": "Rupture",
                 "stock_limited": "Stock insuffisant, max {max}",
-                "empty": "Aucun produit.",
-                "cancel": "Annuler"
+                "empty": "Aucun produit."
             },
             "reviews": {
                 "title": "Avis de nos clients",
@@ -737,51 +738,14 @@
                 "qa_prefix": {
                     "q": "Q",
                     "r": "R"
-                }
+                },
+                "usage_title": "Conseils d'utilisation",
+                "ingredient_title": "Ingrédient à la base",
+                "currency": "EUR",
+                "no_description": "Aucune description disponible pour ce produit.",
+                "cancel": "Annuler"
             },
-            "back": "Retour",
-            "products": {
-                "p1": {
-                    "name": "Gommage corps",
-                    "desc": "Exfoliant naturel pour une peau douce et éclatante",
-                    "long_desc": "Fruit de la jungle péruvienne, riche en lipides, protéines et vitamines. Grâce à ses acides gras oméga 6, 9 et 3, il apporte une grande contribution nutritive à la peau et accélère la régénération des tissus."
-                },
-                "p2": {
-                    "name": "Savon exfoliant",
-                    "desc": "Nettoie en profondeur tout en exfoliant délicatement",
-                    "long_desc": "Un savon enrichi en ingrédients naturels qui nettoie votre peau en profondeur tout en la laissant douce et hydratée."
-                },
-                "p3": {
-                    "name": "Huile de beauté",
-                    "desc": "Nourrit et hydrate intensément votre peau",
-                    "long_desc": "Fruit de la jungle péruvienne, riche en lipides, protéines et vitamines. Grâce à ses acides gras oméga 6, 9 et 3, il apporte une grande contribution nutritive à la peau et accélère la régénération des tissus."
-                },
-                "p4": {
-                    "name": "Lotion de définition",
-                    "desc": "Définit et sublime vos boucles naturelles",
-                    "long_desc": "Une lotion légère qui définit parfaitement vos boucles sans les alourdir. Enrichie en huiles naturelles pour nourrir vos cheveux en profondeur."
-                },
-                "p5": {
-                    "name": "Crème hydratante",
-                    "desc": "Hydratation longue durée pour tous types de peaux",
-                    "long_desc": "Une crème riche et onctueuse qui hydrate intensément votre peau pendant 24 heures."
-                },
-                "p6": {
-                    "name": "Crème réparatrice",
-                    "desc": "Réparer et apaise les peaux sèches et abimées",
-                    "long_desc": "Une crème réparatrice intensive qui restaure la barrière cutanée et apaise les peaux les plus sensibles."
-                },
-                "p7": {
-                    "name": "Eau de toilette",
-                    "desc": "Rafraichit et tonifie votre peau en douceur",
-                    "long_desc": "Une eau de toilette légère et rafraichissante aux notes florales et boisées."
-                },
-                "p8": {
-                    "name": "Masque en poudre",
-                    "desc": "Purifie et revitalise votre peau naturellement",
-                    "long_desc": "Un masque en poudre à mélanger avec de l'eau pour un soin purifiant et revitalisant."
-                }
-            }
+            "back": "Retour"
         },
         "cart": {
             "title": "Mon panier",
@@ -991,12 +955,25 @@
                     "cvc_label": "CVC",
                     "cvc_placeholder": "123",
                     "cancel": "Annuler l'achat",
-                    "next": "Valider l'achat"
+                    "next": "Valider l'achat",
+                    "paypal_redirect": "Vous serez redirigé vers PayPal pour finaliser votre paiement en toute sécurité.",
+                    "processing": "Traitement...",
+                    "pay": "Payer"
                 }
             },
             "confirmation": {
                 "title": "Commande en cours de validation",
-                "btn_home": "Retour à l'accueil"
+                "btn_home": "Retour à l'accueil",
+                "download_invoice": "Télécharger la facture"
+            },
+            "order_summary": {
+                "title": "Résumé de commande",
+                "items_count": "{count, plural, =1 {1 article} other {# articles}}",
+                "empty": "Votre panier est vide.",
+                "back_to_shop": "Retour boutique",
+                "subtotal_ht": "Sous-total HT",
+                "tax": "TVA (20%)",
+                "total_ttc": "Total TTC"
             }
         },
         "rituals": {
@@ -1013,136 +990,8 @@
             "tips_title": "Conseils pratiques",
             "recommended": "Produits recommandés",
             "all_products": "Voir tous les produits",
-            "items": {
-                "morning": {
-                    "title": "Rituel du Matin",
-                    "subtitle": "Réveil Lumineux",
-                    "desc": "Commencez votre journée avec un rituel revitalisant qui éveille votre peau et lui donne éclat et énergie pour affronter la journée.",
-                    "full_desc": "Ce rituel matinal est conçu pour préparer votre peau à affronter les agressions quotidiennes. En suivant ces étapes simples mais efficaces, vous offrez à votre peau une protection optimale tout en stimulant son éclat naturel. Les ingrédients actifs de nos produits travaillent en synergie pour hydrater, protéger et illuminer votre teint.",
-                    "duration": "15 min",
-                    "difficulty": "Facile",
-                    "steps": [
-                        {
-                            "name": "Nettoyage doux",
-                            "desc": "Commencez par nettoyer délicatement votre visage avec notre savon exfoliant pour éliminer les impuretés de la nuit."
-                        },
-                        {
-                            "name": "Tonique revitalisant",
-                            "desc": "Appliquez le tonique pour équilibrer le pH de votre peau et la préparer aux soins suivants."
-                        },
-                        {
-                            "name": "Sérum hydratant",
-                            "desc": "Massez quelques gouttes de notre huile de beauté pour nourrir en profondeur."
-                        },
-                        {
-                            "name": "Crème de jour",
-                            "desc": "Terminez avec votre crème hydratante pour sceller l'hydratation et protéger votre peau."
-                        }
-                    ],
-                    "tips": [
-                        "Effectuez ce rituel chaque matin pour des résultats optimaux",
-                        "Prenez le temps de masser votre visage pour stimuler la circulation",
-                        "Attendez quelques minutes entre chaque étape pour une meilleure absorption"
-                    ]
-                },
-                "evening": {
-                    "title": "Rituel du Soir",
-                    "subtitle": "Régénération Nocturne",
-                    "desc": "Un rituel apaisant pour préparer votre peau au renouvellement cellulaire nocturne et vous offrir un moment de détente.",
-                    "full_desc": "La nuit est le moment idéal pour la régénération de votre peau. Ce rituel du soir vous aide à éliminer toutes les impuretés accumulées durant la journée et à préparer votre peau pour sa phase de réparation nocturne. Les actifs de nos soins travaillent pendant votre sommeil pour une peau régénérée au réveil.",
-                    "duration": "20 min",
-                    "difficulty": "Facile",
-                    "steps": [
-                        {
-                            "name": "Démaquillage",
-                            "desc": "Retirez tout maquillage et impuretés avec notre huile démaquillante douce."
-                        },
-                        {
-                            "name": "Nettoyage profond",
-                            "desc": "Utilisez notre savon exfoliant pour un nettoyage en profondeur."
-                        },
-                        {
-                            "name": "Huile nourrissante",
-                            "desc": "Appliquez généreusement notre huile de beauté pour nourrir intensément."
-                        },
-                        {
-                            "name": "Crème de nuit",
-                            "desc": "Scellez avec une crème riche pour une hydratation nocturne optimale."
-                        }
-                    ],
-                    "tips": [
-                        "Effectuez ce rituel au moins 30 minutes avant le coucher",
-                        "Profitez de ce moment pour vous détendre et decompresser",
-                        "Changez régulièrement vos taies d'oreiller pour une peau saine"
-                    ]
-                },
-                "weekly": {
-                    "title": "Rituel Hebdomadaire",
-                    "subtitle": "Soin Intensif",
-                    "desc": "Offrez à votre peau un soin complet une fois par semaine pour maintenir son éclat et sa santé à long terme.",
-                    "full_desc": "Ce rituel hebdomadaire est un véritable moment de spa à domicile. Il permet d'effectuer un nettoyage en profondeur et de traiter votre peau avec des soins intensifs. En le pratiquant régulièrement, vous maintenez l'éclat et la jeunesse de votre peau sur le long terme.",
-                    "duration": "45 min",
-                    "difficulty": "Intermédiaire",
-                    "steps": [
-                        {
-                            "name": "Gommage doux",
-                            "desc": "Exfoliez votre peau avec notre gommage corps pour éliminer les cellules mortes."
-                        },
-                        {
-                            "name": "Bain de vapeur",
-                            "desc": "Ouvrez vos pores avec un bain de vapeur de 5 minutes."
-                        },
-                        {
-                            "name": "Masque purifiant",
-                            "desc": "Appliquez notre masque en poudre et laissez poser 15 minutes."
-                        },
-                        {
-                            "name": "Massage facial",
-                            "desc": "Massez votre visage avec notre huile pour stimuler la circulation."
-                        },
-                        {
-                            "name": "Sérum intensif",
-                            "desc": "Terminez avec un sérum concentré pour des résultats visibles."
-                        }
-                    ],
-                    "tips": [
-                        "Réservez ce moment pour le week-end quand vous avez plus de temps",
-                        "Créez une ambiance relaxante avec de la musique douce",
-                        "Hydratez-vous bien avant et après ce rituel"
-                    ]
-                },
-                "detox": {
-                    "title": "Rituel Détox",
-                    "subtitle": "Purification Profonde",
-                    "desc": "Un rituel de détoxification pour éliminer les impuretés et redonner à votre peau tout son éclat naturel.",
-                    "full_desc": "Exposée à la pollution, au stress et aux agressions quotidiennes, votre peau a besoin d'une détoxification régulière. Ce rituel élimine en profondeur toutes les toxines accumulées et permet à votre peau de retrouver son équilibre naturel et son éclat d'origine.",
-                    "duration": "30 min",
-                    "difficulty": "Intermédiaire",
-                    "steps": [
-                        {
-                            "name": "Nettoyage en profondeur",
-                            "desc": "Double nettoyage pour éliminer toutes les impuretés."
-                        },
-                        {
-                            "name": "Exfoliation",
-                            "desc": "Gommage doux pour désincruster les pores."
-                        },
-                        {
-                            "name": "Masque détox",
-                            "desc": "Application d'un masque purifiant à base d'argile."
-                        },
-                        {
-                            "name": "Hydratation intense",
-                            "desc": "Sérum et crème pour restaurer l'hydratation."
-                        }
-                    ],
-                    "tips": [
-                        "Idéalement à faire après une période de stress ou d'excès",
-                        "Buvez beaucoup d'eau pour accompagner la détox",
-                        "Évitez le maquillage pendant 24h après ce rituel"
-                    ]
-                }
-            }
+            "empty": "Aucun produit recommandé",
+            "currency": "EUR"
         },
         "blog": {
             "title": "Notre Blog",
@@ -1161,39 +1010,9 @@
                 "newsletter_title": "Newsletter",
                 "newsletter_desc": "Recevez nos conseils beauté et nos dernières actualités directement dans votre boîte mail.",
                 "newsletter_cta": "S'inscrire",
+                "subscribe": "S'inscrire",
+                "share": "Partager cet article",
                 "read_time_suffix": "de lecture"
-            },
-            "posts": {
-                "p1": {
-                    "title": "Les bienfaits de l'huile de jojoba pour votre peau",
-                    "excerpt": "Découvrez comment l'huile de jojoba peut transformer votre routine de soins et apporter éclat et hydratation à votre peau.",
-                    "category": "Soins naturels"
-                },
-                "p2": {
-                    "title": "Rituels de beauté péruviens ancestraux",
-                    "excerpt": "Plongez dans les traditions de beauté du Pérou et découvrez des secrets transmis de génération en génération.",
-                    "category": "Héritage"
-                },
-                "p3": {
-                    "title": "Comment choisir le bon soin pour votre type de peau",
-                    "excerpt": "Guide complet pour identifier votre type de peau et sélectionner les produits les plus adaptés à vos besoins.",
-                    "category": "Conseils"
-                },
-                "p4": {
-                    "title": "L'importance de l'hydratation quotidienne",
-                    "excerpt": "Pourquoi hydrater sa peau chaque jour est essentiel et comment intégrer cette habitude dans votre routine.",
-                    "category": "Bien-être"
-                },
-                "p5": {
-                    "title": "Les ingrédients stars de la cosmétique naturelle",
-                    "excerpt": "Focus sur les ingrédients naturels les plus efficaces et leurs propriétés exceptionnelles pour votre peau.",
-                    "category": "Ingrédients"
-                },
-                "p6": {
-                    "title": "Routine du soir: les étapes essentielles",
-                    "excerpt": "Découvrez la routine du soir idéale pour préparer votre peau au renouvellement cellulaire nocturne.",
-                    "category": "Routines"
-                }
             }
         },
         "podcast": {
@@ -1208,38 +1027,6 @@
                 "desc": "Chaque semaine, nous invitons des experts pour discuter des secrets de la beauté naturelle, des ingrédients ancestraux et des rituels de soins du monde entier. Abonnez-vous pour ne manquer aucun épisode !",
                 "spotify": "S'abonner sur Spotify",
                 "apple": "S'abonner sur Apple Podcasts"
-            },
-            "episodes": {
-                "e1": {
-                    "title": "Les secrets de la beauté péruvienne",
-                    "description": "Découvrez les ingrédients ancestraux utilisés par les femmes péruviennes depuis des siècles pour maintenir une peau éclatante.",
-                    "guest_title": "Ethnobotaniste"
-                },
-                "e2": {
-                    "title": "L'huile de jojoba: or liquide pour la peau",
-                    "description": "Tout ce que vous devez savoir sur l'huile de jojoba, ses bienfaits et comment l'intégrer dans votre routine beauté.",
-                    "guest_title": "Cosmétologue"
-                },
-                "e3": {
-                    "title": "Beauté naturelle et développement durable",
-                    "description": "Comment concilier beauté et respect de l'environnement ? Notre engagement pour une cosmétique responsable.",
-                    "guest_title": "Expert en développement durable"
-                },
-                "e4": {
-                    "title": "Les rituels de beauté à travers le monde",
-                    "description": "Voyage autour du monde à la découverte des rituels de beauté traditionnels et leurs adaptations modernes.",
-                    "guest_title": "Anthropologue"
-                },
-                "e5": {
-                    "title": "Skincare: mythes et réalités",
-                    "description": "Démystifions les idées reçues sur les soins de la peau avec une dermatologue renommée.",
-                    "guest_title": "Dermatologue"
-                },
-                "e6": {
-                    "title": "L'art du massage facial",
-                    "description": "Techniques de massage facial pour stimuler la circulation et obtenir un teint lumineux naturellement.",
-                    "guest_title": "Spécialiste en soins japonais"
-                }
             }
         },
         "legal": {

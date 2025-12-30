@@ -91,7 +91,7 @@ export default function PaymentSuccessModal({ open, onClose, orderId, lines, tot
       })),
       totals: {
         subtotal: totals.subtotalHT,
-        taxLabel: 'TVA 20%',
+        taxLabel: userRegion === 'pe' ? 'IGV 18%' : 'TVA 20%',
         taxAmount: totals.tax,
         total: totals.totalTTC,
         currency,

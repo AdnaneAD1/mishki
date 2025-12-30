@@ -8,18 +8,21 @@ import { Header } from '@/apps/b2c/components/header'
 import { Footer } from '@/apps/b2c/components/footer'
 import { NewsletterSection } from '@/apps/b2c/components/newsletter-section'
 import { notFound } from 'next/navigation'
-import { useBlog } from '@/apps/b2c/hooks/useBlogs'
+import { useTranslations } from 'next-intl'
+import { useBlog, useBlogs } from '@/apps/b2c/hooks/useBlogs'
 
 export default function BlogDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const t = useTranslations('b2c.blog.detail')
   const { id } = use(params)
   const { post, loading, error } = useBlog(id)
+  const { posts: allPosts } = useBlogs()
 
   if (loading) {
     return (
       <>
         <Header />
         <div className="min-h-screen pt-20 flex items-center justify-center text-gray-600">
-          Chargement de l’article...
+          {t('loading_article') || 'Chargement de l’article...'}
         </div>
         <Footer />
       </>
@@ -60,7 +63,7 @@ export default function BlogDetailPage({ params }: { params: Promise<{ id: strin
                 </span>
                 <span className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
-                  {post.readTime} de lecture
+                  {post.readTime} {t('read_time_suffix')}
                 </span>
               </div>
             </div>
@@ -71,7 +74,7 @@ export default function BlogDetailPage({ params }: { params: Promise<{ id: strin
           <div className="mb-8">
             <Link href="/blog" className="inline-flex items-center gap-2 text-[#235730] hover:opacity-80 transition-opacity">
               <ArrowLeft className="w-5 h-5" />
-              Retour aux articles
+              {t('back_to_articles')}
             </Link>
           </div>
 
@@ -97,7 +100,7 @@ export default function BlogDetailPage({ params }: { params: Promise<{ id: strin
 
               <div className="mt-12 pt-8 border-t border-gray-200">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500">Partager cet article</span>
+                  <span className="text-gray-500">{t('share_article')}</span>
                   <div className="flex items-center gap-4">
                     <button className="w-10 h-10 bg-[#235730]/10 rounded-full flex items-center justify-center hover:bg-[#235730] hover:text-white transition-colors text-[#235730]">
                       <Facebook className="w-5 h-5" />
@@ -120,39 +123,42 @@ export default function BlogDetailPage({ params }: { params: Promise<{ id: strin
               <div className="sticky top-24 space-y-8">
                 <div className="bg-white rounded-lg p-6 shadow-sm">
                   <h3 className="text-[#235730] mb-4" style={{ fontFamily: 'var(--font-caveat)', fontSize: '24px' }}>
-                    Articles similaires
+                    {t('similar_articles')}
                   </h3>
                   <div className="space-y-3">
                     {relatedPostsData.length === 0 && (
-                      <p className="text-sm text-gray-500">Aucun article lié.</p>
+                      <p className="text-sm text-gray-500">{t('no_related')}</p>
                     )}
-                    {relatedPostsData.map((slug) => (
-                      <Link key={slug} href={`/blog/${slug}`}>
-                        <div className="flex gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-                          <div className="w-10 h-10 bg-[#235730]/10 rounded flex items-center justify-center text-sm text-[#235730] font-semibold uppercase">
-                            {String(slug).slice(0, 2)}
+                    {relatedPostsData.map((slug) => {
+                      const relatedPost = allPosts.find((p: { slug: string }) => p.slug === slug)
+                      return (
+                        <Link key={slug} href={`/blog/${slug}`}>
+                          <div className="flex gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
+                            <div className="w-10 h-10 bg-[#235730]/10 rounded flex items-center justify-center text-sm text-[#235730] font-semibold uppercase">
+                              {relatedPost ? relatedPost.title.slice(0, 2) : String(slug).slice(0, 2)}
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-medium text-sm text-[#2d2d2d] line-clamp-1">
+                                {relatedPost ? relatedPost.title : `${t('article_prefix')} ${slug}`}
+                              </h4>
+                            </div>
                           </div>
-                          <div className="flex-1">
-                            <h4 className="font-medium text-sm text-[#2d2d2d] line-clamp-1">
-                              Article {slug}
-                            </h4>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
+                        </Link>
+                      )
+                    })}
                   </div>
                 </div>
 
                 <div className="bg-[#235730] rounded-lg p-6 text-white">
                   <h3 className="text-xl mb-3" style={{ fontFamily: 'var(--font-caveat)' }}>
-                    Newsletter
+                    {t('newsletter_title')}
                   </h3>
                   <p className="text-sm text-white/80 mb-4">
-                    Recevez nos conseils beaute et nos dernieres actualites directement dans votre boite mail.
+                    {t('newsletter_desc')}
                   </p>
-                  <Link href="/#newsletter">
+                  <Link href="#newsletter">
                     <button className="w-full bg-white text-[#235730] px-4 py-2 rounded-sm font-medium hover:bg-white/90 transition-colors">
-                      S&apos;inscrire
+                      {t('subscribe')}
                     </button>
                   </Link>
                 </div>

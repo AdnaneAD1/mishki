@@ -124,23 +124,6 @@ export default function PaiementB2B() {
     void loadProfile();
   }, [user?.id]);
 
-  const formatMoney = useMemo(
-    () =>
-      new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2,
-      }),
-    [locale]
-  );
-
-  const htLabel = useMemo(() => {
-    const lower = locale.toLowerCase();
-    if (lower.startsWith('fr')) return 'HT';
-    if (lower.startsWith('es')) return 'Sin IGV';
-    return 'Excl. VAT';
-  }, [locale]);
-
   const userRegion = useMemo(() => {
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone?.toLowerCase();
@@ -152,6 +135,24 @@ export default function PaiementB2B() {
     const lowerLocale = locale.toLowerCase();
     if (lowerLocale.includes('pe')) return 'pe' as const;
     return 'fr' as const;
+  }, [locale]);
+
+  const currencyCode = userRegion === 'pe' ? 'PEN' : 'EUR';
+  const formatMoney = useMemo(
+    () =>
+      new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currencyCode,
+        minimumFractionDigits: 2,
+      }),
+    [locale, currencyCode]
+  );
+
+  const htLabel = useMemo(() => {
+    const lower = locale.toLowerCase();
+    if (lower.startsWith('fr')) return 'HT';
+    if (lower.startsWith('es')) return 'Sin IGV';
+    return 'Excl. VAT';
   }, [locale]);
 
   const baseLines: CheckoutLine[] = useMemo(() => {
@@ -171,13 +172,13 @@ export default function PaiementB2B() {
   }, [draft, items, user?.remise, clearedAfterPay]);
 
   const totals = useMemo(() => {
-    if (clearedAfterPay) return { subtotalHT: 0, tax: 0, totalTTC: 0, currency: 'EUR' as const };
+    if (clearedAfterPay) return { subtotalHT: 0, tax: 0, totalTTC: 0, currency: currencyCode };
     if (draft?.totals) return draft.totals;
     const subtotalHT = baseLines.reduce((sum, l) => sum + (l.totalHT ?? l.unitPriceHT * l.quantity), 0);
-    const tax = subtotalHT * 0.2;
+    const tax = subtotalHT * (userRegion === 'pe' ? 0.18 : 0.2);
     const totalTTC = subtotalHT + tax;
-    return { subtotalHT, tax, totalTTC, currency: 'EUR' as const };
-  }, [baseLines, draft?.totals, clearedAfterPay]);
+    return { subtotalHT, tax, totalTTC, currency: currencyCode };
+  }, [baseLines, draft?.totals, clearedAfterPay, userRegion, currencyCode]);
 
   const paypalAmount = totals.totalTTC;
 
@@ -290,7 +291,7 @@ export default function PaiementB2B() {
             taxLabel: userRegion === 'pe' ? 'IGV 18%' : 'TVA 20%',
             taxAmount: totals.tax,
             total: totals.totalTTC,
-            currency: 'EUR',
+            currency: currencyCode,
           },
         };
 
@@ -462,7 +463,7 @@ export default function PaiementB2B() {
                   </div>
                   <div>
                     <Label htmlFor="city" className="text-sm text-gray-500">
-                    {tr('shipping.city', 'Ville')}
+                      {tr('shipping.city', 'Ville')}
                     </Label>
                     <Input
                       id="city"
@@ -517,7 +518,7 @@ export default function PaiementB2B() {
               <div className="max-w-sm">
                 <PaypalButton
                   amount={paypalAmount}
-                  currency="EUR"
+                  currency={currencyCode}
                   disabled={saving}
                   onSuccess={handlePaypalSuccess}
                   onError={(msg) => setPaypalError(msg || 'Erreur PayPal')}
@@ -544,7 +545,7 @@ export default function PaiementB2B() {
                   <span>{formatMoney.format(totals.subtotalHT)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>{tr('summary.tax', 'TVA (20%)')}</span>
+                  <span>{tr('summary.tax', userRegion === 'pe' ? 'IGV (18%)' : 'TVA (20%)')}</span>
                   <span>{formatMoney.format(totals.tax)}</span>
                 </div>
                 <div className="flex justify-between font-semibold text-base pt-2 border-t border-gray-200">

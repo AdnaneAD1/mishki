@@ -35,15 +35,16 @@ export default function FacturesPro() {
   }, [locale]);
   const userRegion = useMemo(() => detectRegion(), [detectRegion]);
 
+  const currencyCode = userRegion === 'pe' ? 'PEN' : 'EUR';
   const formatMoney = useMemo(
     () =>
       new Intl.NumberFormat(locale, {
         style: 'currency',
-        currency: 'EUR',
+        currency: currencyCode,
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }),
-    [locale]
+    [locale, currencyCode]
   );
 
   const statuts = [

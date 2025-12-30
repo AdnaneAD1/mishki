@@ -11,9 +11,28 @@ import { Header } from '@/apps/b2c/components/header'
 import { Footer } from '@/apps/b2c/components/footer'
 import { NewsletterSection } from '@/apps/b2c/components/newsletter-section'
 import { useCart } from '@/apps/b2c/lib/cart-context'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { useProduct } from '@/apps/b2c/hooks/useProducts'
 import { addDoc, collection, db, getDocs, query, serverTimestamp, where } from '@mishki/firebase'
+
+// Helper function to calculate delivery date range
+function calculateDeliveryDate(deliveryDays: { min: number; max: number } | undefined, locale: string): string {
+  if (!deliveryDays) return '';
+
+  const today = new Date();
+  const minDate = new Date(today);
+  minDate.setDate(today.getDate() + deliveryDays.min);
+
+  const maxDate = new Date(today);
+  maxDate.setDate(today.getDate() + deliveryDays.max);
+
+  const formatter = new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'long'
+  });
+
+  return `${formatter.format(minDate)} - ${formatter.format(maxDate)}`;
+}
 
 type Tab = 'Description' | 'Reviews' | 'Questions'
 
@@ -34,8 +53,8 @@ interface Question {
 }
 
 export function ProductDetail({ productId }: { productId: string }) {
-  const t = useTranslations('b2c.shop')
   const td = useTranslations('b2c.shop.detail')
+  const locale = useLocale()
   const { addToCart } = useCart()
   const [activeTab, setActiveTab] = useState<Tab>('Description')
   const [reviewRating, setReviewRating] = useState(5)
@@ -78,7 +97,7 @@ export function ProductDetail({ productId }: { productId: string }) {
             author: (data.author as string) || 'Anonyme',
             rating: (data.rating as number) || 0,
             text: (data.text as string) || '',
-            date: createdAt ? createdAt.toLocaleDateString('fr-FR') : ''
+            date: createdAt ? createdAt.toLocaleDateString(locale === 'fr' ? 'fr-FR' : locale === 'es-PE' ? 'es-PE' : 'en-US') : ''
           }
         })
 
@@ -91,7 +110,7 @@ export function ProductDetail({ productId }: { productId: string }) {
             author: (data.author as string) || 'Anonyme',
             question: (data.question as string) || '',
             answer: data.answer as string | undefined,
-            date: createdAt ? createdAt.toLocaleDateString('fr-FR') : ''
+            date: createdAt ? createdAt.toLocaleDateString(locale === 'fr' ? 'fr-FR' : locale === 'es-PE' ? 'es-PE' : 'en-US') : ''
           }
         })
 
@@ -106,7 +125,7 @@ export function ProductDetail({ productId }: { productId: string }) {
     return () => {
       mounted = false
     }
-  }, [productId])
+  }, [productId, locale])
 
   const startQuantityPicker = () => {
     setIsPickingQty(true)
@@ -161,7 +180,7 @@ export function ProductDetail({ productId }: { productId: string }) {
       author: reviewName,
       rating: reviewRating,
       text: reviewText,
-      date: createdAt.toLocaleDateString('fr-FR')
+      date: createdAt.toLocaleDateString(locale === 'fr' ? 'fr-FR' : locale === 'es-PE' ? 'es-PE' : 'en-US')
     }
     setReviews((prev) => [optimistic, ...prev])
     setReviewText('')
@@ -197,7 +216,7 @@ export function ProductDetail({ productId }: { productId: string }) {
       id: optimisticId,
       author: questionName,
       question: questionText,
-      date: createdAt.toLocaleDateString('fr-FR')
+      date: createdAt.toLocaleDateString(locale === 'fr' ? 'fr-FR' : locale === 'es-PE' ? 'es-PE' : 'en-US')
     }
     setQuestions((prev) => [optimistic, ...prev])
     setQuestionText('')
@@ -225,7 +244,7 @@ export function ProductDetail({ productId }: { productId: string }) {
       <>
         <Header />
         <div className="min-h-screen pt-20 flex items-center justify-center text-gray-600">
-          {t('loading') || 'Chargement du produit...'}
+          {td('loading_product') || 'Chargement du produit...'}
         </div>
         <Footer />
       </>
@@ -237,7 +256,7 @@ export function ProductDetail({ productId }: { productId: string }) {
       <>
         <Header />
         <div className="min-h-screen pt-20 flex items-center justify-center text-red-600">
-          {error || 'Produit introuvable'}
+          {td('product_not_found') || 'Produit introuvable'}
         </div>
         <Footer />
       </>
@@ -301,9 +320,9 @@ export function ProductDetail({ productId }: { productId: string }) {
               </p>
 
               <div className="flex items-baseline gap-3">
-                <span className="text-3xl font-bold text-[#2d2d2d]">{product.price} EUR</span>
+                <span className="text-3xl font-bold text-[#2d2d2d]">{product.price} {td('currency')}</span>
                 {product.oldPrice && (
-                  <span className="text-lg text-gray-400 line-through">{product.oldPrice} EUR</span>
+                  <span className="text-lg text-gray-400 line-through">{product.oldPrice} {td('currency')}</span>
                 )}
               </div>
 
@@ -319,7 +338,7 @@ export function ProductDetail({ productId }: { productId: string }) {
                 )}
                 <p className="text-sm text-gray-600">
                   {td('delivery')}<br />
-                  <span className="font-medium">{product.deliveryDate || ''}</span>
+                  <span className="font-medium">{calculateDeliveryDate(product.deliveryDays, locale)}</span>
                 </p>
               </div>
 
@@ -429,6 +448,18 @@ export function ProductDetail({ productId }: { productId: string }) {
                   <p className="text-sm text-gray-600 leading-relaxed text-justify">
                     {product.long_desc || product.desc || td('no_description')}
                   </p>
+                  {product.usage && (
+                    <div className="pt-4">
+                      <h4 className="text-sm font-semibold text-[#235730] mb-2">{td('usage_title')}</h4>
+                      <p className="text-sm text-gray-600 leading-relaxed text-justify">{product.usage}</p>
+                    </div>
+                  )}
+                  {product.ingredient_base && (
+                    <div className="pt-4">
+                      <h4 className="text-sm font-semibold text-[#235730] mb-2">{td('ingredient_title')}</h4>
+                      <p className="text-sm text-gray-600 leading-relaxed text-justify">{product.ingredient_base}</p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-6">

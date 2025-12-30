@@ -23,8 +23,7 @@ export default function RitualDetailPage({ params }: { params: Promise<{ id: str
     if (!ritual) return []
     return (ritual.products || [])
       .map((pid) => {
-        const slug = String(pid).startsWith('p') ? String(pid) : `p${pid}`
-        return allProducts.find((p) => p.slug === slug)
+        return allProducts.find((p) => p.slug === pid)
       })
       .filter((p): p is Product => !!p)
   }, [ritual, allProducts])
@@ -152,7 +151,7 @@ export default function RitualDetailPage({ params }: { params: Promise<{ id: str
                         </div>
                         <div className="flex-1">
                           <h4 className="font-medium text-[#2d2d2d] text-sm">{product.name}</h4>
-                          <p className="text-[#235730] font-bold">{product.price} EUR</p>
+                          <p className="text-[#235730] font-bold">{product.price} {t('currency')}</p>
                         </div>
                         <ShoppingCart className="w-5 h-5 text-[#235730]" />
                       </div>

@@ -48,9 +48,10 @@ export async function POST(req: Request) {
     const html = await buildInvoiceEmailHtml({
       customerName: invoiceData.buyer.name,
       orderId: invoiceData.orderNumber || invoiceData.invoiceNumber,
-      total: new Intl.NumberFormat('fr-FR', { style: 'currency', currency: invoiceData.totals.currency }).format(
-        invoiceData.totals.total
-      ),
+      total: new Intl.NumberFormat(invoiceData.locale === 'pe' ? 'es-PE' : 'fr-FR', {
+        style: 'currency',
+        currency: invoiceData.totals.currency,
+      }).format(invoiceData.totals.total),
       invoiceNumber: invoiceData.invoiceNumber,
       ctaHref,
     });

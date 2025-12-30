@@ -15,7 +15,17 @@ type Product = {
   category: string;
   price: number;
   image: string;
-  translations: Record<Locale, { name: string; desc: string; long_desc: string }>;
+  volume?: string;
+  stock?: number;
+  translations: Record<Locale, {
+    name: string;
+    desc: string;
+    long_desc: string;
+    category: string;
+    usage?: string;
+    ingredient_base?: string;
+  }>;
+  deliveryDays?: { min: number; max: number };
 };
 
 type BlogPost = {
@@ -32,7 +42,7 @@ type BlogPost = {
 type Ritual = {
   slug: string;
   image: string;
-  products: number[];
+  products: string[];
   translations: Record<
     Locale,
     {
@@ -183,33 +193,556 @@ function duplicateLocales<T>(frData: T): Record<Locale, T> {
 }
 
 function buildProducts(): Product[] {
-  const p = frLocale.b2c.shop.products;
-  type ProductKey = keyof typeof p;
-  const list: { slug: string; price: number; image: string; category: string; key: ProductKey }[] = [
-    { slug: 'p1', key: 'p1', price: 24, image: '/b2c/produit-1.png', category: 'Soins du corps' },
-    { slug: 'p2', key: 'p2', price: 12, image: '/b2c/produit-2.png', category: 'Soins du corps' },
-    { slug: 'p3', key: 'p3', price: 24, image: '/b2c/produit-3.png', category: 'Soins du visage' },
-    { slug: 'p4', key: 'p4', price: 22, image: '/b2c/produit-4.png', category: 'Soins du cheveu' },
-    { slug: 'p5', key: 'p5', price: 28, image: '/b2c/produit-1.png', category: 'Soins du visage' },
-    { slug: 'p6', key: 'p6', price: 24, image: '/b2c/produit-2.png', category: 'Soins du corps' },
-    { slug: 'p7', key: 'p7', price: 16, image: '/b2c/produit-3.png', category: 'Soins du visage' },
-    { slug: 'p8', key: 'p8', price: 20, image: '/b2c/produit-4.png', category: 'Soins du visage' },
+  const productsData = [
+    // Soins du corps
+    {
+      id: "SC-SE-150",
+      name: {
+        fr: "Savon exfoliant",
+        en: "Exfoliating Soap",
+        "es-PE": "Jabón Exfoliante"
+      },
+      category: {
+        fr: "Soins du corps",
+        en: "Body Care",
+        "es-PE": "Cuidado del Cuerpo"
+      },
+      volume: "150g",
+      desc: {
+        fr: "À base de la graine d'Ungurahui - fruit de l'Amazonie péruvienne",
+        en: "Based on Ungurahui seed - fruit from the Peruvian Amazon",
+        "es-PE": "A base de semilla de Ungurahui - fruto de la Amazonía peruana"
+      },
+      long_desc: {
+        fr: "Savon exfoliant contenant la graine du fruit d'ungurahui - Oenocarpus bataua l. provenant de la forêt Amazonienne Péruvienne. Il nettoie et exfolie en douceur. Grâce à sa formule idéale, il n'irrite pas et se rince facilement. Il laisse la peau sans impuretés et douce de manière naturelle.",
+        en: "Exfoliating soap containing the seed of the ungurahui fruit - Oenocarpus bataua l. from the Peruvian Amazon forest. It gently cleanses and exfoliates. Thanks to its ideal formula, it does not irritate and rinses easily. It leaves the skin free of impurities and naturally soft.",
+        "es-PE": "Jabón exfoliante que contiene la semilla del fruto de ungurahui - Oenocarpus bataua l. proveniente de la selva amazónica peruana. Limpia y exfolia suavemente. Gracias a su fórmula ideal, no irrita y se aclara fácilmente. Deja la piel libre de impurezas y suave de forma natural."
+      },
+      usage: {
+        fr: "Appliquer un peu de savon exfoliant sur la peau humide du corps et masser doucement du bout des doigts d'un mouvement circulaire ascendant pour raffermir la peau. Rincer avec de l'eau et sécher le visage. Après chaque utilisation, bien refermer le tube et le protéger de la chaleur et de la lumière.",
+        en: "Apply a small amount of exfoliating soap to damp body skin and gently massage with fingertips in an upward circular motion to firm the skin. Rinse with water and pat dry. After each use, close the tube tightly and protect it from heat and light.",
+        "es-PE": "Aplicar un poco de jabón exfoliante sobre la piel húmeda del cuerpo y masajear suavemente con las yemas de los dedos con un movimiento circular ascendente para reafirmar la piel. Enjuagar con agua y secar. Después de cada uso, cerrar bien el tubo y protegerlo del calor y la luz."
+      },
+      ingredient_base: {
+        fr: "L'ungurahui est un fruit péruvien provenant d'un palmier de l'Amazonie. Après en avoir extrait l'huile, la graine est moulue suivant une récolte sauvage biologique.",
+        en: "Ungurahui is a Peruvian fruit from an Amazonian palm tree. After extracting the oil, the seed is ground following an organic wild harvest.",
+        "es-PE": "El ungurahui es un fruto peruano que proviene de una palmera de la Amazonía. Tras extraer el aceite, la semilla se muele siguiendo una recolección silvestre orgánica."
+      },
+      price: 18,
+      stock: 45
+    },
+    {
+      id: "SC-CH-150",
+      name: {
+        fr: "Crème corporelle hydratante",
+        en: "Moisturizing Body Cream",
+        "es-PE": "Crema Corporal Hidratante"
+      },
+      category: {
+        fr: "Soins du corps",
+        en: "Body Care",
+        "es-PE": "Cuidado del Cuerpo"
+      },
+      volume: "150g",
+      desc: {
+        fr: "À base d'huile de Muña des Andes Péruviennes",
+        en: "Based on Muña oil from the Peruvian Andes",
+        "es-PE": "A base de aceite de Muña de los Andes peruanos"
+      },
+      long_desc: {
+        fr: "Crème corporelle hydratante qui offre des actifs antioxydants présents dans l’huile essentielle de Muña, Satureja, provenant des Andes Péruviennes, lesquels améliorent l’état de la peau. Sa formule idéale garantit une absorption rapide, hydratant la peau tout en lui donnant élasticité et douceur, sans laisser de film gras. La crème offre une sensation de fraîcheur.",
+        en: "Moisturizing body cream that provides antioxidant active ingredients present in the essential oil of Muña, Satureja, from the Peruvian Andes, which improve skin condition. Its ideal formula guarantees rapid absorption, moisturizing the skin while giving it elasticity and softness, without leaving a greasy film. The cream offers a feeling of freshness.",
+        "es-PE": "Crema corporal hidratante que aporta activos antioxidantes presentes en el aceite esencial de Muña, Satureja, procedente de los Andes peruanos, que mejoran el estado de la piel. Su fórmula ideal garantiza una rápida absorción, hidratando la piel a la vez que le aporta elasticidad y suavidad, sin dejar película grasa. La crema ofrece una sensación de frescor."
+      },
+      usage: {
+        fr: "Appliquer sur le corps propre une légère couche de crème et masser doucement du bout des doigts, d'un mouvement circulaire ascendant pour raffermir la peau. Après chaque utilisation, bien refermer le tube et le protéger de la chaleur et de la lumière.",
+        en: "Apply a thin layer of cream to clean body and gently massage with fingertips in an upward circular motion to firm the skin. After each use, close the tube tightly and protect it from heat and light.",
+        "es-PE": "Aplicar una fina capa de crema sobre el cuerpo limpio y masajear suavemente con las yemas de los dedos, con un movimiento circular ascendente para reafirmar la piel. Después de cada uso, cerrar bien el tubo y protegerlo del calor y la luz."
+      },
+      ingredient_base: {
+        fr: "La muña est une plante des Andes Péruviennes de laquelle on extrait une huile essentielle et une eau, lesquelles contiennent des agents antioxydants et antibactériens. Cette plante sauvage ou cultivée de manière biologique suit un processus d’extraction par distillation par entraînement à la vapeur d’eau.",
+        en: "Muña is a plant from the Peruvian Andes from which an essential oil and a water are extracted, which contain antioxidant and antibacterial agents. This wild or organically cultivated plant follows an extraction process by steam distillation.",
+        "es-PE": "La muña es una planta de los Andes peruanos de la que se extrae un aceite esencial y un agua, que contienen agentes antioxidantes y antibacterianos. Esta planta silvestre o cultivada orgánicamente sigue un proceso de extracción por destilación al vapor."
+      },
+      price: 22,
+      stock: 40
+    },
+    {
+      id: "SC-AN-000",
+      name: {
+        fr: "Argiles naturelles",
+        en: "Natural Clays",
+        "es-PE": "Arcillas Naturales"
+      },
+      category: {
+        fr: "Soins du corps",
+        en: "Body Care",
+        "es-PE": "Cuidado del Cuerpo"
+      },
+      volume: "-",
+      desc: {
+        fr: "Des Andes Péruviennes.",
+        en: "From the Peruvian Andes.",
+        "es-PE": "De los Andes Peruanos."
+      },
+      long_desc: {
+        fr: "Source naturelle d’oligo-éléments et de minéraux pour la peau. Elles sont recommandées pour les peaux mixtes ou sensibles (jaune) ou grasses (noire). Elles offrent un nettoyage doux en profondeur. Les argiles des Andes Péruviennes proviennent du sol de façon naturelle.",
+        en: "Natural source of trace elements and minerals for the skin. They are recommended for mixed or sensitive skin (yellow) or oily skin (black). They offer gentle deep cleansing. Clays from the Peruvian Andes come from the soil naturally.",
+        "es-PE": "Fuente natural de oligoelementos y minerales para la piel. Están recomendadas para pieles mixtas o sensibles (amarilla) o grasas (negra). Ofrecen una limpieza profunda y suave. Las arcillas de los Andes peruanos proceden del suelo de forma natural."
+      },
+      usage: {
+        fr: "Mélanger 1 dose d’argile pour 2 doses d’eau et l’appliquer sur le corps. Laisser agir de 8 à 14 minutes et retirer avec de l’eau. Après chaque utilisation, bien refermer le paquet et le protéger de l’humidité.",
+        en: "Mix 1 part clay with 2 parts water and apply to the body. Leave on for 8 to 14 minutes and remove with water. After each use, close the package tightly and protect it from humidity.",
+        "es-PE": "Mezclar 1 parte de arcilla por 2 partes de agua y aplicar sobre el cuerpo. Dejar actuar de 8 a 14 minutos y retirar con agua. Después de cada uso, cerrar bien el envase y protegerlo de la humedad."
+      },
+      ingredient_base: {
+        fr: "Argiles naturelles des Andes Péruviennes.",
+        en: "Natural clays from the Peruvian Andes.",
+        "es-PE": "Arcillas naturales de los Andes Peruanos."
+      },
+      price: 15,
+      stock: 60
+    },
+    {
+      id: "SC-EN-000",
+      name: {
+        fr: "Éponge naturelle",
+        en: "Natural Sponge",
+        "es-PE": "Esponja Natural"
+      },
+      category: {
+        fr: "Soins du corps",
+        en: "Body Care",
+        "es-PE": "Cuidado del Cuerpo"
+      },
+      volume: "-",
+      desc: {
+        fr: "De l’Amazonie Péruvienne",
+        en: "From the Peruvian Amazon",
+        "es-PE": "De la Amazonía Peruana"
+      },
+      long_desc: {
+        fr: "La luffa, (L. aegyptiaca) est une éponge naturelle de grande qualité pour exfolier le corps. Il s’agit d’une plante grimpante tropicale et sous-tropicale qui provient de l’Amazonie Péruvienne. Sa popularité est née dès le début de son utilisation dans l’élaboration des éponges exfoliantes.",
+        en: "Luffa, (L. aegyptiaca) is a high-quality natural sponge for exfoliating the body. It is a tropical and sub-tropical climbing plant that comes from the Peruvian Amazon. Its popularity was born from the beginning of its use in the creation of exfoliating sponges.",
+        "es-PE": "La luffa, (L. aegyptiaca) es una esponja natural de gran calidad para exfoliar el cuerpo. Se trata de una planta trepadora tropical y subtropical que procede de la Amazonía peruana. Su popularidad nació desde el inicio de su uso en la elaboración de esponjas exfoliantes."
+      },
+      usage: {
+        fr: "Appliquer sur le corps l’exfoliant Mishki et masser doucement avec l’éponge humide, d'un mouvement circulaire ascendant pour raffermir la peau. Après chaque utilisation, bien laver l’éponge et la protéger de l’humidité.",
+        en: "Apply Mishki exfoliant to the body and massage gently with a damp sponge in an upward circular motion to firm the skin. After each use, wash the sponge well and protect it from humidity.",
+        "es-PE": "Aplicar el exfoliante Mishki sobre el cuerpo y masajear suavemente con la esponja húmeda, con un movimiento circular ascendente para reafirmar la piel. Después de cada uso, lavar bien la esponja y protegerla de la humedad."
+      },
+      price: 12,
+      stock: 100
+    },
+    // Soins du cheveu
+    {
+      id: "SCH-SG-250",
+      name: {
+        fr: "Shampooing pour cheveux gras",
+        en: "Shampoo for Oily Hair",
+        "es-PE": "Champú para Cabello Graso"
+      },
+      category: {
+        fr: "Soins du cheveu",
+        en: "Hair Care",
+        "es-PE": "Cuidado del Cabello"
+      },
+      volume: "250ml",
+      desc: {
+        fr: "À base de muña, une plante de la Sierra péruvienne, et de castaña",
+        en: "Based on muña, a plant from the Peruvian Sierra, and castaña",
+        "es-PE": "A base de muña, una planta de la Sierra peruana y castaña"
+      },
+      long_desc: {
+        fr: "Grâce à la castaña qui contient des acides gras comme le palmitique, les omégas 6 et 9; et la muña qui fournit des antioxydants, ce shampoing aidera à réduire la sensibilité du cuir chevelu, tandis qu'il renforcera et hydratera les cheveux, les laissant brillants.",
+        en: "Thanks to castaña which contains fatty acids like palmitic, omegas 6 and 9; and muña which provides antioxidants, this shampoo will help reduce scalp sensitivity while strengthening and moisturizing the hair, leaving it shiny.",
+        "es-PE": "Gracias a la castaña que contiene ácidos grasos como el palmítico, omegas 6 y 9; y la muña que aporta antioxidantes, este champú ayudará a reducir la sensibilidad del cuero cabelludo, a la vez que fortalecera e hidratara el cabello, dejándolo brillante."
+      },
+      price: 24,
+      stock: 40
+    },
+    {
+      id: "SCH-SS-250",
+      name: {
+        fr: "Shampooing pour cheveux secs",
+        en: "Shampoo for Dry Hair",
+        "es-PE": "Champú para Cabello Seco"
+      },
+      category: {
+        fr: "Soins du cheveu",
+        en: "Hair Care",
+        "es-PE": "Cuidado del Cabello"
+      },
+      volume: "250ml",
+      desc: {
+        fr: "À base d'ungurahui, plante de la jungle péruvienne et de castaña",
+        en: "Based on ungurahui, a plant from the Peruvian jungle, and castaña",
+        "es-PE": "A base de ungurahui, planta de la selva peruana y castaña"
+      },
+      long_desc: {
+        fr: "Grâce à la castaña et à l'ungurahui qui contiennent des acides gras comme le palmitique, les omégas 3, 6 et 9 ; ce shampoing renforcera et hydratera les cheveux, les laissant brillants.",
+        en: "Thanks to castaña and ungurahui which contain fatty acids like palmitic, omegas 3, 6 and 9; this shampoo will strengthen and moisturize the hair, leaving it shiny.",
+        "es-PE": "Gracias a la castaña y al ungurahui que contienen ácidos grasos como el palmítico, omegas 3, 6 y 9 ; este champú fortalecerá e hidratará el cabello, dejándolo brillante."
+      },
+      price: 24,
+      stock: 35
+    },
+    {
+      id: "SCH-HC-100",
+      name: {
+        fr: "Huile de Castaña",
+        en: "Castaña Oil",
+        "es-PE": "Aceite de Castaña"
+      },
+      category: {
+        fr: "Soins du cheveu",
+        en: "Hair Care",
+        "es-PE": "Cuidado del Cabello"
+      },
+      volume: "100ml",
+      desc: {
+        fr: "De l'Amazonie péruvienne",
+        en: "From the Peruvian Amazon",
+        "es-PE": "De la Amazonía peruana"
+      },
+      long_desc: {
+        fr: "L'huile de castaña aide à hydrater les cheveux secs et fins et à les rendre brillants. L'huile de castaña contient des omégas 6 et 9 qui agissent comme antioxydant et protègent les cheveux des radicaux libres. Et des acides palmitiques.",
+        en: "Castaña oil helps to moisturize dry and fine hair and make it shiny. Castaña oil contains omegas 6 and 9 which act as antioxidants and protect hair from free radicals. And palmitic acids.",
+        "es-PE": "El aceite de castaña ayuda a hidratar los cabellos secos y finos y a darles brillo. El aceite de castaña contiene omegas 6 y 9 que actúan como antioxidantes y protegen el cabello de los radicales libres. Y de los ácidos palmíticos."
+      },
+      ingredient_base: {
+        fr: "La castaña est un fruit, c’est une capsule pixide incomplète, communément appelée 'noix de coco'. Elle est cultivée de manière biologique en Amazonie par une association de producteurs indépendants.",
+        en: "The castaña is a fruit, it is an incomplete pixide capsule, commonly called 'coconut'. It is organically grown in the Amazon by an association of independent producers.",
+        "es-PE": "La castaña es un fruto, es una cápsula pixide incompleta, comúnmente llamada 'coco'. Se cultiva de forma orgánica en la Amazonía por una asociación de productores independientes."
+      },
+      price: 28,
+      stock: 50
+    },
+    // Soins du visage
+    {
+      id: "SV-LN-100",
+      name: {
+        fr: "Lotion de nettoyage",
+        en: "Cleansing Lotion",
+        "es-PE": "Loción de Limpieza"
+      },
+      category: {
+        fr: "Soins du visage",
+        en: "Face Care",
+        "es-PE": "Cuidado Facial"
+      },
+      volume: "100ml",
+      desc: {
+        fr: "À base d'extrait de pomme de terre native des Andes Péruviennes",
+        en: "Based on native potato extract from the Peruvian Andes",
+        "es-PE": "A base de extracto de papa nativa de los Andes peruanos"
+      },
+      long_desc: {
+        fr: "La lotion de nettoyage naturelle contient des antioxydants présents dans l'extrait végétal de pomme de terre (Solanum tuberosum), provenant des Andes Péruviennes. Cette lotion rafraîchissante nettoie en douceur sans laisser de surface grasse, tout en donnant une onctuosité à la peau.",
+        en: "The natural cleansing lotion contains antioxidants present in the native potato plant extract (Solanum tuberosum), from the Peruvian Andes. This refreshing lotion gently cleanses without leaving a greasy surface, while providing creaminess to the skin.",
+        "es-PE": "La loción limpiadora natural contiene antioxidantes presentes en el extracto vegetal de papa nativa (Solanum tuberosum), procedente de los Andes peruanos. Esta loción refrescante limpia suavemente sin dejar una superficie grasa, a la vez que aporta cremosidad a la piel."
+      },
+      usage: {
+        fr: "Imbiber un coton avec la lotion de nettoyage ou verser directement quelques gouttes dans la paume de la main et masser doucement le visage avec le bout des doigts dans un mouvement circulaire ascendant pour raffermir la peau. Rincer avec de l´eau et sécher le visage. Après chaque utilisation, bien refermer la bouteille et la protéger de l'excès de chaleur et de lumière.",
+        en: "Soak a cotton pad with the cleansing lotion or pour a few drops directly into the palm of your hand and gently massage the face with fingertips in an upward circular motion to firm the skin. Rinse with water and pat dry. After each use, close the bottle tightly and protect it from excess heat and light.",
+        "es-PE": "Empapar un algodón con la loción limpiadora o verter directamente unas gotas en la palma de la mano y masajear suavemente el rostro con las yemas de los dedos con un movimiento circular ascendente para reafirmar la piel. Enjuagar con agua y secar el rostro. Después de cada uso, cerrar bien el frasco y protegerlo del exceso de calor y de la luz."
+      },
+      ingredient_base: {
+        fr: "Cette pomme de terre, unique au monde par sa composition, pousse à 3500 mètres d´altitude dans les montagnes andines. Elle est cultivée de manière organique par des producteurs indépendants regroupés en association.",
+        en: "This potato, unique in the world for its composition, grows at 3,500 meters above sea level in the Andean mountains. It is organically cultivated by independent producers grouped in an association.",
+        "es-PE": "Esta papa, única en el mundo por su composición, crece a 3500 metros de altitud en las montañas andinas. Es cultivada de forma orgánica por productores independientes agrupados en asociación."
+      },
+      price: 19,
+      stock: 45
+    },
+    {
+      id: "SV-EN-100",
+      name: {
+        fr: "Eau de nettoyage",
+        en: "Cleansing Water",
+        "es-PE": "Agua de Limpieza"
+      },
+      category: {
+        fr: "Soins du visage",
+        en: "Face Care",
+        "es-PE": "Cuidado Facial"
+      },
+      volume: "100ml",
+      desc: {
+        fr: "Extraite de la muña - plante des Andes Péruviennes",
+        en: "Extracted from muña - plant from the Peruvian Andes",
+        "es-PE": "Extraída de la muña - planta de los Andes peruanos"
+      },
+      long_desc: {
+        fr: "L’eau de nettoyage Mishki contient des antioxydants présents dans la muña, Satureia Hortensis, provenant des Andes Péruviennes. Cette lotion rafraîchissante aide à décongestionner et détendre la peau tout en procurant un sentiment de bien être naturel. Le parfum offre une agréable sensation de fraîcheur.",
+        en: "Mishki cleansing water contains antioxidants present in muña, Satureia Hortensis, from the Peruvian Andes. This refreshing lotion helps decongest and relax the skin while providing a feeling of natural well-being. The fragrance offers a pleasant sensation of freshness.",
+        "es-PE": "El agua limpiadora Mishki contiene antioxidantes presentes en la muña, Satureia Hortensis, procedente de los Andes peruanos. Esta loción refrescante ayuda a descongestionar y relajar la piel proporcionando al mismo tiempo una sensación de bienestar natural. Su fragancia ofrece una agradable sensación de frescura."
+      },
+      usage: {
+        fr: "Vaporiser l´eau de nettoyage sur le visage et masser doucement, en utilisant le bout des doigts dans un mouvement circulaire ascendant pour raffermir la peau. Sécher le visage. Après chaque utilisation, bien refermer la bouteille et la protéger de l´excès de chaleur et de lumière.",
+        en: "Spray the cleansing water onto the face and gently massage using fingertips in an upward circular motion to firm the skin. Dry the face. After each use, close the bottle tightly and protect it from excess heat and light.",
+        "es-PE": "Vaporizar el agua de limpieza sobre el rostro y masajear suavemente con la punta de los dedos con un movimiento circular ascendente para reafirmar la piel. Secar el rostro. Después de cada uso, cerrar bien el frasco y protegerlo del exceso de calor y de la luz."
+      },
+      ingredient_base: {
+        fr: "La muña est une plante des Andes Péruviennes de laquelle on extrait une huile essentielle et une eau, lesquelles contiennent des agents antioxydants et antibactériens. Cette plante sauvage ou cultivée de manière biologique suit un processus d’extraction par distillation par entraînement à la vapeur d ‘eau.",
+        en: "Muña is a plant from the Peruvian Andes from which an essential oil and a water are extracted, which contain antioxidant and antibacterial agents. This wild or organically cultivated plant follows an extraction process by steam distillation.",
+        "es-PE": "La muña es una planta de los Andes peruanos de la que se extrae un aceite esencial y un agua, que contienen agentes antioxidantes y antibacterianos. Esta planta silvestre o cultivada orgánicamente sigue un proceso de extracción por destilación al vapor."
+      },
+      price: 18,
+      stock: 50
+    },
+    {
+      id: "SV-SE-80",
+      name: {
+        fr: "Savon exfoliant visage",
+        en: "Facial Exfoliating Soap",
+        "es-PE": "Jabón Exfoliante Facial"
+      },
+      category: {
+        fr: "Soins du visage",
+        en: "Face Care",
+        "es-PE": "Cuidado Facial"
+      },
+      volume: "80g",
+      desc: {
+        fr: "À base d'ungurahui - fruit de l'Amazonie Péruvienne",
+        en: "Based on ungurahui - fruit from the Peruvian Amazon",
+        "es-PE": "A base de ungurahui - fruto de la Amazonía peruana"
+      },
+      long_desc: {
+        fr: "Savon exfoliant qui contient la graine du fruit d'ungurahui - Oenocarpus bataua l. provenant de la forêt Amazonienne Péruvienne. Il nettoie et exfolie en douceur. Grâce à sa formule idéale, il n'irrite pas et se rince facilement. Il laisse la peau sans impuretés et douce de manière naturelle.",
+        en: "Exfoliating soap containing the seed of the ungurahui fruit - Oenocarpus bataua l. from the Peruvian Amazon forest. It gently cleanses and exfoliates. Thanks to its ideal formula, it does not irritate and rinses easily. It leaves the skin free of impurities and naturally soft.",
+        "es-PE": "Jabón exfoliante que contiene la semilla del fruto de ungurahui - Oenocarpus bataua l. proveniente de la selva amazónica peruana. Limpia y exfolia suavemente. Gracias a su fórmula ideal, no irrita y se aclara fácilmente. Deja la piel libre de impurezas y suave de forma natural."
+      },
+      usage: {
+        fr: "Mettre un peu de savon exfoliant sur la peau humide du visage et masser doucement en utilisant le bout des doigts dans un mouvement circulaire ascendant pour raffermir la peau. Rincer avec de l´eau et sécher le visage. Après chaque utilisation, bien refermer le tube et le protéger de l´excès de chaleur et de lumière.",
+        en: "Put a small amount of exfoliating soap on damp face and gently massage using fingertips in an upward circular motion to firm the skin. Rinse with water and pat dry. After each use, close the tube tightly and protect it from excess heat and light.",
+        "es-PE": "Poner un poco de jabón exfoliante sobre la piel húmeda del rostro y masajear suavemente con las yemas de los dedos con un movimiento circular ascendente para reafirmar la piel. Enjuagar con agua y secar el rostro. Después de cada uso, cerrar bien el tubo y protegerlo del exceso de calor y de la luz."
+      },
+      ingredient_base: {
+        fr: "L'ungurahui est un fruit péruvien provenant d'un palmier de l'Amazonie.",
+        en: "Ungurahui is a Peruvian fruit from an Amazonian palm tree.",
+        "es-PE": "El ungurahui es un fruto peruano procedente de una palmera de la Amazonía."
+      },
+      price: 16,
+      stock: 60
+    },
+    {
+      id: "SV-CHG-50",
+      name: {
+        fr: "Crème Hydratante (Grasses)",
+        en: "Moisturizing Cream (Oily)",
+        "es-PE": "Crema Hidratante (Grasas)"
+      },
+      category: {
+        fr: "Soins du visage",
+        en: "Face Care",
+        "es-PE": "Cuidado Facial"
+      },
+      volume: "50g",
+      desc: {
+        fr: "Peau normale à grasse. À base d'extrait de pomme de terre native",
+        en: "Normal to oily skin. Based on native potato extract",
+        "es-PE": "Piel normal a grasa. A base de extracto de papa nativa"
+      },
+      long_desc: {
+        fr: "Crème faciale hydratante naturelle. Les antioxydants, présents dans l´extrait végétal de pomme de terre violette (Solanum tuberosum) des Andes Péruviennes, améliorent l´état de la peau, aident à prévenir les rides et protègent des effets nocifs des radicaux libres. Grâce à sa formule idéale, la crème pénètre rapidement, protégeant et hydratant la peau, tout en lui donnant élasticité et douceur, sans laisser de surface grasse.",
+        en: "Natural moisturizing facial cream. Antioxidants present in the purple native potato plant extract (Solanum tuberosum) from the Peruvian Andes improve skin condition, help prevent wrinkles and protect against the harmful effects of free radicals. Thanks to its ideal formula, the cream penetrates quickly, protecting and moisturizing the skin, while providing elasticity and softness, without leaving a greasy surface.",
+        "es-PE": "Crema facial hidratante natural. Los antioxidantes presentes en el extracto vegetal de papa nativa morada (Solanum tuberosum) de los Andes peruanos mejoran el estado de la piel, ayudan a prevenir las arrugas y protegen de los efectos nocivos de los radicales libres. Gracias a su fórmula ideal, la crema penetra rápidamente, protegiendo e hidratando la piel, a la vez que le aporta elasticidad y suavidad, sin dejar una superficie grasa."
+      },
+      usage: {
+        fr: "Appliquer un peu de crème sur une peau propre et masser doucement du bout des doigts, d'un mouvement circulaire ascendant pour raffermir la peau. Après chaque utilisation, bien refermer le tube et le protéger de la chaleur et de la lumière.",
+        en: "Apply a small amount of cream to clean skin and gently massage with fingertips in an upward circular motion to firm the skin. After each use, close the tube tightly and protect it from heat and light.",
+        "es-PE": "Aplicar un poco de crema sobre la piel limpia y masajear suavemente con las yemas de los dedos, con un movimiento circular ascendente para reafirmar la piel. Después de cada uso, cerrar bien el tubo y protegerlo del calor y la luz."
+      },
+      ingredient_base: {
+        fr: "Cette pomme de terre, unique au monde par sa composition, pousse à 3500 mètres d´altitude dans les montagnes andines. Elle est cultivée de manière organique par des producteurs indépendants regroupés en association.",
+        en: "This potato, unique in the world for its composition, grows at 3,500 meters above sea level in the Andean mountains. It is organically cultivated by independent producers grouped in an association.",
+        "es-PE": "Esta papa, única en el mundo por su composición, crece a 3500 metros de altitud en las montañas andinas. Es cultivada de forma orgánica por productores independientes agrupados en asociación."
+      },
+      price: 32,
+      stock: 25
+    },
+    {
+      id: "SV-CHS-50",
+      name: {
+        fr: "Crème Hydratante (Sèches)",
+        en: "Moisturizing Cream (Dry)",
+        "es-PE": "Crema Hidratante (Secas)"
+      },
+      category: {
+        fr: "Soins du visage",
+        en: "Face Care",
+        "es-PE": "Cuidado Facial"
+      },
+      volume: "50g",
+      desc: {
+        fr: "À base d'huile d'Ungurahui – fruit de L’Amazonie péruvienne",
+        en: "Based on Ungurahui oil – fruit from the Peruvian Amazon",
+        "es-PE": "A base de aceite de Ungurahui – fruto de la Amazonía peruana"
+      },
+      long_desc: {
+        fr: "Crème faciale hydratante naturelle. Contient des acides gras, Omega 9, 6 et 3, provenant de l’huile d’ungurahui - Oenocarpus bataua L. de la forêt Amazonienne Péruvienne. Ces acides gras sont des éléments essentiels pour le soin de la peau qui aident à prévenir l’apparition des rides grâce à la régénération plus efficace des cellules. Sa formule idéale garantie une absorption rapide, hydratant la peau tout en lui donnant élasticité et douceur, sans laisser de surface grasse. La crème exhale une délicate odeur boisée.",
+        en: "Natural moisturizing facial cream. Contains fatty acids, Omega 9, 6 and 3, from ungurahui oil - Oenocarpus bataua L. from the Peruvian Amazon forest. These fatty acids are essential elements for skin care that help prevent the appearance of wrinkles through more efficient cell regeneration. Its ideal formula guarantees rapid absorption, moisturizing the skin while giving it elasticity and softness, without leaving a greasy surface. The cream exudes a delicate woody scent.",
+        "es-PE": "Crema facial hidratante natural. Contiene ácidos grasos, Omega 9, 6 y 3, procedentes del aceite de ungurahui - Oenocarpus bataua L. de la selva amazónica peruana. Estos ácidos grasos son elementos esenciales para el cuidado de la piel que ayudan a prevenir la aparición de arrugas gracias a una regeneración celular más eficaz. Su fórmula ideal garantiza una rápida absorción, hidratando la piel a la vez que le aporta elasticidad y suavidad, sin dejar una superficie grasa. La crema exhala un delicado aroma a madera."
+      },
+      usage: {
+        fr: "Appliquer un peu de crème sur une peau propre et masser doucement du bout des doigts, d'un mouvement circulaire ascendant pour raffermir la peau. Après chaque utilisation, bien refermer le tube et le protéger de la chaleur et de la lumière.",
+        en: "Apply a small amount of cream to clean skin and gently massage with fingertips in an upward circular motion to firm the skin. After each use, close the tube tightly and protect it from heat and light.",
+        "es-PE": "Aplicar un poco de crema sobre la piel limpia y masajear suavemente con las yemas de los dedos, con un movimiento circular ascendente para reafirmar la piel. Después de cada uso, cerrar bien el tubo y protegerlo del calor y la luz."
+      },
+      ingredient_base: {
+        fr: "L’ungurahui est un fruit péruvien provenant d’un palmier de l’Amazonie. Après en avoir extrait l’huile, la graine est moulue suivant une récolte sauvage biologique.",
+        en: "Ungurahui is a Peruvian fruit from an Amazonian palm tree. After extracting the oil, the seed is ground following an organic wild harvest.",
+        "es-PE": "El ungurahui es un fruto peruano que proviene de una palmera de la Amazonía. Tras extraer el aceite, la semilla se muele siguiendo una recolección silvestre orgánica."
+      },
+      price: 32,
+      stock: 20
+    },
+    {
+      id: "SV-HJ-100",
+      name: {
+        fr: "Huile de jojoba",
+        en: "Jojoba Oil",
+        "es-PE": "Aceite de Jojoba"
+      },
+      category: {
+        fr: "Soins du visage",
+        en: "Face Care",
+        "es-PE": "Cuidado Facial"
+      },
+      volume: "100ml",
+      desc: {
+        fr: "De la Côte Péruvienne",
+        en: "From the Peruvian Coast",
+        "es-PE": "De la Costa Peruana"
+      },
+      long_desc: {
+        fr: "L'huile de jojoba, mélangée avec la crème Mishki pour peau normale à sèche, aide à prévenir les rides et à hydrater la peau sèche. Seule, elle permet d'éviter l'accumulation de sébum. L'application quotidienne de l'huile de jojoba facilite la régénération des cellules et améliore l'élasticité de la peau, elle donne aussi douceur et fermeté á la peau. L'huile de jojoba contient de la vitamine E qui agit comme un antioxydant et protège la peau des effets nocifs des radicaux libres.",
+        en: "Jojoba oil, mixed with Mishki cream for normal to dry skin, helps prevent wrinkles and moisturize dry skin. On its own, it helps prevent sebum buildup. Daily application of jojoba oil facilitates cell regeneration and improves skin elasticity, it also provides softness and firmness to the skin. Jojoba oil contains vitamin E that acts as an antioxidant and protects the skin from the harmful effects of free radicals.",
+        "es-PE": "El aceite de jojoba, mezclado con la crema Mishki para pieles normales a secas, ayuda a prevenir las arrugas e hidratar la piel seca. Por sí solo, ayuda a prevenir la acumulación de sebo. La aplicación diaria de aceite de jojoba facilita la regeneración celular y mejora la elasticidad de la piel, aportando además suavidad y firmeza. El aceite de jojoba contiene vitamina E que actúa como antioxidante y protege la piel de los efectos nocivos de los radicales libres."
+      },
+      usage: {
+        fr: "Mettre un peu de crème Mishki pour peau normale à sèche dans votre main et ajouter une ou deux gouttes d`huile de jojoba. Mélanger et appliquer sur votre visage. Masser doucement, utilisant le bout de vos doigts, dans un mouvement circulaire ascendant pour raffermir la peau. Après chaque utilisation, bien refermer la bouteille et la protéger de l´excès de chaleur et de lumière.",
+        en: "Put a small amount of Mishki cream for normal to dry skin in your hand and add one or two drops of jojoba oil. Mix and apply to your face. Gently massage using fingertips in an upward circular motion to firm the skin. After each use, close the bottle tightly and protect it from excess heat and light.",
+        "es-PE": "Poner un poco de crema Mishki para piel normal a seca en la mano y añadir una o dos gotas de aceite de jojoba. Mezclar y aplicar sobre el rostro. Masajear suavemente con las yemas de los dedos con un movimiento circular ascendente para reafirmar la piel. Después de cada uso, cerrar bien el frasco y protegerlo del exceso de calor y de la luz."
+      },
+      ingredient_base: {
+        fr: "Le jojoba est une plante qui vit 100 ans en moyenne et qui peut atteindre une hauteur de 5 mètres. Le fruit du jojoba contient une graine d`una longueur de 2 à 4 cm de laquelle nous extrayons l`huile. Les plantes que nous utilisons sont cultivées de manière biologique à Ica par une association de producteurs indépendants.",
+        en: "Jojoba is a plant that lives an average of 100 years and can reach a height of 5 meters. The jojoba fruit contains a seed 2 to 4 cm long from which we extract the oil. The plants we use are organically grown in Ica by an association of independent producers.",
+        "es-PE": "La jojoba es una planta que vive 100 años en promedio y puede alcanzar una altura de 5 metros. El fruto de la jojoba contiene una semilla de 2 a 4 cm de longitud de la que extraemos el aceite. Las plantas que utilizamos se cultivan de forma orgánica en Ica por una asociación de productores independientes."
+      },
+      price: 35,
+      stock: 40
+    },
+    {
+      id: "SV-CS-50",
+      name: {
+        fr: "Crème solaire",
+        en: "Sunscreen",
+        "es-PE": "Protector Solar"
+      },
+      category: {
+        fr: "Soins du visage",
+        en: "Face Care",
+        "es-PE": "Cuidado Facial"
+      },
+      volume: "50g",
+      desc: {
+        fr: "À base de tara, plante des Andes Péruviennes. 30+ SPF - UVA / UVB protection",
+        en: "Based on tara, plant from the Peruvian Andes. 30+ SPF - UVA / UVB protection",
+        "es-PE": "A base de tara, planta de los Andes Peruanos. 30+ SPF - UVA / UVB protección"
+      },
+      long_desc: {
+        fr: "Crème solaire contenant une plante provenant des Andes Péruviennes, tara - (Caesalpinia Spinosa). Offre une protection contre les brûlures et le vieillissement précoce de la peau provenant des rayons UVA et UVB. N’IRRITE PAS LES YEUX. Contient de la vitamine E grâce à l’huile de jojoba, qui donne à la peau un effet hydratant et doux.",
+        en: "Sunscreen containing a plant from the Peruvian Andes, tara - (Caesalpinia Spinosa). Offers protection against burns and premature skin aging from UVA and UVB rays. DOES NOT IRRITATE THE EYES. Contains vitamin E from jojoba oil, which gives the skin a moisturizing and soft effect.",
+        "es-PE": "Protector solar que contiene una planta de los Andes peruanos, tara - (Caesalpinia Spinosa). Ofrece protección contra las quemaduras y el envejecimiento prematuro de la piel causado por los rayos UVA y UVB. NO IRRITA LOS OJOS. Contiene vitamina E gracias al aceite de jojoba, que aporta a la piel un efecto hidratante y suave."
+      },
+      usage: {
+        fr: "Appliquer sa crème Mishki, et une fois absorbée, mettre la crème solaire. Après chaque utilisation, bien refermer le tube et le protéger de la chaleur et de la lumière.",
+        en: "Apply your Mishki cream, and once absorbed, apply the sunscreen. After each use, close the tube tightly and protect it from heat and light.",
+        "es-PE": "Aplicar su crema Mishki, y una vez absorbida, poner el protector solar. Después de cada uso, cerrar bien el tubo y protegerlo del calor y la luz."
+      },
+      ingredient_base: {
+        fr: "La tara provient des Andes Péruviennes et a un effet photoprotecteur naturel.",
+        en: "Tara comes from the Peruvian Andes and has a natural photoprotective effect.",
+        "es-PE": "La tara procede de los Andes peruanos y tiene un efecto fotoprotector natural."
+      },
+      price: 29,
+      stock: 30
+    },
+    {
+      id: "SV-MPC-25",
+      name: {
+        fr: "Masque de pétales de Calendula",
+        en: "Calendula Flower Mask",
+        "es-PE": "Mascarilla de Pétalos de Caléndula"
+      },
+      category: {
+        fr: "Soins du visage",
+        en: "Face Care",
+        "es-PE": "Cuidado Facial"
+      },
+      volume: "25g",
+      desc: {
+        fr: "Des Andes Péruviennes",
+        en: "From the Peruvian Andes",
+        "es-PE": "De los Andes Peruanos"
+      },
+      long_desc: {
+        fr: "La calendula est une fleur avec des propriétés anti inflammatoires qui connaît aussi une légère activité anti microbienne. Utilisée comme masque, les pétales de calendula aident à décongestionner la peau et ont un effet anti microbien.",
+        en: "Calendula is a flower with anti-inflammatory properties that also has some anti-microbial activity. Used as a mask, calendula petals help decongest the skin and have an anti-microbial effect.",
+        "es-PE": "La caléndula es una flor con propiedades antiinflamatorias que también tiene una ligera actividad antimicrobiana. Utilizados como mascarilla, los pétalos de caléndula ayudan a descongestionar la piel y tienen un efecto antimicrobiano."
+      },
+      usage: {
+        fr: "Mettre une poignée de fleurs de calendula dans un bol et recouvrir les pétales avec de l`eau bouillante. Retirer les pétales de l`eau et les mettre directement sur la peau, tout en gardant le reste de l`eau. Laisser le masque durant 15-20 minutes. Si les pétales de calendula se sèchent au cours de la période, humidifier les avec l`eau de calendula, utilisant du coton. Aprés 15-20 minutes, assurez vous de retirer tout le produit du visage et appliquer une crème Mishki. Après chaque utilisation, bien refermer le sac et le protéger de l´excès de chaleur et d`humidité.",
+        en: "Put a handful of calendula flowers in a bowl and cover the petals with boiling water. Remove the petals from the water and place them directly on the skin, keeping the rest of the water. Leave the mask on for 15-20 minutes. If the calendula petals dry out during the period, moisten them with the calendula water using cotton. After 15-20 minutes, make sure to remove all the product from the face and apply a Mishki cream. After each use, close the bag tightly and protect it from excess heat and humidity.",
+        "es-PE": "Poner un puñado de flores de caléndula en un cuenco y cubrir los pétalos con agua hirviendo. Retirar los pétalos del agua y colocarlos directamente sobre la piel, conservando el resto del agua. Dejar actuar la mascarilla durante 15-20 minutos. Si los pétalos de caléndula se secan durante el periodo, humedecerlos con el agua de caléndula utilizando un algodón. Transcurridos 15-20 minutos, asegúrese de retirar todo el producto del rostro y aplicar una crema Mishki. Después de cada uso, cierre bien la bolsa y protéjala del exceso de calor y humedad."
+      },
+      ingredient_base: {
+        fr: "Les fleurs de calendula sont cultivées de manière biologique par une association de producteurs indépendants.",
+        en: "Calendula flowers are organically grown by an association of independent producers.",
+        "es-PE": "Las flores de caléndula son cultivadas orgánicamente por una asociación de productores independientes."
+      },
+      price: 26,
+      stock: 15
+    }
   ];
 
-  return list.map((item) => {
-    const frTrans = p[item.key];
-    return {
-      slug: item.slug,
-      category: item.category,
-      price: item.price,
-      image: item.image,
-      translations: duplicateLocales({
-        name: frTrans.name,
-        desc: frTrans.desc,
-        long_desc: frTrans.long_desc ?? frTrans.desc,
-      }),
-    };
-  });
+  return productsData.map((item) => ({
+    slug: item.id,
+    category: item.category.fr,
+    price: item.price,
+    image: `/b2c/${item.id}.png`,
+    volume: item.volume,
+    stock: item.stock,
+    translations: {
+      fr: {
+        name: item.name.fr,
+        desc: item.desc.fr,
+        long_desc: item.long_desc.fr,
+        category: item.category.fr,
+        usage: item.usage?.fr || "",
+        ingredient_base: item.ingredient_base?.fr || ""
+      },
+      en: {
+        name: item.name.en,
+        desc: item.desc.en,
+        long_desc: item.long_desc.en,
+        category: item.category.en,
+        usage: item.usage?.en || "",
+        ingredient_base: item.ingredient_base?.en || ""
+      },
+      "es-PE": {
+        name: item.name["es-PE"],
+        desc: item.desc["es-PE"],
+        long_desc: item.long_desc["es-PE"],
+        category: item.category["es-PE"],
+        usage: item.usage?.["es-PE"] || "",
+        ingredient_base: item.ingredient_base?.["es-PE"] || ""
+      }
+    }
+  }));
 }
 
 function buildProtocolesB2B(): { rituels: RituelB2B[]; fiches: FicheB2B[] } {
@@ -723,11 +1256,11 @@ function buildBlogPosts(): BlogPost[] {
 function buildRituals(): Ritual[] {
   const r = frLocale.b2c.rituals.items;
   type RitualKey = keyof typeof r;
-  const list: { slug: string; key: RitualKey; image: string; products: number[] }[] = [
-    { slug: 'morning', key: 'morning', image: 'https://images.pexels.com/photos/3762879/pexels-photo-3762879.jpeg?auto=compress&cs=tinysrgb&w=800', products: [1, 3] },
-    { slug: 'evening', key: 'evening', image: 'https://images.pexels.com/photos/3997379/pexels-photo-3997379.jpeg?auto=compress&cs=tinysrgb&w=800', products: [2, 3] },
-    { slug: 'weekly', key: 'weekly', image: 'https://images.pexels.com/photos/3785147/pexels-photo-3785147.jpeg?auto=compress&cs=tinysrgb&w=800', products: [1, 2, 4] },
-    { slug: 'detox', key: 'detox', image: 'https://images.pexels.com/photos/3756165/pexels-photo-3756165.jpeg?auto=compress&cs=tinysrgb&w=800', products: [1, 4] },
+  const list: { slug: string; key: RitualKey; image: string; products: string[] }[] = [
+    { slug: 'morning', key: 'morning', image: 'https://images.pexels.com/photos/3762879/pexels-photo-3762879.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-SE-150', 'SC-AN-000'] },
+    { slug: 'evening', key: 'evening', image: 'https://images.pexels.com/photos/3997379/pexels-photo-3997379.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-CH-150', 'SC-AN-000'] },
+    { slug: 'weekly', key: 'weekly', image: 'https://images.pexels.com/photos/3785147/pexels-photo-3785147.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-SE-150', 'SC-CH-150', 'SC-EN-000'] },
+    { slug: 'detox', key: 'detox', image: 'https://images.pexels.com/photos/3756165/pexels-photo-3756165.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-SE-150', 'SC-EN-000'] },
   ];
 
   return list.map((item) => {
@@ -923,16 +1456,21 @@ export async function POST() {
     const b2bData = buildProtocolesB2B();
     const downloads = buildDownloadsB2B();
 
-    // Products
-    for (const product of buildProducts()) {
-      const ref = db.collection('products').doc(product.slug);
+    // Products (B2C & B2B shared collection)
+    const products = buildProducts();
+    for (const prod of products) {
+      const ref = db.collection('products').doc(prod.slug);
       batch.set(ref, {
-        slug: product.slug,
-        category: product.category,
-        price: product.price,
-        image: product.image,
-        defaultLocale: 'fr',
-        translations: product.translations,
+        slug: prod.slug,
+        category: prod.category,
+        price: prod.price,
+        image: prod.image,
+        volume: prod.volume,
+        stock: prod.stock,
+        translations: prod.translations,
+        usage: prod.translations.fr.usage || "",
+        ingredient_base: prod.translations.fr.ingredient_base || "",
+        deliveryDays: { min: 4, max: 10 }
       });
     }
 
@@ -1035,8 +1573,8 @@ export async function POST() {
     }
 
     await batch.commit();
-    return NextResponse.json({ 
-      ok: true, 
+    return NextResponse.json({
+      ok: true,
       message: 'Seed completed successfully',
       users: testUsers,
     });

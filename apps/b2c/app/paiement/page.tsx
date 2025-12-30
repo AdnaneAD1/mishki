@@ -103,18 +103,6 @@ export default function PaymentPage() {
     return () => unsub()
   }, [])
 
-  const formatMoney = useMemo(
-    () =>
-      new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
-    [locale]
-  )
-
-  const cartTotal = clearedAfterPay ? 0 : selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const userRegion = useMemo(() => {
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone?.toLowerCase()
@@ -127,6 +115,19 @@ export default function PaymentPage() {
     if (lowerLocale.includes('pe')) return 'pe' as const
     return 'fr' as const
   }, [locale])
+
+  const currencyCode = userRegion === 'pe' ? 'PEN' : 'EUR'
+  const formatMoney = useMemo(
+    () =>
+      new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: currencyCode,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+    [locale, currencyCode]
+  )
+  const cartTotal = clearedAfterPay ? 0 : selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const taxRate = userRegion === 'pe' ? 0.18 : 0.2
   const subtotalHT = cartTotal / (1 + taxRate)
   const taxAmount = cartTotal - subtotalHT
@@ -209,18 +210,18 @@ export default function PaymentPage() {
       subtotal: round2(subtotalHT),
       tax: round2(taxAmount),
       total: round2(totalTTC),
-      currency: 'EUR',
+      currency: currencyCode,
     }
     const fullName = [savedProfile?.firstName, savedProfile?.lastName].filter(Boolean).join(' ') || null
     const shipping = addressMode === 'saved'
       ? {
-          address: savedProfile?.address ?? null,
-          city: savedProfile?.city ?? null,
-          postalCode: savedProfile?.postalCode ?? null,
-          phone: formData.phone || savedProfile?.phone || null,
-          fullName,
-          deliveryType: formData.deliveryType || null,
-        }
+        address: savedProfile?.address ?? null,
+        city: savedProfile?.city ?? null,
+        postalCode: savedProfile?.postalCode ?? null,
+        phone: formData.phone || savedProfile?.phone || null,
+        fullName,
+        deliveryType: formData.deliveryType || null,
+      }
       : {
         address: formData.address || null,
         city: formData.city || null,
@@ -282,7 +283,7 @@ export default function PaymentPage() {
             taxLabel: userRegion === 'pe' ? 'IGV 18%' : 'TVA 20%',
             taxAmount: totals.tax,
             total: totals.total,
-            currency: totals.currency === 'EUR' ? 'EUR' : 'EUR',
+            currency: currencyCode,
           },
         }
         if (userEmail) {
@@ -360,7 +361,7 @@ export default function PaymentPage() {
         taxLabel: userRegion === 'pe' ? 'IGV 18%' : 'TVA 20%',
         taxAmount: totalsSnapshot.tax,
         total: totalsSnapshot.total,
-        currency: 'EUR',
+        currency: currencyCode,
       },
     }
   }, [
@@ -378,6 +379,7 @@ export default function PaymentPage() {
     savedProfile?.firstName,
     savedProfile?.lastName,
     savedProfile?.phone,
+    currencyCode,
   ])
 
   if (showConfirmation) {
@@ -413,7 +415,7 @@ export default function PaymentPage() {
                 <InvoiceDownloadButton
                   data={invoiceData}
                   fileName={`${invoiceData.invoiceNumber}.pdf`}
-                  label="Télécharger la facture"
+                  label={t('confirmation.download_invoice')}
                   className="w-full justify-center px-4 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700 transition"
                 />
               </div>
@@ -482,11 +484,11 @@ export default function PaymentPage() {
 
               <div className="mb-6 border border-gray-200 rounded-lg p-4 bg-gray-50">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-semibold text-[#2d2d2d]">Résumé de commande</span>
-                  <span className="text-sm text-gray-500">{selectedItems.length} article{selectedItems.length > 1 ? 's' : ''}</span>
+                  <span className="text-sm font-semibold text-[#2d2d2d]">{t('order_summary.title')}</span>
+                  <span className="text-sm text-gray-500">{t('order_summary.items_count', { count: selectedItems.length })}</span>
                 </div>
                 {selectedItems.length === 0 ? (
-                  <p className="text-sm text-gray-500">Votre panier est vide. <Link href="/produits" className="text-[#235730] hover:underline">Retour boutique</Link></p>
+                  <p className="text-sm text-gray-500">{t('order_summary.empty')} <Link href="/produits" className="text-[#235730] hover:underline">{t('order_summary.back_to_shop')}</Link></p>
                 ) : (
                   <div className="space-y-2">
                     {selectedItems.map((item) => (
@@ -501,15 +503,15 @@ export default function PaymentPage() {
                     ))}
                     <div className="pt-3 mt-3 border-t border-gray-200 space-y-1 text-sm text-[#2d2d2d]">
                       <div className="flex justify-between">
-                        <span>Sous-total HT</span>
+                        <span>{t('order_summary.subtotal_ht')}</span>
                         <span>{formatMoney.format(subtotalHT)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>TVA (20%)</span>
+                        <span>{t('order_summary.tax')}</span>
                         <span>{formatMoney.format(taxAmount)}</span>
                       </div>
                       <div className="flex justify-between font-semibold text-base">
-                        <span>Total TTC</span>
+                        <span>{t('order_summary.total_ttc')}</span>
                         <span>{formatMoney.format(totalTTC)}</span>
                       </div>
                     </div>
@@ -686,8 +688,8 @@ export default function PaymentPage() {
                         type="button"
                         onClick={() => setPaymentMethod('card')}
                         className={`w-full border rounded-md px-4 py-3 text-sm flex items-center justify-between transition ${paymentMethod === 'card'
-                            ? 'border-[#235730] bg-[#235730]/5 text-[#235730]'
-                            : 'border-gray-300 text-gray-700 hover:border-[#235730]'
+                          ? 'border-[#235730] bg-[#235730]/5 text-[#235730]'
+                          : 'border-gray-300 text-gray-700 hover:border-[#235730]'
                           }`}
                       >
                         <span className="flex items-center gap-3">
@@ -720,8 +722,8 @@ export default function PaymentPage() {
                         type="button"
                         onClick={() => setPaymentMethod('paypal')}
                         className={`w-full border rounded-md px-4 py-3 text-sm flex items-center justify-between transition ${paymentMethod === 'paypal'
-                            ? 'border-[#235730] bg-[#235730]/5 text-[#235730]'
-                            : 'border-gray-300 text-gray-700 hover:border-[#235730]'
+                          ? 'border-[#235730] bg-[#235730]/5 text-[#235730]'
+                          : 'border-gray-300 text-gray-700 hover:border-[#235730]'
                           }`}
                       >
                         <span className="flex items-center gap-3">
@@ -808,7 +810,7 @@ export default function PaymentPage() {
                       <div className="p-4 border border-dashed border-[#235730] rounded-md bg-[#235730]/5 text-sm text-[#235730] space-y-2">
                         <p className="font-medium mb-1">PayPal</p>
                         <p className="text-[#235730]/80">
-                          Vous serez redirigé vers PayPal pour finaliser votre paiement en toute sécurité.
+                          {t('sections.payment.paypal_redirect')}
                         </p>
                         <PaypalButton
                           amount={paypalAmount}
@@ -834,7 +836,7 @@ export default function PaymentPage() {
                       disabled={saving}
                       className="bg-[#235730] hover:bg-[#1d4626] disabled:opacity-60 text-white rounded-sm px-8"
                     >
-                      {saving ? 'Traitement...' : t('sections.payment.pay')}
+                      {saving ? t('sections.payment.processing') : t('sections.payment.pay')}
                     </Button>
                   </div>
                   {paymentError && (

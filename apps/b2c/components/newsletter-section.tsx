@@ -37,7 +37,7 @@ export function NewsletterSection() {
   }
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-white" id="newsletter">
       <div className="container mx-auto px-6 text-center">
         <h2
           className="mb-4 text-[#235730]"
