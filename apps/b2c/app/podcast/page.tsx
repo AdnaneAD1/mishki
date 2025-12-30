@@ -65,7 +65,7 @@ export default function PodcastPage() {
               <Button className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm">
                 {t('info.spotify')}
               </Button>
-              <Button variant="outline" className="border-[#235730] text-[#235730] hover:bg-[#235730] hover:text-white rounded-sm">
+              <Button className="bg-[#235730] hover:bg-[#1d4626] text-white rounded-sm">
                 {t('info.apple')}
               </Button>
             </div>
