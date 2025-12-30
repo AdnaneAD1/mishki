@@ -1253,188 +1253,188 @@ function buildBlogPosts(): BlogPost[] {
   }));
 }
 
-function buildRituals(): Ritual[] {
-  const r = frLocale.b2c.rituals.items;
-  type RitualKey = keyof typeof r;
-  const list: { slug: string; key: RitualKey; image: string; products: string[] }[] = [
-    { slug: 'morning', key: 'morning', image: 'https://images.pexels.com/photos/3762879/pexels-photo-3762879.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-SE-150', 'SC-AN-000'] },
-    { slug: 'evening', key: 'evening', image: 'https://images.pexels.com/photos/3997379/pexels-photo-3997379.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-CH-150', 'SC-AN-000'] },
-    { slug: 'weekly', key: 'weekly', image: 'https://images.pexels.com/photos/3785147/pexels-photo-3785147.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-SE-150', 'SC-CH-150', 'SC-EN-000'] },
-    { slug: 'detox', key: 'detox', image: 'https://images.pexels.com/photos/3756165/pexels-photo-3756165.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-SE-150', 'SC-EN-000'] },
-  ];
+// function buildRituals(): Ritual[] {
+//   const r = frLocale.b2c.rituals.items;
+//   type RitualKey = keyof typeof r;
+//   const list: { slug: string; key: RitualKey; image: string; products: string[] }[] = [
+//     { slug: 'morning', key: 'morning', image: 'https://images.pexels.com/photos/3762879/pexels-photo-3762879.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-SE-150', 'SC-AN-000'] },
+//     { slug: 'evening', key: 'evening', image: 'https://images.pexels.com/photos/3997379/pexels-photo-3997379.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-CH-150', 'SC-AN-000'] },
+//     { slug: 'weekly', key: 'weekly', image: 'https://images.pexels.com/photos/3785147/pexels-photo-3785147.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-SE-150', 'SC-CH-150', 'SC-EN-000'] },
+//     { slug: 'detox', key: 'detox', image: 'https://images.pexels.com/photos/3756165/pexels-photo-3756165.jpeg?auto=compress&cs=tinysrgb&w=800', products: ['SC-SE-150', 'SC-EN-000'] },
+//   ];
 
-  return list.map((item) => {
-    const data = r[item.key];
-    return {
-      slug: item.slug,
-      image: item.image,
-      products: item.products,
-      translations: duplicateLocales({
-        title: data.title,
-        subtitle: data.subtitle,
-        description: data.desc,
-        duration: data.duration,
-        difficulty: data.difficulty,
-        full_desc: data.full_desc ?? data.desc,
-        steps: (data.steps || []).map((s) => ({ name: s.name, desc: s.desc })),
-        tips: data.tips || [],
-      }),
-    };
-  });
-}
+//   return list.map((item) => {
+//     const data = r[item.key];
+//     return {
+//       slug: item.slug,
+//       image: item.image,
+//       products: item.products,
+//       translations: duplicateLocales({
+//         title: data.title,
+//         subtitle: data.subtitle,
+//         description: data.desc,
+//         duration: data.duration,
+//         difficulty: data.difficulty,
+//         full_desc: data.full_desc ?? data.desc,
+//         steps: (data.steps || []).map((s) => ({ name: s.name, desc: s.desc })),
+//         tips: data.tips || [],
+//       }),
+//     };
+//   });
+// }
 
-function buildPodcasts(): Podcast[] {
-  const p = frLocale.b2c.podcast;
-  type PodcastKey = keyof typeof p.episodes;
-  const episodes: { slug: string; key: PodcastKey; duration: string; date: string; image: string; guest: string }[] = [
-    {
-      slug: 'e1',
-      key: 'e1',
-      duration: '45 min',
-      date: '10 Dec 2024',
-      image: 'https://images.pexels.com/photos/3762879/pexels-photo-3762879.jpeg?auto=compress&cs=tinysrgb&w=800',
-      guest: 'Dr. Maria Santos',
-    },
-    {
-      slug: 'e2',
-      key: 'e2',
-      duration: '38 min',
-      date: '3 Dec 2024',
-      image: 'https://images.pexels.com/photos/3997379/pexels-photo-3997379.jpeg?auto=compress&cs=tinysrgb&w=800',
-      guest: 'Sophie Durand',
-    },
-    {
-      slug: 'e3',
-      key: 'e3',
-      duration: '52 min',
-      date: '26 Nov 2024',
-      image: 'https://images.pexels.com/photos/3785147/pexels-photo-3785147.jpeg?auto=compress&cs=tinysrgb&w=800',
-      guest: 'Jean-Pierre Martin',
-    },
-    {
-      slug: 'e4',
-      key: 'e4',
-      duration: '48 min',
-      date: '19 Nov 2024',
-      image: 'https://images.pexels.com/photos/3756165/pexels-photo-3756165.jpeg?auto=compress&cs=tinysrgb&w=800',
-      guest: 'Amelia Chen',
-    },
-    {
-      slug: 'e5',
-      key: 'e5',
-      duration: '42 min',
-      date: '12 Nov 2024',
-      image: 'https://images.pexels.com/photos/3737579/pexels-photo-3737579.jpeg?auto=compress&cs=tinysrgb&w=800',
-      guest: 'Dr. Claire Dubois',
-    },
-    {
-      slug: 'e6',
-      key: 'e6',
-      duration: '35 min',
-      date: '5 Nov 2024',
-      image: 'https://images.pexels.com/photos/3762874/pexels-photo-3762874.jpeg?auto=compress&cs=tinysrgb&w=800',
-      guest: 'Yuki Tanaka',
-    },
-  ];
+// function buildPodcasts(): Podcast[] {
+//   const p = frLocale.b2c.podcast;
+//   type PodcastKey = keyof typeof p.episodes;
+//   const episodes: { slug: string; key: PodcastKey; duration: string; date: string; image: string; guest: string }[] = [
+//     {
+//       slug: 'e1',
+//       key: 'e1',
+//       duration: '45 min',
+//       date: '10 Dec 2024',
+//       image: 'https://images.pexels.com/photos/3762879/pexels-photo-3762879.jpeg?auto=compress&cs=tinysrgb&w=800',
+//       guest: 'Dr. Maria Santos',
+//     },
+//     {
+//       slug: 'e2',
+//       key: 'e2',
+//       duration: '38 min',
+//       date: '3 Dec 2024',
+//       image: 'https://images.pexels.com/photos/3997379/pexels-photo-3997379.jpeg?auto=compress&cs=tinysrgb&w=800',
+//       guest: 'Sophie Durand',
+//     },
+//     {
+//       slug: 'e3',
+//       key: 'e3',
+//       duration: '52 min',
+//       date: '26 Nov 2024',
+//       image: 'https://images.pexels.com/photos/3785147/pexels-photo-3785147.jpeg?auto=compress&cs=tinysrgb&w=800',
+//       guest: 'Jean-Pierre Martin',
+//     },
+//     {
+//       slug: 'e4',
+//       key: 'e4',
+//       duration: '48 min',
+//       date: '19 Nov 2024',
+//       image: 'https://images.pexels.com/photos/3756165/pexels-photo-3756165.jpeg?auto=compress&cs=tinysrgb&w=800',
+//       guest: 'Amelia Chen',
+//     },
+//     {
+//       slug: 'e5',
+//       key: 'e5',
+//       duration: '42 min',
+//       date: '12 Nov 2024',
+//       image: 'https://images.pexels.com/photos/3737579/pexels-photo-3737579.jpeg?auto=compress&cs=tinysrgb&w=800',
+//       guest: 'Dr. Claire Dubois',
+//     },
+//     {
+//       slug: 'e6',
+//       key: 'e6',
+//       duration: '35 min',
+//       date: '5 Nov 2024',
+//       image: 'https://images.pexels.com/photos/3762874/pexels-photo-3762874.jpeg?auto=compress&cs=tinysrgb&w=800',
+//       guest: 'Yuki Tanaka',
+//     },
+//   ];
 
-  return episodes.map((ep) => {
-    const data = p.episodes[ep.key];
-    return {
-      slug: ep.slug,
-      image: ep.image,
-      date: ep.date,
-      duration: ep.duration,
-      guest: ep.guest,
-      translations: duplicateLocales({
-        title: data.title,
-        description: data.description,
-        guest_title: data.guest_title,
-      }),
-    };
-  });
-}
+//   return episodes.map((ep) => {
+//     const data = p.episodes[ep.key];
+//     return {
+//       slug: ep.slug,
+//       image: ep.image,
+//       date: ep.date,
+//       duration: ep.duration,
+//       guest: ep.guest,
+//       translations: duplicateLocales({
+//         title: data.title,
+//         description: data.description,
+//         guest_title: data.guest_title,
+//       }),
+//     };
+//   });
+// }
 
-async function createTestUsers() {
-  if (!adminAuth) {
-    throw new Error('Admin Auth not configured');
-  }
+// async function createTestUsers() {
+//   if (!adminAuth) {
+//     throw new Error('Admin Auth not configured');
+//   }
 
-  const users = [
-    {
-      email: 'client@mishki.com',
-      password: 'ClientMishki2025!',
-      role: 'b2c',
-      displayName: 'Client Test B2C',
-    },
-    {
-      email: 'pro@mishki.com',
-      password: 'ProMishki2025!',
-      role: 'b2b',
-      displayName: 'Professionnel Test B2B',
-    },
-  ];
+//   const users = [
+//     {
+//       email: 'client@mishki.com',
+//       password: 'ClientMishki2025!',
+//       role: 'b2c',
+//       displayName: 'Client Test B2C',
+//     },
+//     {
+//       email: 'pro@mishki.com',
+//       password: 'ProMishki2025!',
+//       role: 'b2b',
+//       displayName: 'Professionnel Test B2B',
+//     },
+//   ];
 
-  const createdUsers = [];
+//   const createdUsers = [];
 
-  for (const userData of users) {
-    try {
-      // Vérifier si l'utilisateur existe déjà
-      let userRecord;
-      try {
-        userRecord = await adminAuth.getUserByEmail(userData.email);
-        console.log(`User ${userData.email} already exists, skipping creation`);
-      } catch (error: any) {
-        if (error.code === 'auth/user-not-found') {
-          // Créer l'utilisateur dans Firebase Auth
-          userRecord = await adminAuth.createUser({
-            email: userData.email,
-            password: userData.password,
-            displayName: userData.displayName,
-            emailVerified: true,
-          });
-          console.log(`Created user: ${userData.email} with UID: ${userRecord.uid}`);
-        } else {
-          throw error;
-        }
-      }
+//   for (const userData of users) {
+//     try {
+//       // Vérifier si l'utilisateur existe déjà
+//       let userRecord;
+//       try {
+//         userRecord = await adminAuth.getUserByEmail(userData.email);
+//         console.log(`User ${userData.email} already exists, skipping creation`);
+//       } catch (error: any) {
+//         if (error.code === 'auth/user-not-found') {
+//           // Créer l'utilisateur dans Firebase Auth
+//           userRecord = await adminAuth.createUser({
+//             email: userData.email,
+//             password: userData.password,
+//             displayName: userData.displayName,
+//             emailVerified: true,
+//           });
+//           console.log(`Created user: ${userData.email} with UID: ${userRecord.uid}`);
+//         } else {
+//           throw error;
+//         }
+//       }
 
-      // Créer/mettre à jour le document dans Firestore
-      if (userRecord) {
-        const userDoc: any = {
-          email: userData.email,
-          role: userData.role,
-          displayName: userData.displayName,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
+//       // Créer/mettre à jour le document dans Firestore
+//       if (userRecord) {
+//         const userDoc: any = {
+//           email: userData.email,
+//           role: userData.role,
+//           displayName: userData.displayName,
+//           createdAt: new Date().toISOString(),
+//           updatedAt: new Date().toISOString(),
+//         };
 
-        // Ajouter des champs spécifiques pour le B2B
-        if (userData.role === 'b2b') {
-          userDoc.validated = true; // Compte validé automatiquement pour les tests
-          userDoc.remise = 15; // Remise pro de 15%
-          userDoc.societe = 'Société Test B2B';
-          userDoc.siret = '12345678901234';
-          userDoc.nom = 'Test';
-          userDoc.prenom = 'Pro';
-        }
+//         // Ajouter des champs spécifiques pour le B2B
+//         if (userData.role === 'b2b') {
+//           userDoc.validated = true; // Compte validé automatiquement pour les tests
+//           userDoc.remise = 15; // Remise pro de 15%
+//           userDoc.societe = 'Société Test B2B';
+//           userDoc.siret = '12345678901234';
+//           userDoc.nom = 'Test';
+//           userDoc.prenom = 'Pro';
+//         }
 
-        await adminDb?.collection('users').doc(userRecord.uid).set(userDoc, { merge: true });
-        console.log(`Created/updated Firestore document for ${userData.email}`);
+//         await adminDb?.collection('users').doc(userRecord.uid).set(userDoc, { merge: true });
+//         console.log(`Created/updated Firestore document for ${userData.email}`);
 
-        createdUsers.push({
-          uid: userRecord.uid,
-          email: userData.email,
-          role: userData.role,
-        });
-      }
-    } catch (error: any) {
-      console.error(`Error creating user ${userData.email}:`, error.message);
-      // Continue avec les autres utilisateurs même en cas d'erreur
-    }
-  }
+//         createdUsers.push({
+//           uid: userRecord.uid,
+//           email: userData.email,
+//           role: userData.role,
+//         });
+//       }
+//     } catch (error: any) {
+//       console.error(`Error creating user ${userData.email}:`, error.message);
+//       // Continue avec les autres utilisateurs même en cas d'erreur
+//     }
+//   }
 
-  return createdUsers;
-}
+//   return createdUsers;
+// }
 
 export async function POST() {
   if (!ENABLE_SEED) {
@@ -1448,9 +1448,9 @@ export async function POST() {
     }
 
     // Créer les utilisateurs de test
-    console.log('Creating test users...');
-    const testUsers = await createTestUsers();
-    console.log(`Created ${testUsers.length} test users`);
+    // console.log('Creating test users...');
+    // const testUsers = await createTestUsers();
+    // console.log(`Created ${testUsers.length} test users`);
 
     const batch = db.batch();
     const b2bData = buildProtocolesB2B();
@@ -1491,30 +1491,30 @@ export async function POST() {
     }
 
     // Rituals
-    for (const ritual of buildRituals()) {
-      const ref = db.collection('rituals').doc(ritual.slug);
-      batch.set(ref, {
-        slug: ritual.slug,
-        image: ritual.image,
-        products: ritual.products,
-        defaultLocale: 'fr',
-        translations: ritual.translations,
-      });
-    }
+    // for (const ritual of buildRituals()) {
+    //   const ref = db.collection('rituals').doc(ritual.slug);
+    //   batch.set(ref, {
+    //     slug: ritual.slug,
+    //     image: ritual.image,
+    //     products: ritual.products,
+    //     defaultLocale: 'fr',
+    //     translations: ritual.translations,
+    //   });
+    // }
 
-    // Podcasts
-    for (const pod of buildPodcasts()) {
-      const ref = db.collection('podcasts').doc(pod.slug);
-      batch.set(ref, {
-        slug: pod.slug,
-        image: pod.image,
-        date: pod.date,
-        duration: pod.duration,
-        guest: pod.guest,
-        defaultLocale: 'fr',
-        translations: pod.translations,
-      });
-    }
+    // // Podcasts
+    // for (const pod of buildPodcasts()) {
+    //   const ref = db.collection('podcasts').doc(pod.slug);
+    //   batch.set(ref, {
+    //     slug: pod.slug,
+    //     image: pod.image,
+    //     date: pod.date,
+    //     duration: pod.duration,
+    //     guest: pod.guest,
+    //     defaultLocale: 'fr',
+    //     translations: pod.translations,
+    //   });
+    // }
 
     // B2B Rituels détaillés
     for (const rituel of b2bData.rituels) {
@@ -1576,7 +1576,7 @@ export async function POST() {
     return NextResponse.json({
       ok: true,
       message: 'Seed completed successfully',
-      users: testUsers,
+      // users: testUsers,
     });
   } catch (error: unknown) {
     console.error('Seed error', error);
