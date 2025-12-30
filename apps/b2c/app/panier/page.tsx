@@ -105,7 +105,7 @@ export default function CartPage() {
                         >
                           <Minus className="w-4 h-4" />
                         </button>
-                        <span className="px-4 py-2 text-center min-w-[3rem] text-sm text-[#2d2d2d]">
+                        <span className="px-4 py-2 text-center min-w-[3rem] text-sm text-black">
                           {item.quantity}
                         </span>
                         <button
