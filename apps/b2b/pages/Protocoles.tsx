@@ -103,9 +103,10 @@ export default function Protocoles() {
         {filteredProtocoles.map((protocole) => (
           <div
             key={protocole.slug}
-            className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all group"
+            className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all group flex flex-col"
+            style={{ minHeight: '500px' }}
           >
-            <div className="aspect-video bg-gray-100 overflow-hidden relative">
+            <div className="relative h-48 bg-gray-100 overflow-hidden flex-shrink-0">
               <Image
                 src={protocole.image}
                 alt={protocole.title}
@@ -125,7 +126,7 @@ export default function Protocoles() {
               </div>
             </div>
 
-            <div className="p-5">
+            <div className="p-5 flex flex-col flex-grow">
               <div className="flex items-center gap-2 mb-3">
                 <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
                   {protocole.category || t('filter_all_cats')}
@@ -136,10 +137,10 @@ export default function Protocoles() {
                 </span>
               </div>
 
-              <h3 className="text-gray-900 mb-2">{protocole.title}</h3>
-              <p className="text-sm text-gray-600 mb-4">{protocole.description}</p>
+              <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2" style={{ minHeight: '48px' }}>{protocole.title}</h3>
+              <p className="text-sm text-gray-600 mb-4 line-clamp-2" style={{ minHeight: '40px' }}>{protocole.description}</p>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 mt-auto">
                 <Link
                   href={`/pro/protocoles/${protocole.type}/${protocole.slug}`}
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg transition-colors text-sm"

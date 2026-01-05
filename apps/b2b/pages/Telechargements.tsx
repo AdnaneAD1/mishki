@@ -200,15 +200,16 @@ export default function Telechargements() {
       </div>
 
       {/* Assets Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredAssets.map((asset) => {
           const TypeIcon = getTypeIcon(asset.type);
           return (
             <div
               key={asset.slug}
-              className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all group"
+              className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all group flex flex-col"
+              style={{ minHeight: '420px' }}
             >
-              <div className="aspect-video bg-gray-100 overflow-hidden relative">
+              <div className="relative h-48 bg-gray-100 overflow-hidden flex-shrink-0">
                 <Image
                   src={asset.url}
                   alt={asset.titre}
@@ -237,13 +238,13 @@ export default function Telechargements() {
                 </div>
               </div>
 
-              <div className="p-4">
-                <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded mb-2">
+              <div className="p-4 flex flex-col flex-grow">
+                <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded mb-3 w-fit">
                   {asset.categorie}
                 </span>
-                <h3 className="text-sm text-gray-900 mb-2 line-clamp-2">{asset.titre}</h3>
+                <h3 className="font-semibold text-sm text-gray-900 mb-3 line-clamp-2" style={{ minHeight: '40px' }}>{asset.titre}</h3>
                 <p className="text-xs text-gray-500 mb-4">{asset.taille}</p>
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-2 text-white rounded-lg transition-colors text-sm"
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-white rounded-lg transition-colors text-sm font-medium mt-auto"
                   style={{ backgroundColor: '#235730' }}
                   onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1a4023')}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#235730')}

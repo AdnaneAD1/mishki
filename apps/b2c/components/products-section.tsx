@@ -19,7 +19,18 @@ export function ProductsSection() {
   const [quantity, setQuantity] = useState(1)
   const [stockMessages, setStockMessages] = useState<Record<string, string>>({})
   const minQty = 1
-  const limitedProducts = products.slice(0, 4)
+  
+  // Ordre spécifique des produits à afficher avec leurs IDs
+  const productOrder = ['SC-CH-150', 'SV-LN-100', 'SV-HJ-100', 'SV-CHS-50']
+  
+  const limitedProducts = useMemo(() => {
+    const orderedProducts: typeof products = []
+    productOrder.forEach(id => {
+      const product = products.find(p => p.id === id || p.slug === id)
+      if (product) orderedProducts.push(product)
+    })
+    return orderedProducts
+  }, [products])
 
   const formatMoney = useMemo(
     () =>
@@ -127,11 +138,11 @@ export function ProductsSection() {
               </Link>
               <div className="flex flex-col flex-grow">
                 <Link href={`/produits/${product.slug}`}>
-                  <h3 className="font-semibold text-base text-[#2d2d2d] hover:text-[#235730] transition-colors cursor-pointer min-h-[3rem] line-clamp-2 mb-2">
+                  <h3 className="font-bold text-base text-[#235730] hover:text-[#235730]/80 transition-colors cursor-pointer line-clamp-2 mb-1" style={{ fontFamily: 'Inter' }}>
                     {product.name}
                   </h3>
                 </Link>
-                <p className="text-xs text-[#2d2d2d] leading-relaxed min-h-[3rem] line-clamp-2 mb-2">
+                <p className="text-xs text-[#2d2d2d] leading-relaxed line-clamp-2 mb-3" style={{ fontFamily: 'Inter' }}>
                   {product.desc || product.long_desc || ''}
                 </p>
                 <div className="flex items-center justify-between mb-2 mt-auto">

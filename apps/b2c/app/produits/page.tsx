@@ -170,7 +170,7 @@ export default function ProduitsPage() {
             {!loading && !error && filteredProducts.map((product) => (
               <div
                 key={product.slug}
-                className="bg-transparent"
+                className="bg-transparent flex flex-col h-full"
               >
                 <Link href={`/produits/${product.slug}`}>
                   <div className="relative h-72 mb-4 cursor-pointer group">
@@ -187,13 +187,13 @@ export default function ProduitsPage() {
                     </div>
                   </div>
                 </Link>
-                <div className="space-y-3">
+                <div className="flex flex-col flex-grow space-y-3">
                   <Link href={`/produits/${product.slug}`}>
-                    <h3 className="font-semibold text-base text-[#2d2d2d] hover:text-[#235730] transition-colors cursor-pointer">
+                    <h3 className="font-bold text-base text-[#235730] hover:text-[#235730]/80 transition-colors cursor-pointer h-12 line-clamp-2" style={{ fontFamily: 'Inter' }}>
                       {product.name}
                     </h3>
                   </Link>
-                  <p className="text-xs text-[#2d2d2d] leading-relaxed line-clamp-2">
+                  <p className="text-xs text-[#2d2d2d] leading-relaxed line-clamp-2 h-10" style={{ fontFamily: 'Inter' }}>
                     {product.desc}
                   </p>
                   <div className="flex items-center justify-between">

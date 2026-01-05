@@ -19,7 +19,7 @@ export default function BlogPage() {
       <div className="min-h-screen">
         <div className="relative h-[300px] md:h-[400px] w-full pt-16 md:pt-20">
           <Image
-            src="https://images.pexels.com/photos/3762879/pexels-photo-3762879.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src="/b2c/blog-hero.jpg"
             alt={t('title')}
             fill
             className="object-cover"

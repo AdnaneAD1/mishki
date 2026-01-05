@@ -84,8 +84,8 @@ export default function PodcastPage() {
           <div className="space-y-6">
             {episodes.map((episode) => (
               <div key={episode.slug} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-0">
-                  <div className="relative h-48 md:h-full">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-0 md:h-64">
+                  <div className="relative h-48 md:h-64">
                     <Image src={episode.image} alt={episode.title} fill className="object-cover" />
                     <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                       <button className="w-16 h-16 bg-[#235730] rounded-full flex items-center justify-center hover:bg-[#1d4626] transition-colors">

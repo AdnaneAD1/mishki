@@ -276,33 +276,34 @@ export default function CataloguePro() {
             return (
               <div
                 key={product.id}
-                className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all group"
+                className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all group flex flex-col"
+                style={{ minHeight: '580px' }}
               >
-                <div className="aspect-square bg-gray-100 overflow-hidden">
+                <div className="relative h-64 bg-gray-100 overflow-hidden flex-shrink-0">
                   <Image
                     src={product.image}
                     alt={product.nom}
                     width={400}
                     height={400}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <div className="p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
+                <div className="p-4 flex flex-col flex-grow">
+                  <div className="flex items-start justify-between mb-3 gap-2">
+                    <div className="flex-1 min-w-0">
                       <span className="inline-block px-2 py-1 text-xs rounded mb-2 text-white" style={{ backgroundColor: '#235730' }}>
                         {formatVolume(product.formatCabine)}
                       </span>
-                      <h3 className="text-gray-900">{product.nom}</h3>
-                      <p className="text-xs text-gray-500 mb-1">{product.reference}</p>
+                      <h3 className="font-semibold text-gray-900 line-clamp-2 mb-1" style={{ minHeight: '48px' }}>{product.nom}</h3>
+                      <p className="text-xs text-gray-500">{product.reference}</p>
                     </div>
-                    <div className="text-xs font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-700">
+                    <div className="text-xs font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-700 whitespace-nowrap flex-shrink-0">
                       {product.stock > 0
                         ? t('stock.label', { count: product.stock }) || `Stock : ${product.stock}`
                         : t('stock.out') || 'Rupture'}
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">{product.description}</p>
+                  <p className="text-sm text-gray-600 mb-3 line-clamp-2" style={{ minHeight: '40px' }}>{product.description}</p>
                   <div className="flex items-end justify-between mb-3">
                     <div>
                       {user?.remise ? (

@@ -26,10 +26,10 @@ export function HeroSection() {
         />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 py-16 sm:py-24 relative z-10">
-        <div className="max-w-4xl text-white space-y-4 sm:space-y-6 md:space-y-8">
+      <div className="container mx-auto px-12 sm:px-16 md:px-24 py-32 sm:py-40 md:py-48 relative z-10">
+        <div className="max-w-2xl text-white space-y-4 sm:space-y-5">
           <h1
-            className="text-white text-left text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+            className="text-white text-left text-3xl sm:text-4xl md:text-5xl leading-tight"
             style={{
               fontFamily: 'var(--font-caveat)',
             }}
@@ -37,7 +37,7 @@ export function HeroSection() {
             {t('title')}
           </h1>
 
-          <p className="text-white text-left text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed font-medium max-w-3xl">
+          <p className="text-white text-left text-[11px] sm:text-xs md:text-sm leading-relaxed max-w-lg">
             {t('desc')}
           </p>
 
