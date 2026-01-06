@@ -9,7 +9,7 @@ type B2BUser = {
   email?: string | null;
   nom?: string | null;
   prenom?: string | null;
-  societe?: string | null;
+  company?: string | null;
   siret?: string | null;
   remise?: number | null;
 };
@@ -85,7 +85,7 @@ export function useCheckoutB2B() {
       const orderDoc = await addDoc(collection(db, 'orders'), {
         userId: user?.id ?? null,
         userEmail: user?.email ?? null,
-        userSociete: user?.societe ?? null,
+        userSociete: user?.company ?? null,
         userSiret: user?.siret ?? null,
         userNom: user?.nom ?? null,
         userPrenom: user?.prenom ?? null,

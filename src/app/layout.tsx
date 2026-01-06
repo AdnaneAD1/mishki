@@ -6,8 +6,6 @@ import { Caveat, Inter, Playfair_Display } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import { auth, db, doc, getDoc } from '@mishki/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
 import RoleRedirector from '@/components/RoleRedirector';
 
 const inter = Inter({

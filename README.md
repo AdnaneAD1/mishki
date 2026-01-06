@@ -83,7 +83,7 @@ Lié à l'authentification Firebase Auth via l'ID utilisateur (`uid`).
 *   `email` : Adresse email.
 *   `role` : 'b2c' (client) ou 'b2b' (pro).
 *   `validated` (Boolean) : **CRITIQUE**. Si `false`, l'utilisateur Pro est bloqué sur une page d'attente.
-*   `societe` / `company` : Nom de l'entreprise.
+*   `company` : Nom de l'entreprise.
 *   `siret` : Numéro d'identification.
 *   `prenom`, `nom`, `phone`, `address`, `city`, `postalCode`.
 *   `remise` (Number) : Pourcentage de remise personnalisé (optionnel).

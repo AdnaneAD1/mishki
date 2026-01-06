@@ -1,68 +1,60 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, Plus, Edit, Trash2, Eye } from 'lucide-react';
+import { Search, Plus, Edit, Trash2, Eye, Loader2 } from 'lucide-react';
+import { useAdminProducts } from '@/apps/admin/hooks/useAdminProducts';
 
 export default function Produits() {
+  const { products, loading, deleteProduct } = useAdminProducts();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('Toutes');
 
-  const products = [
-    {
-      id: 'SC-CH-150',
-      name: 'Crème Hydratante Visage',
-      category: 'Soins Cabine',
-      price: 45.99,
-      stock: 120,
-      image: '/b2c/products/creme-hydratante.jpg',
-      status: 'Actif',
-    },
-    {
-      id: 'SV-LN-100',
-      name: 'Lotion de Nettoyage',
-      category: 'Soins Vente',
-      price: 28.50,
-      stock: 85,
-      image: '/b2c/products/lotion-nettoyage.jpg',
-      status: 'Actif',
-    },
-    {
-      id: 'SV-HJ-100',
-      name: 'Huile de Jojoba',
-      category: 'Soins Vente',
-      price: 32.00,
-      stock: 45,
-      image: '/b2c/products/huile-jojoba.jpg',
-      status: 'Actif',
-    },
-    {
-      id: 'SV-CHS-50',
-      name: 'Crème Hydratante Spéciale',
-      category: 'Soins Vente',
-      price: 52.00,
-      stock: 0,
-      image: '/b2c/products/creme-speciale.jpg',
-      status: 'Rupture',
-    },
-  ];
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.id.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = categoryFilter === 'Toutes' || product.category === categoryFilter;
+      return matchesSearch && matchesCategory;
+    });
+  }, [products, searchTerm, categoryFilter]);
 
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = categoryFilter === 'Toutes' || product.category === categoryFilter;
-    return matchesSearch && matchesCategory;
-  });
+  const stats = useMemo(() => {
+    return {
+      total: products.length,
+      inStock: products.filter((p) => p.stock > 0).length,
+      outOfStock: products.filter((p) => p.stock === 0).length,
+      lowStock: products.filter((p) => p.stock > 0 && p.stock < 10).length,
+    };
+  }, [products]);
+
+  const handleDelete = async (id: string, name: string) => {
+    if (window.confirm(`Êtes-vous sûr de vouloir supprimer le produit "${name}" ?`)) {
+      try {
+        await deleteProduct(id);
+      } catch {
+        alert('Erreur lors de la suppression du produit');
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 text-[#235730] animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl text-gray-900 mb-2">Produits</h1>
-          <p className="text-gray-600">Gérer le catalogue de produits</p>
+          <h1 className="text-2xl text-gray-900 mb-2 font-bold">Produits</h1>
+          <p className="text-gray-600">Gérer le catalogue de produits ({products.length})</p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-[#235730] text-white rounded-lg hover:bg-[#1a4023] transition-colors">
           <Plus className="w-4 h-4" />
@@ -70,10 +62,29 @@ export default function Produits() {
         </button>
       </div>
 
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p className="text-sm text-gray-500 mb-1">Total produits</p>
+          <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+        </div>
+        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p className="text-sm text-gray-500 mb-1">En stock</p>
+          <p className="text-2xl font-bold text-green-600">{stats.inStock}</p>
+        </div>
+        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p className="text-sm text-gray-500 mb-1">Rupture</p>
+          <p className="text-2xl font-bold text-red-600">{stats.outOfStock}</p>
+        </div>
+        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p className="text-sm text-gray-500 mb-1">Stock faible (&lt;10)</p>
+          <p className="text-2xl font-bold text-yellow-600">{stats.lowStock}</p>
+        </div>
+      </div>
+
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4">
+      <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
         <div className="flex flex-col md:flex-row gap-4">
-          {/* Search */}
           <div className="flex-1">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -87,11 +98,10 @@ export default function Produits() {
             </div>
           </div>
 
-          {/* Category Filter */}
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#235730]"
+            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#235730] bg-white"
           >
             <option value="Toutes">Toutes les catégories</option>
             <option value="Soins Cabine">Soins Cabine</option>
@@ -100,101 +110,84 @@ export default function Produits() {
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">Total produits</p>
-          <p className="text-2xl font-bold text-gray-900">{products.length}</p>
-        </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">En stock</p>
-          <p className="text-2xl font-bold text-green-600">
-            {products.filter((p) => p.stock > 0).length}
-          </p>
-        </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">Rupture</p>
-          <p className="text-2xl font-bold text-red-600">
-            {products.filter((p) => p.stock === 0).length}
-          </p>
-        </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">Stock faible</p>
-          <p className="text-2xl font-bold text-yellow-600">
-            {products.filter((p) => p.stock > 0 && p.stock < 50).length}
-          </p>
-        </div>
-      </div>
-
       {/* Products Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProducts.map((product) => (
-          <div
-            key={product.id}
-            className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all flex flex-col"
-            style={{ minHeight: '420px' }}
-          >
-            <div className="relative h-48 bg-gray-100 overflow-hidden flex-shrink-0">
-              <Image
-                src={product.image}
-                alt={product.name}
-                width={400}
-                height={300}
-                className="w-full h-full object-contain p-4"
-              />
-              <div className="absolute top-3 right-3">
-                <span
-                  className={`px-2 py-1 text-xs rounded-full ${
-                    product.status === 'Actif'
+      {filteredProducts.length === 0 ? (
+        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center text-gray-500">
+          Aucun produit ne correspond à votre recherche.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredProducts.map((product) => (
+            <div
+              key={product.id}
+              className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all flex flex-col group"
+            >
+              <div className="relative h-48 bg-gray-50 overflow-hidden flex-shrink-0">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                  className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute top-3 right-3">
+                  <span
+                    className={`px-2 py-1 text-[10px] font-bold uppercase rounded-full shadow-sm ${product.stock > 0
                       ? 'bg-green-100 text-green-700'
                       : 'bg-red-100 text-red-700'
-                  }`}
-                >
-                  {product.status}
-                </span>
-              </div>
-            </div>
-
-            <div className="p-4 flex flex-col flex-grow">
-              <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded mb-2 w-fit">
-                {product.category}
-              </span>
-              <h3 className="font-semibold text-gray-900 mb-1" style={{ minHeight: '48px' }}>
-                {product.name}
-              </h3>
-              <p className="text-xs text-gray-500 mb-3">Réf: {product.id}</p>
-
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-lg font-bold text-gray-900">€{product.price.toFixed(2)}</p>
-                  <p className="text-xs text-gray-500">Prix HT</p>
-                </div>
-                <div className="text-right">
-                  <p className={`text-sm font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {product.stock > 0 ? `Stock: ${product.stock}` : 'Rupture'}
-                  </p>
+                      }`}
+                  >
+                    {product.stock > 0 ? 'Actif' : 'Rupture'}
+                  </span>
                 </div>
               </div>
 
-              <div className="flex gap-2 mt-auto">
-                <Link
-                  href={`/admin/produits/${product.id}`}
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[#235730] text-white rounded-lg hover:bg-[#1a4023] transition-colors text-sm"
-                >
-                  <Eye className="w-4 h-4" />
-                  Voir
-                </Link>
-                <button className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                  <Edit className="w-4 h-4" />
-                </button>
-                <button className="px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
-                  <Trash2 className="w-4 h-4" />
-                </button>
+              <div className="p-4 flex flex-col flex-grow">
+                <div className="flex justify-between items-start mb-2">
+                  <span className="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-medium rounded uppercase tracking-wider">
+                    {product.categoryLabel}
+                  </span>
+                </div>
+                <h3 className="font-bold text-gray-900 mb-1 line-clamp-2 h-10 leading-tight">
+                  {product.name}
+                </h3>
+                <p className="text-xs text-gray-400 mb-4">Réf: {product.id}</p>
+
+                <div className="flex items-center justify-between mb-4 mt-auto">
+                  <div>
+                    <p className="text-lg font-bold text-[#235730]">{product.price.toFixed(2)} €</p>
+                    <p className="text-[10px] text-gray-400 uppercase font-bold">Prix B2C</p>
+                  </div>
+                  <div className="text-right">
+                    <p className={`text-sm font-bold ${product.stock > 0 ? (product.stock < 10 ? 'text-yellow-600' : 'text-gray-900') : 'text-red-600'}`}>
+                      {product.stock > 0 ? `Stock: ${product.stock}` : 'Rupture'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <Link
+                    href={`/admin/produits/${product.id}`}
+                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-xs font-bold"
+                  >
+                    <Eye className="w-4 h-4" />
+                    Explorer
+                  </Link>
+                  <button className="p-2 bg-[#235730]/10 text-[#235730] rounded-lg hover:bg-[#235730]/20 transition-colors">
+                    <Edit className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(product.id, product.name)}
+                    className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

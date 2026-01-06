@@ -18,10 +18,17 @@ export {
   addDoc,
   query,
   where,
+  orderBy,
+  onSnapshot,
   setDoc,
   serverTimestamp,
+  type QuerySnapshot,
+  type DocumentData,
+  type QueryDocumentSnapshot,
+  type Timestamp,
+  limit,
 } from "firebase/firestore"
-export { updateDoc, runTransaction, increment } from "firebase/firestore"
+export { updateDoc, runTransaction, increment, deleteDoc } from "firebase/firestore"
 
 export type SignupB2CInput = {
   email: string
