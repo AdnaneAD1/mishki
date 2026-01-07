@@ -918,7 +918,8 @@
                 "title": "Subscribe to our exclusive offers",
                 "desc": "Join our community and receive exclusive news, beauty tips, and special offers directly in your inbox.",
                 "placeholder": "Your email address",
-                "btn": "Subscribe!"
+                "btn": "Subscribe!",
+                "success": "Thank you for subscribing to our newsletter!"
             }
         },
         "shop": {
@@ -1169,6 +1170,8 @@
                 "delivery": {
                     "title": "Delivery information",
                     "use_saved": "Use saved address",
+                    "no_saved_address": "No saved address",
+                    "saved_hint": "You can modify your saved address in your account settings",
                     "address_label": "Address",
                     "address_placeholder": "123",
                     "phone_label": "Phone number",

@@ -918,7 +918,8 @@
                 "title": "Suscríbete a nuestras ofertas exclusivas",
                 "desc": "Únete a nuestra comunidad y recibe en exclusiva nuestras últimas novedades, consejos de belleza y ofertas especiales directamente en tu correo.",
                 "placeholder": "Tu dirección de email",
-                "btn": "¡Me suscribo!"
+                "btn": "¡Me suscribo!",
+                "success": "¡Gracias por suscribirte a nuestro boletín!"
             }
         },
         "shop": {
@@ -1169,6 +1170,8 @@
                 "delivery": {
                     "title": "Información de envíos",
                     "use_saved": "Usar dirección guardada",
+                    "no_saved_address": "Sin dirección guardada",
+                    "saved_hint": "Puede modificar su dirección guardada en la configuración de su cuenta",
                     "address_label": "Dirección",
                     "address_placeholder": "123",
                     "phone_label": "Número de teléfono",

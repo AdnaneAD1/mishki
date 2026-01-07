@@ -918,7 +918,8 @@
                 "title": "Abonnez-vous à nos réseaux offres",
                 "desc": "Rejoignez notre communauté et recevez en exclusivité nos dernières nouveautés, conseils beauté et offres spéciales directement dans votre boîte mail.",
                 "placeholder": "Votre adresse e-mail",
-                "btn": "Je m'abonne !"
+                "btn": "Je m'abonne !",
+                "success": "Merci pour votre inscription à notre newsletter !"
             }
         },
         "shop": {
@@ -1169,6 +1170,8 @@
                 "delivery": {
                     "title": "Informations de livraisons",
                     "use_saved": "Utiliser l'adresse sauvegardée",
+                    "no_saved_address": "Aucune adresse enregistrée",
+                    "saved_hint": "Vous pouvez modifier votre adresse enregistrée dans les paramètres de votre compte",
                     "address_label": "Adresse",
                     "address_placeholder": "123",
                     "phone_label": "Numéro de téléphone",
