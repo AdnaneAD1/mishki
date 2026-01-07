@@ -12,15 +12,7 @@ import {
   FileText,
   X,
 } from 'lucide-react';
-
-const navItems = [
-  { to: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/admin/professionnels', icon: Users, label: 'Professionnels' },
-  { to: '/admin/commandes', icon: ShoppingBag, label: 'Commandes' },
-  { to: '/admin/produits', icon: Package, label: 'Produits' },
-  { to: '/admin/parametres', icon: Settings, label: 'Paramètres' },
-  { to: '/admin/logs', icon: FileText, label: 'Logs' },
-];
+import { useTranslations } from 'next-intl';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -29,6 +21,16 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const t = useTranslations('admin.sidebar');
+
+  const navItems = [
+    { to: '/admin/dashboard', icon: LayoutDashboard, label: t('navigation.dashboard') },
+    { to: '/admin/professionnels', icon: Users, label: t('navigation.professionals') },
+    { to: '/admin/commandes', icon: ShoppingBag, label: t('navigation.orders') },
+    { to: '/admin/produits', icon: Package, label: t('navigation.products') },
+    { to: '/admin/parametres', icon: Settings, label: t('navigation.settings') },
+    { to: '/admin/logs', icon: FileText, label: t('navigation.logs') },
+  ];
 
   return (
     <>
@@ -65,7 +67,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           <button
             onClick={onClose}
             className="lg:hidden p-2 text-white/80 hover:text-white rounded-lg hover:bg-white/10 transition-colors absolute right-4"
-            aria-label="Fermer le menu"
+            aria-label={t('closeMenu')}
           >
             <X className="w-5 h-5" />
           </button>
@@ -80,11 +82,10 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                 key={item.to}
                 href={item.to}
                 onClick={onClose}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                  isActive
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive
                     ? 'bg-[#235730] text-white'
                     : 'text-gray-600 hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
                 <span className="text-sm md:text-base truncate">{item.label}</span>
@@ -96,9 +97,9 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
         {/* Admin Badge */}
         <div className="p-4 border-t border-gray-200">
           <div className="rounded-lg p-4" style={{ backgroundColor: '#F7F0E0' }}>
-            <p className="text-xs text-gray-600 mb-1">Mode Administrateur</p>
+            <p className="text-xs text-gray-600 mb-1">{t('adminMode')}</p>
             <p className="text-xs font-semibold" style={{ color: '#235730' }}>
-              Accès complet au système
+              {t('fullAccess')}
             </p>
           </div>
         </div>

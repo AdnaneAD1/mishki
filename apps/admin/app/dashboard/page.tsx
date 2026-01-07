@@ -4,17 +4,19 @@ import Link from 'next/link';
 import { Users, ShoppingBag, Package, TrendingUp, ArrowUp, ArrowDown, Loader2 } from 'lucide-react';
 import { useAdminDashboard } from '@/apps/admin/hooks/useAdminDashboard';
 import { useAdminUsers } from '@/apps/admin/hooks/useAdminUsers';
+import { useTranslations } from 'next-intl';
 
 export default function Dashboard() {
   const { stats, recentOrders, pendingProsList, loading } = useAdminDashboard();
   const { validateUser } = useAdminUsers();
+  const t = useTranslations('admin.dashboard');
 
   const handleValidate = async (id: string, name: string) => {
-    if (confirm(`Valider le compte de ${name} ?`)) {
+    if (confirm(t('confirmValidation', { name }))) {
       try {
         await validateUser(id);
       } catch {
-        alert('Erreur lors de la validation');
+        alert(t('validationError'));
       }
     }
   };
@@ -29,15 +31,15 @@ export default function Dashboard() {
 
   const statCards = [
     {
-      title: 'Professionnels',
+      title: t('stats.professionals'),
       value: stats.professionals.toString(),
-      change: stats.pendingPros > 0 ? `${stats.pendingPros} en attente` : 'À jour',
+      change: stats.pendingPros > 0 ? t('stats.pending', { count: stats.pendingPros }) : t('stats.upToDate'),
       trend: stats.pendingPros > 0 ? 'down' : 'up',
       icon: Users,
       color: 'bg-blue-500',
     },
     {
-      title: 'Commandes',
+      title: t('stats.orders'),
       value: stats.orders.toString(),
       change: '+100%', // Temporary placeholder
       trend: 'up',
@@ -45,17 +47,17 @@ export default function Dashboard() {
       color: 'bg-green-500',
     },
     {
-      title: 'Produits',
+      title: t('stats.products'),
       value: stats.products.toString(),
-      change: 'Catalogue',
+      change: t('stats.catalog'),
       trend: 'up',
       icon: Package,
       color: 'bg-purple-500',
     },
     {
-      title: "Chiffre d'affaires",
+      title: t('stats.revenue'),
       value: `${stats.revenue.toLocaleString('fr-FR')} €`,
-      change: 'Total',
+      change: t('stats.total'),
       trend: 'up',
       icon: TrendingUp,
       color: 'bg-orange-500',
@@ -66,8 +68,8 @@ export default function Dashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl text-gray-900 mb-2 font-bold">Dashboard</h1>
-        <p className="text-gray-600">Vue d&apos;ensemble de votre plateforme en temps réel</p>
+        <h1 className="text-2xl text-gray-900 mb-2 font-bold">{t('title')}</h1>
+        <p className="text-gray-600">{t('subtitle')}</p>
       </div>
 
       {/* Stats Grid */}
@@ -95,14 +97,14 @@ export default function Dashboard() {
         {/* Recent Orders */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-gray-900">Commandes récentes</h2>
+            <h2 className="text-lg font-bold text-gray-900">{t('recentOrders.title')}</h2>
             <Link href="/admin/commandes" className="text-xs font-bold text-[#235730] hover:underline uppercase tracking-wider">
-              Voir tout
+              {t('recentOrders.viewAll')}
             </Link>
           </div>
           <div className="space-y-3">
             {recentOrders.length === 0 ? (
-              <p className="text-center py-8 text-gray-400 text-sm italic">Aucune commande enregistrée</p>
+              <p className="text-center py-8 text-gray-400 text-sm italic">{t('recentOrders.noOrders')}</p>
             ) : (
               recentOrders.map((order) => (
                 <div key={order.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors border border-transparent hover:border-gray-200">
@@ -128,16 +130,16 @@ export default function Dashboard() {
         {/* Pending Professionals */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-gray-900">Validations en attente</h2>
+            <h2 className="text-lg font-bold text-gray-900">{t('pendingValidations.title')}</h2>
             <Link href="/admin/professionnels" className="text-xs font-bold text-[#235730] hover:underline uppercase tracking-wider">
-              Gérer ({stats.pendingPros})
+              {t('pendingValidations.manage', { count: stats.pendingPros })}
             </Link>
           </div>
           <div className="space-y-4">
             {pendingProsList.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-gray-400">
                 <Users className="w-12 h-12 mb-3 opacity-20" />
-                <p className="text-sm italic">Aucune demande en attente</p>
+                <p className="text-sm italic">{t('pendingValidations.noPending')}</p>
               </div>
             ) : (
               pendingProsList.map((pro) => (
@@ -150,13 +152,13 @@ export default function Dashboard() {
                     <span className="text-[10px] text-gray-400 font-bold uppercase">{pro.date}</span>
                   </div>
                   <div className="flex items-center justify-between gap-4">
-                    <p className="text-[10px] text-gray-400 font-mono">SIRET: {pro.siret}</p>
+                    <p className="text-[10px] text-gray-400 font-mono">{t('pendingValidations.siret', { siret: pro.siret })}</p>
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleValidate(pro.id, pro.name)}
                         className="px-3 py-1.5 bg-[#235730] text-white text-[10px] font-bold uppercase rounded-lg hover:bg-[#1a4023] transition-colors shadow-sm"
                       >
-                        Valider
+                        {t('pendingValidations.validate')}
                       </button>
                     </div>
                   </div>

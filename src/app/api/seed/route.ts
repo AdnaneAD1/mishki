@@ -2,11 +2,9 @@
 
 import { NextResponse } from 'next/server';
 import { adminDb, adminAuth } from '@mishki/firebase/admin';
-import fr from '@/public/locales/fr/common.json';
 
 const ENABLE_SEED = process.env.NEXT_PUBLIC_ENABLE_SEED === 'true';
 const SUPPORTED_LOCALES = ['fr', 'en', 'es-PE'] as const;
-const frLocale = fr as typeof fr;
 
 type Locale = (typeof SUPPORTED_LOCALES)[number];
 
@@ -39,24 +37,24 @@ type BlogPost = {
   translations: Record<Locale, { title: string; excerpt: string; content: string[] }>;
 };
 
-type Ritual = {
-  slug: string;
-  image: string;
-  products: string[];
-  translations: Record<
-    Locale,
-    {
-      title: string;
-      subtitle: string;
-      description: string;
-      duration: string;
-      difficulty: string;
-      full_desc: string;
-      steps: { name: string; desc: string }[];
-      tips: string[];
-    }
-  >;
-};
+// type Ritual = {
+//   slug: string;
+//   image: string;
+//   products: string[];
+//   translations: Record<
+//     Locale,
+//     {
+//       title: string;
+//       subtitle: string;
+//       description: string;
+//       duration: string;
+//       difficulty: string;
+//       full_desc: string;
+//       steps: { name: string; desc: string }[];
+//       tips: string[];
+//     }
+//   >;
+// };
 
 type DownloadAssetB2B = {
   slug: string;
@@ -74,37 +72,37 @@ type DownloadAssetB2B = {
   defaultLocale?: Locale;
 };
 
-type Podcast = {
-  slug: string;
-  image: string;
-  date: string;
-  duration: string;
-  guest: string;
-  translations: Record<
-    Locale,
-    {
-      title: string;
-      description: string;
-      guest_title: string;
-    }
-  >;
-};
+// type Podcast = {
+//   slug: string;
+//   image: string;
+//   date: string;
+//   duration: string;
+//   guest: string;
+//   translations: Record<
+//     Locale,
+//     {
+//       title: string;
+//       description: string;
+//       guest_title: string;
+//     }
+//   >;
+// };
 
 // --- B2B Protocoles ---
-type ProtocoleB2B = {
-  slug: string;
-  type: 'fiche' | 'rituel';
-  category: string;
-  duration: string;
-  image: string;
-  translations: Record<
-    Locale,
-    {
-      title: string;
-      description: string;
-    }
-  >;
-};
+// type ProtocoleB2B = {
+//   slug: string;
+//   type: 'fiche' | 'rituel';
+//   category: string;
+//   duration: string;
+//   image: string;
+//   translations: Record<
+//     Locale,
+//     {
+//       title: string;
+//       description: string;
+//     }
+//   >;
+// };
 
 type RituelB2B = {
   slug: string;
@@ -1436,6 +1434,56 @@ function buildBlogPosts(): BlogPost[] {
 //   return createdUsers;
 // }
 
+async function createAdminUser() {
+  const adminEmail = 'admin@mishki.com';
+  const adminPassword = 'mishki@1234';
+
+  if (!adminAuth || !adminDb) {
+    throw new Error('Admin Auth or Admin DB not configured');
+  }
+
+  try {
+    // Check if user already exists in Auth
+    let userRecord;
+    try {
+      userRecord = await adminAuth.getUserByEmail(adminEmail);
+      console.log('Admin user already exists in Auth');
+    } catch (e: unknown) {
+      if (typeof e === 'object' && e !== null && 'code' in e && e.code === 'auth/user-not-found') {
+        // Create user in Auth
+        userRecord = await adminAuth.createUser({
+          email: adminEmail,
+          password: adminPassword,
+          displayName: 'Admin Mishki',
+        });
+        console.log('Admin user created in Auth');
+      } else {
+        throw e;
+      }
+    }
+
+    // Ensure profile exists in Firestore with admin role
+    const userRef = adminDb.collection('users').doc(userRecord.uid);
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists || userDoc.data()?.role !== 'admin') {
+      await userRef.set({
+        email: adminEmail,
+        role: 'admin',
+        firstName: 'Admin',
+        lastName: 'Mishki',
+        createdAt: new Date().toISOString(),
+      }, { merge: true });
+      console.log('Admin profile created/updated in Firestore');
+    }
+
+    return userRecord;
+  } catch (error) {
+    console.error('Error in createAdminUser:', error);
+    throw error;
+  }
+}
+
 export async function POST() {
   if (!ENABLE_SEED) {
     return NextResponse.json({ ok: false, error: 'Seed disabled' }, { status: 403 });
@@ -1451,6 +1499,10 @@ export async function POST() {
     // console.log('Creating test users...');
     // const testUsers = await createTestUsers();
     // console.log(`Created ${testUsers.length} test users`);
+
+    // Créer l'administrateur par défaut
+    console.log('Creating default admin...');
+    await createAdminUser();
 
     const batch = db.batch();
     const b2bData = buildProtocolesB2B();

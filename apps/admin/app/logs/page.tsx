@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { Search, Filter, Download, AlertCircle, CheckCircle, Info, XCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function Logs() {
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState('Tous');
+  const t = useTranslations('admin.logs');
 
   const logs = [
     {
@@ -109,17 +111,30 @@ export default function Logs() {
     }
   };
 
+  const getTypeLabel = (type: string) => {
+    switch (type) {
+      case 'success':
+        return t('types.success');
+      case 'error':
+        return t('types.error');
+      case 'warning':
+        return t('types.warning');
+      default:
+        return t('types.info');
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl text-gray-900 mb-2">Logs d'activité</h1>
-          <p className="text-gray-600">Historique des événements système</p>
+          <h1 className="text-2xl text-gray-900 mb-2">{t('title')}</h1>
+          <p className="text-gray-600">{t('subtitle')}</p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-[#235730] text-white rounded-lg hover:bg-[#1a4023] transition-colors">
           <Download className="w-4 h-4" />
-          Exporter
+          {t('export')}
         </button>
       </div>
 
@@ -132,7 +147,7 @@ export default function Logs() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher dans les logs..."
+                placeholder={t('search.placeholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#235730]"
@@ -146,11 +161,11 @@ export default function Logs() {
             onChange={(e) => setTypeFilter(e.target.value)}
             className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#235730]"
           >
-            <option value="Tous">Tous les types</option>
-            <option value="success">Succès</option>
-            <option value="info">Info</option>
-            <option value="warning">Avertissement</option>
-            <option value="error">Erreur</option>
+            <option value="Tous">{t('filters.allTypes')}</option>
+            <option value="success">{t('types.success')}</option>
+            <option value="info">{t('types.info')}</option>
+            <option value="warning">{t('types.warning')}</option>
+            <option value="error">{t('types.error')}</option>
           </select>
         </div>
       </div>
@@ -158,23 +173,23 @@ export default function Logs() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">Total</p>
+          <p className="text-sm text-gray-600 mb-1">{t('stats.total')}</p>
           <p className="text-2xl font-bold text-gray-900">{logs.length}</p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">Succès</p>
+          <p className="text-sm text-gray-600 mb-1">{t('stats.success')}</p>
           <p className="text-2xl font-bold text-green-600">
             {logs.filter((l) => l.type === 'success').length}
           </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">Avertissements</p>
+          <p className="text-sm text-gray-600 mb-1">{t('stats.warnings')}</p>
           <p className="text-2xl font-bold text-yellow-600">
             {logs.filter((l) => l.type === 'warning').length}
           </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">Erreurs</p>
+          <p className="text-sm text-gray-600 mb-1">{t('stats.errors')}</p>
           <p className="text-2xl font-bold text-red-600">
             {logs.filter((l) => l.type === 'error').length}
           </p>
@@ -192,18 +207,12 @@ export default function Logs() {
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="font-medium text-gray-900">{log.action}</h3>
                     <span className={`px-2 py-1 text-xs rounded-full ${getTypeColor(log.type)}`}>
-                      {log.type === 'success'
-                        ? 'Succès'
-                        : log.type === 'error'
-                        ? 'Erreur'
-                        : log.type === 'warning'
-                        ? 'Avertissement'
-                        : 'Info'}
+                      {getTypeLabel(log.type)}
                     </span>
                   </div>
                   <p className="text-sm text-gray-600 mb-1">{log.details}</p>
                   <div className="flex items-center gap-4 text-xs text-gray-500">
-                    <span>Utilisateur: {log.user}</span>
+                    <span>{t('logEntry.user', { user: log.user })}</span>
                     <span>•</span>
                     <span>{log.timestamp}</span>
                   </div>

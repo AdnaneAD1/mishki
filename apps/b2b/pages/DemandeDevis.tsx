@@ -282,8 +282,8 @@ export default function DemandeDevis() {
                               type="button"
                               onClick={() => selectDate(day)}
                               className={`py-2 rounded-lg transition-colors ${isSelected
-                                  ? 'bg-[#235730] text-white'
-                                  : 'text-gray-700 hover:bg-gray-100'
+                                ? 'bg-[#235730] text-white'
+                                : 'text-gray-700 hover:bg-gray-100'
                                 }`}
                             >
                               {day}

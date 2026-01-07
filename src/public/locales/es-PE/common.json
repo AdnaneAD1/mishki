@@ -1,5 +1,248 @@
 {
     "test": "Español",
+    "admin": {
+        "dashboard": {
+            "title": "Panel de control",
+            "subtitle": "Visión general en tiempo real de tu plataforma",
+            "stats": {
+                "professionals": "Profesionales",
+                "orders": "Pedidos",
+                "products": "Productos",
+                "revenue": "Ingresos",
+                "pending": "{count} pendiente",
+                "upToDate": "Al día",
+                "catalog": "Catálogo",
+                "total": "Total"
+            },
+            "recentOrders": {
+                "title": "Pedidos recientes",
+                "viewAll": "Ver todo",
+                "noOrders": "No hay pedidos registrados"
+            },
+            "pendingValidations": {
+                "title": "Validaciones pendientes",
+                "manage": "Gestionar ({count})",
+                "noPending": "No hay solicitudes pendientes",
+                "validate": "Validar",
+                "siret": "SIRET: {siret}"
+            },
+            "confirmValidation": "¿Validar la cuenta de {name}?",
+            "validationError": "Error durante la validación"
+        },
+        "professionals": {
+            "title": "Profesionales",
+            "subtitle": "Gestionar cuentas profesionales ({count})",
+            "search": {
+                "placeholder": "Buscar por nombre, empresa o email..."
+            },
+            "filters": {
+                "allStatuses": "Todos los estados",
+                "validated": "Validado",
+                "pending": "Pendiente",
+                "suspended": "Suspendido"
+            },
+            "stats": {
+                "total": "Total",
+                "validated": "Validados",
+                "pending": "Pendientes",
+                "suspended": "Suspendidos"
+            },
+            "table": {
+                "professional": "Profesional",
+                "company": "Empresa",
+                "siret": "SIRET",
+                "status": "Estado",
+                "discount": "Descuento",
+                "registrationDate": "Fecha Registro",
+                "actions": "Acciones",
+                "noResults": "No se encontraron profesionales"
+            },
+            "actions": {
+                "view": "Ver",
+                "validate": "Validar cuenta",
+                "reject": "Rechazar / Suspender",
+                "suspend": "Suspender cuenta"
+            },
+            "error": "Error al recuperar profesionales: {error}"
+        },
+        "professionalDetail": {
+            "backToList": "Volver a la lista",
+            "memberSince": "Miembro desde el {date}",
+            "siret": "SIRET",
+            "stats": {
+                "totalOrders": "Pedidos totales",
+                "totalSpent": "Monto total (con IVA)",
+                "avgOrderValue": "Valor promedio del pedido",
+                "discountGranted": "Descuento concedido"
+            },
+            "recentOrders": {
+                "title": "Pedidos recientes",
+                "orderNumber": "N° Pedido",
+                "date": "Fecha",
+                "items": "Artículos",
+                "amount": "Monto",
+                "status": "Estado",
+                "noOrders": "No se encontraron pedidos",
+                "products": "productos",
+                "product": "producto",
+                "pending": "Pendiente"
+            },
+            "actions": {
+                "title": "Acciones",
+                "validateAccount": "Validar cuenta",
+                "modifyDiscount": "Modificar descuento",
+                "reactivateAccount": "Reactivar cuenta",
+                "suspendAccount": "Suspender cuenta"
+            },
+            "error": "Error: {error}",
+            "userNotFound": "Usuario no encontrado"
+        },
+        "orders": {
+            "title": "Pedidos",
+            "subtitle": "Gestionar todos los pedidos ({count})",
+            "search": {
+                "placeholder": "Buscar por N° o cliente..."
+            },
+            "filters": {
+                "allStatuses": "Todos los estados"
+            },
+            "statuses": {
+                "paid": "Pagado",
+                "pending": "Pendiente",
+                "late": "Retrasado",
+                "delivered": "Entregado",
+                "cancelled": "Cancelado"
+            },
+            "stats": {
+                "total": "Total",
+                "pending": "Pendientes",
+                "paid": "Pagados",
+                "b2bB2c": "B2B / B2C"
+            },
+            "table": {
+                "orderNumber": "N° Pedido",
+                "client": "Cliente",
+                "date": "Fecha",
+                "items": "Artículos",
+                "amount": "Monto",
+                "source": "Origen",
+                "status": "Estado",
+                "actions": "Acciones",
+                "noResults": "No se encontraron pedidos"
+            },
+            "error": "Error al recuperar pedidos: {error}"
+        },
+        "products": {
+            "title": "Productos",
+            "subtitle": "Gestionar catálogo de productos ({count})",
+            "newProduct": "Nuevo producto",
+            "search": {
+                "placeholder": "Buscar por nombre o referencia..."
+            },
+            "filters": {
+                "allCategories": "Todas las categorías"
+            },
+            "stats": {
+                "totalProducts": "Total productos",
+                "inStock": "En stock",
+                "outOfStock": "Agotado",
+                "lowStock": "Stock bajo (<10)"
+            },
+            "status": {
+                "active": "Activo",
+                "outOfStock": "Agotado"
+            },
+            "card": {
+                "ref": "Ref: {ref}",
+                "priceB2C": "Precio B2C",
+                "stock": "Stock: {stock}",
+                "explore": "Explorar"
+            },
+            "confirmDelete": "¿Estás seguro de querer eliminar el producto \"{name}\"?",
+            "deleteError": "Error al eliminar producto",
+            "noResults": "Ningún producto coincide con tu búsqueda."
+        },
+        "settings": {
+            "title": "Configuración",
+            "subtitle": "Configuración de la plataforma",
+            "general": {
+                "title": "Configuración general",
+                "platformName": "Nombre de la plataforma",
+                "contactEmail": "Email de contacto",
+                "phone": "Teléfono"
+            },
+            "emailNotifications": {
+                "title": "Notificaciones por email",
+                "newOrders": "Nuevos pedidos",
+                "newProfessionals": "Nuevos profesionales",
+                "lowStock": "Stock bajo",
+                "weeklyReports": "Reportes semanales"
+            },
+            "systemAlerts": {
+                "title": "Alertas del sistema",
+                "lowStockThreshold": "Umbral de stock bajo",
+                "validationDelay": "Retraso validación profesionales (días)"
+            },
+            "security": {
+                "title": "Seguridad",
+                "twoFactor": "Autenticación de dos factores",
+                "activityLogs": "Registros de actividad",
+                "manualValidation": "Validación manual de profesionales"
+            },
+            "backup": {
+                "title": "Copia de seguridad de datos",
+                "lastBackup": "Última copia de seguridad",
+                "backupNow": "Hacer copia ahora"
+            },
+            "saveChanges": "Guardar cambios"
+        },
+        "logs": {
+            "title": "Registros de actividad",
+            "subtitle": "Historial de eventos del sistema",
+            "export": "Exportar",
+            "search": {
+                "placeholder": "Buscar en registros..."
+            },
+            "filters": {
+                "allTypes": "Todos los tipos"
+            },
+            "types": {
+                "success": "Éxito",
+                "info": "Información",
+                "warning": "Advertencia",
+                "error": "Error"
+            },
+            "stats": {
+                "total": "Total",
+                "success": "Éxitos",
+                "warnings": "Advertencias",
+                "errors": "Errores"
+            },
+            "logEntry": {
+                "user": "Usuario: {user}"
+            }
+        },
+        "header": {
+            "search": "Buscar...",
+            "admin": "Admin",
+            "administrator": "Administrador",
+            "systemAdministrator": "Administrador del sistema",
+            "logout": "Cerrar sesión"
+        },
+        "sidebar": {
+            "closeMenu": "Cerrar menú",
+            "navigation": {
+                "dashboard": "Panel de control",
+                "professionals": "Profesionales",
+                "orders": "Pedidos",
+                "products": "Productos",
+                "settings": "Configuración",
+                "logs": "Registros"
+            },
+            "adminMode": "Modo Administrador",
+            "fullAccess": "Acceso completo al sistema"
+        }
+    },
     "b2b": {
         "loading": "Cargando...",
         "redirecting": "Redirigiendo...",

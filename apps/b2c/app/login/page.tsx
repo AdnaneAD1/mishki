@@ -36,7 +36,7 @@ export default function LoginPage() {
       }
     })
     return () => unsub()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,7 +48,14 @@ export default function LoginPage() {
       setCartOwner(user.uid)
       const snap = await getDoc(doc(db, 'users', user.uid))
       const role = snap.exists() ? (snap.data().role as string | undefined) : undefined
-      const target = role === 'b2b' ? '/pro' : redirect
+
+      let target = redirect
+      if (role === 'admin') {
+        target = '/admin'
+      } else if (role === 'b2b') {
+        target = '/pro'
+      }
+
       router.push(target)
     } catch (err) {
       console.log('err', err)

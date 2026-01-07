@@ -1,14 +1,17 @@
 'use client';
 
 import { Settings, Mail, Bell, Shield, Database } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function Parametres() {
+  const t = useTranslations('admin.settings');
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl text-gray-900 mb-2">Paramètres</h1>
-        <p className="text-gray-600">Configuration de la plateforme</p>
+        <h1 className="text-2xl text-gray-900 mb-2">{t('title')}</h1>
+        <p className="text-gray-600">{t('subtitle')}</p>
       </div>
 
       {/* Settings Sections */}
@@ -19,12 +22,12 @@ export default function Parametres() {
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
               <Settings className="w-5 h-5 text-blue-600" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900">Paramètres généraux</h2>
+            <h2 className="text-lg font-semibold text-gray-900">{t('general.title')}</h2>
           </div>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Nom de la plateforme
+                {t('general.platformName')}
               </label>
               <input
                 type="text"
@@ -34,7 +37,7 @@ export default function Parametres() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email de contact
+                {t('general.contactEmail')}
               </label>
               <input
                 type="email"
@@ -44,7 +47,7 @@ export default function Parametres() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Téléphone
+                {t('general.phone')}
               </label>
               <input
                 type="tel"
@@ -61,23 +64,23 @@ export default function Parametres() {
             <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
               <Mail className="w-5 h-5 text-green-600" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900">Notifications Email</h2>
+            <h2 className="text-lg font-semibold text-gray-900">{t('emailNotifications.title')}</h2>
           </div>
           <div className="space-y-3">
             <label className="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer">
-              <span className="text-sm text-gray-700">Nouvelles commandes</span>
+              <span className="text-sm text-gray-700">{t('emailNotifications.newOrders')}</span>
               <input type="checkbox" defaultChecked className="w-5 h-5 text-[#235730] rounded" />
             </label>
             <label className="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer">
-              <span className="text-sm text-gray-700">Nouveaux professionnels</span>
+              <span className="text-sm text-gray-700">{t('emailNotifications.newProfessionals')}</span>
               <input type="checkbox" defaultChecked className="w-5 h-5 text-[#235730] rounded" />
             </label>
             <label className="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer">
-              <span className="text-sm text-gray-700">Stock faible</span>
+              <span className="text-sm text-gray-700">{t('emailNotifications.lowStock')}</span>
               <input type="checkbox" defaultChecked className="w-5 h-5 text-[#235730] rounded" />
             </label>
             <label className="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer">
-              <span className="text-sm text-gray-700">Rapports hebdomadaires</span>
+              <span className="text-sm text-gray-700">{t('emailNotifications.weeklyReports')}</span>
               <input type="checkbox" className="w-5 h-5 text-[#235730] rounded" />
             </label>
           </div>
@@ -89,12 +92,12 @@ export default function Parametres() {
             <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
               <Bell className="w-5 h-5 text-purple-600" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900">Alertes système</h2>
+            <h2 className="text-lg font-semibold text-gray-900">{t('systemAlerts.title')}</h2>
           </div>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Seuil stock faible
+                {t('systemAlerts.lowStockThreshold')}
               </label>
               <input
                 type="number"
@@ -104,7 +107,7 @@ export default function Parametres() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Délai validation professionnels (jours)
+                {t('systemAlerts.validationDelay')}
               </label>
               <input
                 type="number"
@@ -121,19 +124,19 @@ export default function Parametres() {
             <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
               <Shield className="w-5 h-5 text-red-600" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-900">Sécurité</h2>
+            <h2 className="text-lg font-semibold text-gray-900">{t('security.title')}</h2>
           </div>
           <div className="space-y-3">
             <label className="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer">
-              <span className="text-sm text-gray-700">Authentification à deux facteurs</span>
+              <span className="text-sm text-gray-700">{t('security.twoFactor')}</span>
               <input type="checkbox" className="w-5 h-5 text-[#235730] rounded" />
             </label>
             <label className="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer">
-              <span className="text-sm text-gray-700">Logs d'activité</span>
+              <span className="text-sm text-gray-700">{t('security.activityLogs')}</span>
               <input type="checkbox" defaultChecked className="w-5 h-5 text-[#235730] rounded" />
             </label>
             <label className="flex items-center justify-between p-3 bg-gray-50 rounded-lg cursor-pointer">
-              <span className="text-sm text-gray-700">Validation manuelle des pros</span>
+              <span className="text-sm text-gray-700">{t('security.manualValidation')}</span>
               <input type="checkbox" defaultChecked className="w-5 h-5 text-[#235730] rounded" />
             </label>
           </div>
@@ -146,15 +149,15 @@ export default function Parametres() {
           <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
             <Database className="w-5 h-5 text-orange-600" />
           </div>
-          <h2 className="text-lg font-semibold text-gray-900">Sauvegarde de données</h2>
+          <h2 className="text-lg font-semibold text-gray-900">{t('backup.title')}</h2>
         </div>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-gray-700 mb-1">Dernière sauvegarde</p>
+            <p className="text-sm text-gray-700 mb-1">{t('backup.lastBackup')}</p>
             <p className="text-xs text-gray-500">05/01/2026 à 03:00</p>
           </div>
           <button className="px-4 py-2 bg-[#235730] text-white rounded-lg hover:bg-[#1a4023] transition-colors">
-            Sauvegarder maintenant
+            {t('backup.backupNow')}
           </button>
         </div>
       </div>
@@ -162,7 +165,7 @@ export default function Parametres() {
       {/* Save Button */}
       <div className="flex justify-end">
         <button className="px-6 py-3 bg-[#235730] text-white rounded-lg hover:bg-[#1a4023] transition-colors font-medium">
-          Enregistrer les modifications
+          {t('saveChanges')}
         </button>
       </div>
     </div>

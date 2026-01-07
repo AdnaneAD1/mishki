@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Mail, Calendar, TrendingUp, Package, Loader2 } from 'lucide-react';
 import { useAdminUsers, useAdminUserDetail } from '@/apps/admin/hooks/useAdminUsers';
+import { useTranslations } from 'next-intl';
 
 export default function ProfessionnelDetail() {
   const params = useParams();
@@ -11,6 +12,7 @@ export default function ProfessionnelDetail() {
 
   const { user, orders, stats, loading, error } = useAdminUserDetail(id);
   const { validateUser, suspendUser } = useAdminUsers();
+  const t = useTranslations('admin.professionalDetail');
 
   if (loading) {
     return (
@@ -23,7 +25,7 @@ export default function ProfessionnelDetail() {
   if (error || !user) {
     return (
       <div className="p-6 bg-red-50 text-red-700 rounded-xl border border-red-200">
-        Erreur : {error || 'Utilisateur non trouvé'}
+        {t('error', { error: error || t('userNotFound') })}
       </div>
     );
   }
@@ -36,7 +38,7 @@ export default function ProfessionnelDetail() {
         className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900"
       >
         <ArrowLeft className="w-4 h-4" />
-        Retour à la liste
+        {t('backToList')}
       </Link>
 
       {/* Header */}
@@ -65,12 +67,12 @@ export default function ProfessionnelDetail() {
           </div>
           <div className="flex items-center gap-3 text-gray-600 text-sm">
             <Calendar className="w-5 h-5" />
-            <span>Membre depuis le {user.createdAt}</span>
+            <span>{t('memberSince', { date: user.createdAt })}</span>
           </div>
         </div>
 
         <div className="mt-6 pt-6 border-t border-gray-200">
-          <p className="text-sm text-gray-600 mb-1">SIRET</p>
+          <p className="text-sm text-gray-600 mb-1">{t('siret')}</p>
           <p className="font-medium text-gray-900">{user.siret}</p>
         </div>
       </div>
@@ -84,7 +86,7 @@ export default function ProfessionnelDetail() {
             </div>
           </div>
           <p className="text-2xl font-bold text-gray-900 mb-1">{stats.totalOrders}</p>
-          <p className="text-sm text-gray-600">Commandes totales</p>
+          <p className="text-sm text-gray-600">{t('stats.totalOrders')}</p>
         </div>
 
         <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -94,7 +96,7 @@ export default function ProfessionnelDetail() {
             </div>
           </div>
           <p className="text-2xl font-bold text-gray-900 mb-1">{stats.totalSpent.toLocaleString('fr-FR')} €</p>
-          <p className="text-sm text-gray-600">Montant total (TTC)</p>
+          <p className="text-sm text-gray-600">{t('stats.totalSpent')}</p>
         </div>
 
         <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -104,7 +106,7 @@ export default function ProfessionnelDetail() {
             </div>
           </div>
           <p className="text-2xl font-bold text-gray-900 mb-1">{stats.avgOrderValue.toLocaleString('fr-FR', { maximumFractionDigits: 0 })} €</p>
-          <p className="text-sm text-gray-600">Panier moyen</p>
+          <p className="text-sm text-gray-600">{t('stats.avgOrderValue')}</p>
         </div>
 
         <div className="bg-white rounded-xl border border-gray-200 p-6">
@@ -114,29 +116,29 @@ export default function ProfessionnelDetail() {
             </div>
           </div>
           <p className="text-2xl font-bold text-gray-900 mb-1">{user.remise}%</p>
-          <p className="text-sm text-gray-600">Remise accordée</p>
+          <p className="text-sm text-gray-600">{t('stats.discountGranted')}</p>
         </div>
       </div>
 
       {/* Recent Orders */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Commandes récentes</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('recentOrders.title')}</h2>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">N° Commande</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">Date</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">Articles</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">Montant</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">Statut</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">{t('recentOrders.orderNumber')}</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">{t('recentOrders.date')}</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">{t('recentOrders.items')}</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">{t('recentOrders.amount')}</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-600">{t('recentOrders.status')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {orders.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center text-gray-500 text-sm">
-                    Aucune commande trouvée
+                    {t('recentOrders.noOrders')}
                   </td>
                 </tr>
               ) : (
@@ -150,7 +152,7 @@ export default function ProfessionnelDetail() {
                       <td className="px-4 py-3 text-sm font-medium text-gray-900">#{order.id}</td>
                       <td className="px-4 py-3 text-sm text-gray-600">{order.date}</td>
                       <td className="px-4 py-3 text-sm text-gray-600">
-                        {totalQuantity} ({uniqueProducts} {uniqueProducts > 1 ? 'produits' : 'produit'})
+                        {totalQuantity} ({uniqueProducts} {uniqueProducts > 1 ? t('recentOrders.products') : t('recentOrders.product')})
                       </td>
                       <td className="px-4 py-3 text-sm font-medium text-gray-900">{order.amountTTC || 0} €</td>
                       <td className="px-4 py-3">
@@ -158,7 +160,7 @@ export default function ProfessionnelDetail() {
                           ? 'bg-green-100 text-green-700'
                           : 'bg-yellow-100 text-yellow-700'
                           }`}>
-                          {order.paymentStatus || 'En attente'}
+                          {order.paymentStatus || t('recentOrders.pending')}
                         </span>
                       </td>
                     </tr>
@@ -167,23 +169,23 @@ export default function ProfessionnelDetail() {
               )}
             </tbody>
           </table>
-        </div >
-      </div >
+        </div>
+      </div>
 
       {/* Actions */}
-      < div className="bg-white rounded-xl border border-gray-200 p-6" >
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Actions</h2>
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('actions.title')}</h2>
         <div className="flex flex-wrap gap-3">
           {user.status === 'En attente' && (
             <button
               onClick={() => validateUser(user.id)}
               className="px-4 py-2 bg-[#235730] text-white rounded-lg hover:bg-[#1a4023] transition-colors"
             >
-              Valider le compte
+              {t('actions.validateAccount')}
             </button>
           )}
           <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-            Modifier la remise
+            {t('actions.modifyDiscount')}
           </button>
           <button
             onClick={() => suspendUser(user.id)}
@@ -192,10 +194,10 @@ export default function ProfessionnelDetail() {
               : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
               }`}
           >
-            {user.status === 'Suspendu' ? 'Réactiver le compte' : 'Suspendu le compte'}
+            {user.status === 'Suspendu' ? t('actions.reactivateAccount') : t('actions.suspendAccount')}
           </button>
         </div>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 }

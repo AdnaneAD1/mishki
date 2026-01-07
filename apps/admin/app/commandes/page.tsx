@@ -4,19 +4,21 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Search, Eye, Download, Loader2 } from 'lucide-react';
 import { useAdminOrders } from '@/apps/admin/hooks/useAdminOrders';
+import { useTranslations } from 'next-intl';
 
-const statusMap: Record<string, { label: string; color: string }> = {
-  payee: { label: 'Payée', color: 'bg-green-100 text-green-700' },
-  en_attente: { label: 'En attente', color: 'bg-yellow-100 text-yellow-700' },
-  retard: { label: 'En retard', color: 'bg-red-100 text-red-700' },
-  livree: { label: 'Livrée', color: 'bg-blue-100 text-blue-700' },
-  annulee: { label: 'Annulée', color: 'bg-gray-100 text-gray-700' },
+const statusMap: Record<string, { labelKey: string; color: string }> = {
+  payee: { labelKey: 'statuses.paid', color: 'bg-green-100 text-green-700' },
+  en_attente: { labelKey: 'statuses.pending', color: 'bg-yellow-100 text-yellow-700' },
+  retard: { labelKey: 'statuses.late', color: 'bg-red-100 text-red-700' },
+  livree: { labelKey: 'statuses.delivered', color: 'bg-blue-100 text-blue-700' },
+  annulee: { labelKey: 'statuses.cancelled', color: 'bg-gray-100 text-gray-700' },
 };
 
 export default function Commandes() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('Tous');
   const { orders, loading, error } = useAdminOrders();
+  const t = useTranslations('admin.orders');
 
   const filteredOrders = useMemo(() => {
     return orders.filter((order) => {
@@ -24,12 +26,12 @@ export default function Commandes() {
         order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.client.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const uiStatus = statusMap[order.status]?.label || order.status;
+      const uiStatus = statusMap[order.status] ? t(statusMap[order.status].labelKey) : order.status;
       const matchesStatus = statusFilter === 'Tous' || uiStatus === statusFilter;
 
       return matchesSearch && matchesStatus;
     });
-  }, [orders, searchTerm, statusFilter]);
+  }, [orders, searchTerm, statusFilter, t]);
 
   const formatPrice = (amount: number, currency: string) => {
     return new Intl.NumberFormat('fr-FR', {
@@ -49,7 +51,7 @@ export default function Commandes() {
   if (error) {
     return (
       <div className="p-6 bg-red-50 text-red-700 rounded-xl border border-red-200">
-        Erreur lors de la récupération des commandes : {error}
+        {t('error', { error })}
       </div>
     );
   }
@@ -58,8 +60,8 @@ export default function Commandes() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl text-gray-900 mb-2">Commandes</h1>
-        <p className="text-gray-600">Gérer toutes les commandes ({orders.length})</p>
+        <h1 className="text-2xl text-gray-900 mb-2">{t('title')}</h1>
+        <p className="text-gray-600">{t('subtitle', { count: orders.length })}</p>
       </div>
 
       {/* Filters */}
@@ -71,7 +73,7 @@ export default function Commandes() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher par N° ou client..."
+                placeholder={t('search.placeholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#235730]"
@@ -85,9 +87,9 @@ export default function Commandes() {
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#235730]"
           >
-            <option value="Tous">Tous les statuts</option>
+            <option value="Tous">{t('filters.allStatuses')}</option>
             {Object.values(statusMap).map(s => (
-              <option key={s.label} value={s.label}>{s.label}</option>
+              <option key={s.labelKey} value={t(s.labelKey)}>{t(s.labelKey)}</option>
             ))}
           </select>
         </div>
@@ -96,23 +98,23 @@ export default function Commandes() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">Total</p>
+          <p className="text-sm text-gray-600 mb-1">{t('stats.total')}</p>
           <p className="text-2xl font-bold text-gray-900">{orders.length}</p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">En attente</p>
+          <p className="text-sm text-gray-600 mb-1">{t('stats.pending')}</p>
           <p className="text-2xl font-bold text-yellow-600">
             {orders.filter((o) => o.status === 'en_attente').length}
           </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">Payées</p>
+          <p className="text-sm text-gray-600 mb-1">{t('stats.paid')}</p>
           <p className="text-2xl font-bold text-green-600">
             {orders.filter((o) => o.status === 'payee').length}
           </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <p className="text-sm text-gray-600 mb-1">B2B / B2C</p>
+          <p className="text-sm text-gray-600 mb-1">{t('stats.b2bB2c')}</p>
           <p className="text-lg font-bold text-gray-900">
             {orders.filter(o => o.source === 'b2b').length} / {orders.filter(o => o.source === 'b2c').length}
           </p>
@@ -125,21 +127,21 @@ export default function Commandes() {
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">N° Commande</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">Client</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">Articles</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">Montant</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">Source</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">Statut</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">{t('table.orderNumber')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">{t('table.client')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">{t('table.date')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">{t('table.items')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">{t('table.amount')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">{t('table.source')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">{t('table.status')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600">{t('table.actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {filteredOrders.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
-                    Aucune commande trouvée
+                    {t('table.noResults')}
                   </td>
                 </tr>
               ) : (
@@ -170,7 +172,7 @@ export default function Commandes() {
                         className={`px-2 py-1 text-xs rounded-full ${statusMap[order.status]?.color || 'bg-gray-100 text-gray-700'
                           }`}
                       >
-                        {statusMap[order.status]?.label || order.status}
+                        {statusMap[order.status] ? t(statusMap[order.status].labelKey) : order.status}
                       </span>
                     </td>
                     <td className="px-6 py-4">

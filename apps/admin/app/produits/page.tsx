@@ -5,11 +5,28 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Plus, Edit, Trash2, Eye, Loader2 } from 'lucide-react';
 import { useAdminProducts } from '@/apps/admin/hooks/useAdminProducts';
+import { useTranslations } from 'next-intl';
 
 export default function Produits() {
   const { products, loading, deleteProduct } = useAdminProducts();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('Toutes');
+  const t = useTranslations('admin.products');
+
+  // Build categories list with multilingual labels
+  const categories = useMemo(() => {
+    const map = new Map<string, string>();
+    products.forEach((p) => {
+      if (p.category) {
+        const label = p.categoryLabel || p.category;
+        if (!map.has(p.category)) map.set(p.category, label);
+      }
+    });
+    return [
+      { value: 'Toutes', label: t('filters.allCategories') },
+      ...Array.from(map.entries()).map(([value, label]) => ({ value, label }))
+    ];
+  }, [products, t]);
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
@@ -31,11 +48,11 @@ export default function Produits() {
   }, [products]);
 
   const handleDelete = async (id: string, name: string) => {
-    if (window.confirm(`Êtes-vous sûr de vouloir supprimer le produit "${name}" ?`)) {
+    if (window.confirm(t('confirmDelete', { name }))) {
       try {
         await deleteProduct(id);
       } catch {
-        alert('Erreur lors de la suppression du produit');
+        alert(t('deleteError'));
       }
     }
   };
@@ -53,31 +70,31 @@ export default function Produits() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl text-gray-900 mb-2 font-bold">Produits</h1>
-          <p className="text-gray-600">Gérer le catalogue de produits ({products.length})</p>
+          <h1 className="text-2xl text-gray-900 mb-2 font-bold">{t('title')}</h1>
+          <p className="text-gray-600">{t('subtitle', { count: products.length })}</p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-[#235730] text-white rounded-lg hover:bg-[#1a4023] transition-colors">
           <Plus className="w-4 h-4" />
-          Nouveau produit
+          {t('newProduct')}
         </button>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p className="text-sm text-gray-500 mb-1">Total produits</p>
+          <p className="text-sm text-gray-500 mb-1">{t('stats.totalProducts')}</p>
           <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p className="text-sm text-gray-500 mb-1">En stock</p>
+          <p className="text-sm text-gray-500 mb-1">{t('stats.inStock')}</p>
           <p className="text-2xl font-bold text-green-600">{stats.inStock}</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p className="text-sm text-gray-500 mb-1">Rupture</p>
+          <p className="text-sm text-gray-500 mb-1">{t('stats.outOfStock')}</p>
           <p className="text-2xl font-bold text-red-600">{stats.outOfStock}</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p className="text-sm text-gray-500 mb-1">Stock faible (&lt;10)</p>
+          <p className="text-sm text-gray-500 mb-1">{t('stats.lowStock')}</p>
           <p className="text-2xl font-bold text-yellow-600">{stats.lowStock}</p>
         </div>
       </div>
@@ -90,7 +107,7 @@ export default function Produits() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Rechercher par nom ou référence..."
+                placeholder={t('search.placeholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#235730]"
@@ -103,9 +120,9 @@ export default function Produits() {
             onChange={(e) => setCategoryFilter(e.target.value)}
             className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#235730] bg-white"
           >
-            <option value="Toutes">Toutes les catégories</option>
-            <option value="Soins Cabine">Soins Cabine</option>
-            <option value="Soins Vente">Soins Vente</option>
+            {categories.map((cat) => (
+              <option key={cat.value} value={cat.value}>{cat.label}</option>
+            ))}
           </select>
         </div>
       </div>
@@ -113,7 +130,7 @@ export default function Produits() {
       {/* Products Grid */}
       {filteredProducts.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-12 text-center text-gray-500">
-          Aucun produit ne correspond à votre recherche.
+          {t('noResults')}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -137,7 +154,7 @@ export default function Produits() {
                       : 'bg-red-100 text-red-700'
                       }`}
                   >
-                    {product.stock > 0 ? 'Actif' : 'Rupture'}
+                    {product.stock > 0 ? t('status.active') : t('status.outOfStock')}
                   </span>
                 </div>
               </div>
@@ -151,16 +168,16 @@ export default function Produits() {
                 <h3 className="font-bold text-gray-900 mb-1 line-clamp-2 h-10 leading-tight">
                   {product.name}
                 </h3>
-                <p className="text-xs text-gray-400 mb-4">Réf: {product.id}</p>
+                <p className="text-xs text-gray-400 mb-4">{t('card.ref', { ref: product.id })}</p>
 
                 <div className="flex items-center justify-between mb-4 mt-auto">
                   <div>
                     <p className="text-lg font-bold text-[#235730]">{product.price.toFixed(2)} €</p>
-                    <p className="text-[10px] text-gray-400 uppercase font-bold">Prix B2C</p>
+                    <p className="text-[10px] text-gray-400 uppercase font-bold">{t('card.priceB2C')}</p>
                   </div>
                   <div className="text-right">
                     <p className={`text-sm font-bold ${product.stock > 0 ? (product.stock < 10 ? 'text-yellow-600' : 'text-gray-900') : 'text-red-600'}`}>
-                      {product.stock > 0 ? `Stock: ${product.stock}` : 'Rupture'}
+                      {product.stock > 0 ? t('card.stock', { stock: product.stock }) : t('status.outOfStock')}
                     </p>
                   </div>
                 </div>
@@ -171,7 +188,7 @@ export default function Produits() {
                     className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-xs font-bold"
                   >
                     <Eye className="w-4 h-4" />
-                    Explorer
+                    {t('card.explore')}
                   </Link>
                   <button className="p-2 bg-[#235730]/10 text-[#235730] rounded-lg hover:bg-[#235730]/20 transition-colors">
                     <Edit className="w-4 h-4" />

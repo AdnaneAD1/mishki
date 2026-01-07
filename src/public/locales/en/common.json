@@ -1,10 +1,250 @@
 {
     "test": "English",
+    "admin": {
+        "dashboard": {
+            "title": "Dashboard",
+            "subtitle": "Real-time overview of your platform",
+            "stats": {
+                "professionals": "Professionals",
+                "orders": "Orders",
+                "products": "Products",
+                "revenue": "Revenue",
+                "pending": "{count} pending",
+                "upToDate": "Up to date",
+                "catalog": "Catalog",
+                "total": "Total"
+            },
+            "recentOrders": {
+                "title": "Recent orders",
+                "viewAll": "View all",
+                "noOrders": "No orders recorded"
+            },
+            "pendingValidations": {
+                "title": "Pending validations",
+                "manage": "Manage ({count})",
+                "noPending": "No pending requests",
+                "validate": "Validate",
+                "siret": "SIRET: {siret}"
+            },
+            "confirmValidation": "Validate {name}'s account?",
+            "validationError": "Error during validation"
+        },
+        "professionals": {
+            "title": "Professionals",
+            "subtitle": "Manage professional accounts ({count})",
+            "search": {
+                "placeholder": "Search by name, company or email..."
+            },
+            "filters": {
+                "allStatuses": "All statuses",
+                "validated": "Validated",
+                "pending": "Pending",
+                "suspended": "Suspended"
+            },
+            "stats": {
+                "total": "Total",
+                "validated": "Validated",
+                "pending": "Pending",
+                "suspended": "Suspended"
+            },
+            "table": {
+                "professional": "Professional",
+                "company": "Company",
+                "siret": "SIRET",
+                "status": "Status",
+                "discount": "Discount",
+                "registrationDate": "Registration Date",
+                "actions": "Actions",
+                "noResults": "No professionals found"
+            },
+            "actions": {
+                "view": "View",
+                "validate": "Validate account",
+                "reject": "Reject / Suspend",
+                "suspend": "Suspend account"
+            },
+            "error": "Error retrieving professionals: {error}"
+        },
+        "professionalDetail": {
+            "backToList": "Back to list",
+            "memberSince": "Member since {date}",
+            "siret": "SIRET",
+            "stats": {
+                "totalOrders": "Total orders",
+                "totalSpent": "Total amount (incl. tax)",
+                "avgOrderValue": "Average order value",
+                "discountGranted": "Discount granted"
+            },
+            "recentOrders": {
+                "title": "Recent orders",
+                "orderNumber": "Order #",
+                "date": "Date",
+                "items": "Items",
+                "amount": "Amount",
+                "status": "Status",
+                "noOrders": "No orders found",
+                "products": "products",
+                "product": "product",
+                "pending": "Pending"
+            },
+            "actions": {
+                "title": "Actions",
+                "validateAccount": "Validate account",
+                "modifyDiscount": "Modify discount",
+                "reactivateAccount": "Reactivate account",
+                "suspendAccount": "Suspend account"
+            },
+            "error": "Error: {error}",
+            "userNotFound": "User not found"
+        },
+        "orders": {
+            "title": "Orders",
+            "subtitle": "Manage all orders ({count})",
+            "search": {
+                "placeholder": "Search by order # or customer..."
+            },
+            "filters": {
+                "allStatuses": "All statuses"
+            },
+            "statuses": {
+                "paid": "Paid",
+                "pending": "Pending",
+                "late": "Overdue",
+                "delivered": "Delivered",
+                "cancelled": "Cancelled"
+            },
+            "stats": {
+                "total": "Total",
+                "pending": "Pending",
+                "paid": "Paid",
+                "b2bB2c": "B2B / B2C"
+            },
+            "table": {
+                "orderNumber": "Order #",
+                "client": "Customer",
+                "date": "Date",
+                "items": "Items",
+                "amount": "Amount",
+                "source": "Source",
+                "status": "Status",
+                "actions": "Actions",
+                "noResults": "No orders found"
+            },
+            "error": "Error retrieving orders: {error}"
+        },
+        "products": {
+            "title": "Products",
+            "subtitle": "Manage product catalog ({count})",
+            "newProduct": "New product",
+            "search": {
+                "placeholder": "Search by name or reference..."
+            },
+            "filters": {
+                "allCategories": "All categories"
+            },
+            "stats": {
+                "totalProducts": "Total products",
+                "inStock": "In stock",
+                "outOfStock": "Out of stock",
+                "lowStock": "Low stock (<10)"
+            },
+            "status": {
+                "active": "Active",
+                "outOfStock": "Out of stock"
+            },
+            "card": {
+                "ref": "Ref: {ref}",
+                "priceB2C": "B2C price",
+                "stock": "Stock: {stock}",
+                "explore": "Explore"
+            },
+            "confirmDelete": "Are you sure you want to delete the product \"{name}\"?",
+            "deleteError": "Error deleting product",
+            "noResults": "No products match your search."
+        },
+        "settings": {
+            "title": "Settings",
+            "subtitle": "Platform configuration",
+            "general": {
+                "title": "General settings",
+                "platformName": "Platform name",
+                "contactEmail": "Contact email",
+                "phone": "Phone"
+            },
+            "emailNotifications": {
+                "title": "Email notifications",
+                "newOrders": "New orders",
+                "newProfessionals": "New professionals",
+                "lowStock": "Low stock",
+                "weeklyReports": "Weekly reports"
+            },
+            "systemAlerts": {
+                "title": "System alerts",
+                "lowStockThreshold": "Low stock threshold",
+                "validationDelay": "Professional validation delay (days)"
+            },
+            "security": {
+                "title": "Security",
+                "twoFactor": "Two-factor authentication",
+                "activityLogs": "Activity logs",
+                "manualValidation": "Manual professional validation"
+            },
+            "backup": {
+                "title": "Data backup",
+                "lastBackup": "Last backup",
+                "backupNow": "Backup now"
+            },
+            "saveChanges": "Save changes"
+        },
+        "logs": {
+            "title": "Activity logs",
+            "subtitle": "System event history",
+            "export": "Export",
+            "search": {
+                "placeholder": "Search logs..."
+            },
+            "filters": {
+                "allTypes": "All types"
+            },
+            "types": {
+                "success": "Success",
+                "info": "Info",
+                "warning": "Warning",
+                "error": "Error"
+            },
+            "stats": {
+                "total": "Total",
+                "success": "Success",
+                "warnings": "Warnings",
+                "errors": "Errors"
+            },
+            "logEntry": {
+                "user": "User: {user}"
+            }
+        },
+        "header": {
+            "search": "Search...",
+            "admin": "Admin",
+            "administrator": "Administrator",
+            "systemAdministrator": "System administrator",
+            "logout": "Logout"
+        },
+        "sidebar": {
+            "closeMenu": "Close menu",
+            "navigation": {
+                "dashboard": "Dashboard",
+                "professionals": "Professionals",
+                "orders": "Orders",
+                "products": "Products",
+                "settings": "Settings",
+                "logs": "Logs"
+            },
+            "adminMode": "Admin Mode",
+            "fullAccess": "Full system access"
+        }
+    },
     "b2b": {
         "loading": "Loading...",
-        "downloads_page": {
-            "loading": "Loading..."
-        },
         "redirecting": "Redirecting...",
         "accueil": {
             "welcome": "Welcome",
