@@ -9,8 +9,10 @@ import { useTranslations } from 'next-intl';
 export default function Professionnels() {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('Tous');
+    const [currentPage, setCurrentPage] = useState(1);
     const { users, loading, error, validateUser, suspendUser } = useAdminUsers();
     const t = useTranslations('admin.professionals');
+    const itemsPerPage = 5;
 
     const filteredUsers = useMemo(() => {
         return users.filter((user) => {
@@ -22,6 +24,12 @@ export default function Professionnels() {
             return matchesSearch && matchesStatus;
         });
     }, [users, searchTerm, statusFilter]);
+
+    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+    const paginatedUsers = useMemo(() => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return filteredUsers.slice(startIndex, startIndex + itemsPerPage);
+    }, [filteredUsers, currentPage]);
 
     if (loading) {
         return (
@@ -120,14 +128,14 @@ export default function Professionnels() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200">
-                            {filteredUsers.length === 0 ? (
+                            {paginatedUsers.length === 0 ? (
                                 <tr>
                                     <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
                                         {t('table.noResults')}
                                     </td>
                                 </tr>
                             ) : (
-                                filteredUsers.map((user) => (
+                                paginatedUsers.map((user) => (
                                     <tr key={user.id} className="hover:bg-gray-50">
                                         <td className="px-6 py-4">
                                             <div>
@@ -198,6 +206,30 @@ export default function Professionnels() {
                         </tbody>
                     </table>
                 </div>
+                {/* Pagination */}
+                {totalPages > 1 && (
+                    <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+                        <p className="text-sm text-gray-600">
+                            Page {currentPage} sur {totalPages} ({filteredUsers.length} résultats)
+                        </p>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={currentPage === 1}
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Précédent
+                            </button>
+                            <button
+                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                disabled={currentPage === totalPages}
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Suivant
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

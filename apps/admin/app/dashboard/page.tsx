@@ -106,10 +106,10 @@ export default function Dashboard() {
             {recentOrders.length === 0 ? (
               <p className="text-center py-8 text-gray-400 text-sm italic">{t('recentOrders.noOrders')}</p>
             ) : (
-              recentOrders.map((order) => (
+              recentOrders.slice(0, 5).map((order) => (
                 <div key={order.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors border border-transparent hover:border-gray-200">
                   <div className="flex-1">
-                    <p className="font-bold text-gray-900 leading-tight">#{order.id}</p>
+                    <p className="font-bold text-gray-900 leading-tight">#CMD-{order.id.substring(0, 4).toUpperCase()}</p>
                     <p className="text-xs text-gray-500 font-medium">{order.client}</p>
                   </div>
                   <div className="text-right flex flex-col items-end gap-1">
@@ -137,12 +137,12 @@ export default function Dashboard() {
           </div>
           <div className="space-y-4">
             {pendingProsList.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-                <Users className="w-12 h-12 mb-3 opacity-20" />
-                <p className="text-sm italic">{t('pendingValidations.noPending')}</p>
+              <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+                <Users className="w-16 h-16 mb-4 opacity-30" />
+                <p className="text-base font-semibold">Aucune demande en attente</p>
               </div>
             ) : (
-              pendingProsList.map((pro) => (
+              pendingProsList.slice(0, 5).map((pro) => (
                 <div key={pro.id} className="p-4 bg-gray-50 rounded-xl border border-transparent hover:border-gray-200 transition-all">
                   <div className="flex items-start justify-between mb-3">
                     <div>

@@ -26,10 +26,10 @@ export function HeroSection() {
         />
       </div>
 
-      <div className="container mx-auto px-12 sm:px-16 md:px-24 py-32 sm:py-40 md:py-48 relative z-10">
-        <div className="max-w-2xl text-white space-y-4 sm:space-y-5">
+      <div className="container mx-auto px-6 sm:px-16 md:px-24 py-20 sm:py-40 md:py-48 relative z-10">
+        <div className="max-w-2xl text-white space-y-6 sm:space-y-5">
           <h1
-            className="text-white text-left text-3xl sm:text-4xl md:text-5xl leading-tight"
+            className="text-white text-left text-4xl sm:text-4xl md:text-5xl leading-tight"
             style={{
               fontFamily: 'var(--font-caveat)',
             }}
@@ -37,15 +37,15 @@ export function HeroSection() {
             {t('title')}
           </h1>
 
-          <p className="text-white text-left text-[11px] sm:text-xs md:text-sm leading-relaxed max-w-lg">
+          <p className="text-white text-justify text-base sm:text-xs md:text-sm leading-relaxed max-w-lg">
             {t('desc')}
           </p>
 
-          <div className="pt-2 sm:pt-4">
+          <div className="pt-4 sm:pt-4">
             <Link href="/produits">
-              <Button className="bg-white text-[#235730] hover:bg-white/90 text-sm sm:text-base px-6 sm:px-8 py-4 sm:py-6 rounded-sm font-medium flex items-center gap-2">
+              <Button className="bg-white text-[#235730] hover:bg-white/90 text-base sm:text-base px-8 sm:px-8 py-6 sm:py-6 rounded-sm font-medium flex items-center gap-2">
                 {t('cta')}
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                <ArrowRight className="w-5 h-5 sm:w-5 sm:h-5" />
               </Button>
             </Link>
           </div>

@@ -17,8 +17,10 @@ const statusMap: Record<string, { labelKey: string; color: string }> = {
 export default function Commandes() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('Tous');
+  const [currentPage, setCurrentPage] = useState(1);
   const { orders, loading, error } = useAdminOrders();
   const t = useTranslations('admin.orders');
+  const itemsPerPage = 5;
 
   const filteredOrders = useMemo(() => {
     return orders.filter((order) => {
@@ -32,6 +34,12 @@ export default function Commandes() {
       return matchesSearch && matchesStatus;
     });
   }, [orders, searchTerm, statusFilter, t]);
+
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+  const paginatedOrders = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredOrders.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredOrders, currentPage]);
 
   const formatPrice = (amount: number, currency: string) => {
     return new Intl.NumberFormat('fr-FR', {
@@ -138,14 +146,14 @@ export default function Commandes() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredOrders.length === 0 ? (
+              {paginatedOrders.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
                     {t('table.noResults')}
                   </td>
                 </tr>
               ) : (
-                filteredOrders.map((order) => (
+                paginatedOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm font-medium text-gray-900">
                       <span className="font-mono text-xs">{order.id}</span>
@@ -194,6 +202,30 @@ export default function Commandes() {
             </tbody>
           </table>
         </div>
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200">
+            <p className="text-sm text-gray-600">
+              Page {currentPage} sur {totalPages} ({filteredOrders.length} résultats)
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Précédent
+              </button>
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Suivant
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
