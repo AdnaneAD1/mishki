@@ -10,6 +10,8 @@ import {
     onSnapshot,
     deleteDoc,
     doc,
+    addDoc,
+    updateDoc,
     type QuerySnapshot,
     type DocumentData,
 } from '@mishki/firebase';
@@ -51,7 +53,11 @@ export type AdminProduct = {
     image: string;
     status: 'Actif' | 'Rupture';
     desc: string;
+    long_desc?: string;
+    usage?: string;
+    ingredient_base?: string;
     volume?: string;
+    translations?: ProductDb['translations'];
 };
 
 function mapAdminProduct(
@@ -76,7 +82,11 @@ function mapAdminProduct(
         image: data.image || '/placeholder.jpg',
         status: (data.stock || 0) > 0 ? 'Actif' : 'Rupture',
         desc: trans?.desc || '',
+        long_desc: trans?.long_desc || '',
+        usage: trans?.usage || '',
+        ingredient_base: trans?.ingredient_base || '',
         volume: data.volume,
+        translations: data.translations,
     };
 }
 
@@ -105,16 +115,34 @@ export function useAdminProducts() {
         return () => unsubscribe();
     }, [locale]);
 
-    const deleteProduct = async (id: string) => {
+    const addProduct = async (data: ProductDb) => {
         try {
-            await deleteDoc(doc(db, 'products', id));
-        } catch {
-            alert('Erreur lors de la suppression du produit');
-            throw new Error('Failed to delete product');
+            await addDoc(collection(db, 'products'), data);
+        } catch (err: unknown) {
+            console.error('Error adding product:', err);
+            throw new Error(err instanceof Error ? err.message : 'Failed to add product');
         }
     };
 
-    return { products, loading, error, deleteProduct };
+    const updateProduct = async (id: string, data: Partial<ProductDb>) => {
+        try {
+            await updateDoc(doc(db, 'products', id), data);
+        } catch (err: unknown) {
+            console.error('Error updating product:', err);
+            throw new Error(err instanceof Error ? err.message : 'Failed to update product');
+        }
+    };
+
+    const deleteProduct = async (id: string) => {
+        try {
+            await deleteDoc(doc(db, 'products', id));
+        } catch (err: unknown) {
+            console.error('Error deleting product:', err);
+            throw new Error(err instanceof Error ? err.message : 'Failed to delete product');
+        }
+    };
+
+    return { products, loading, error, addProduct, updateProduct, deleteProduct };
 }
 
 export function useAdminProduct(id: string) {

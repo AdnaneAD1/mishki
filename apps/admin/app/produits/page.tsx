@@ -4,14 +4,18 @@ import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Plus, Edit, Trash2, Eye, Loader2 } from 'lucide-react';
-import { useAdminProducts } from '@/apps/admin/hooks/useAdminProducts';
+import { useAdminProducts, AdminProduct, ProductDb } from '@/apps/admin/hooks/useAdminProducts';
 import { useTranslations } from 'next-intl';
+import ProductModal from '@/apps/admin/components/products/ProductModal';
 
 export default function Produits() {
-  const { products, loading, deleteProduct } = useAdminProducts();
+  const { products, loading, deleteProduct, addProduct, updateProduct } = useAdminProducts();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('Toutes');
   const t = useTranslations('admin.products');
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<AdminProduct | null>(null);
 
   // Build categories list with multilingual labels
   const categories = useMemo(() => {
@@ -57,6 +61,24 @@ export default function Produits() {
     }
   };
 
+  const handleCreate = () => {
+    setSelectedProduct(null);
+    setModalOpen(true);
+  };
+
+  const handleEdit = (product: AdminProduct) => {
+    setSelectedProduct(product);
+    setModalOpen(true);
+  };
+
+  const handleSaveProduct = async (data: ProductDb) => {
+    if (selectedProduct) {
+      await updateProduct(selectedProduct.id, data);
+    } else {
+      await addProduct(data);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -73,7 +95,10 @@ export default function Produits() {
           <h1 className="text-2xl text-gray-900 mb-2 font-bold">{t('title')}</h1>
           <p className="text-gray-600">{t('subtitle', { count: products.length })}</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-[#235730] text-white rounded-lg hover:bg-[#1a4023] transition-colors">
+        <button
+          onClick={handleCreate}
+          className="flex items-center gap-2 px-4 py-2 bg-[#235730] text-white rounded-lg hover:bg-[#1a4023] transition-colors"
+        >
           <Plus className="w-4 h-4" />
           {t('newProduct')}
         </button>
@@ -190,7 +215,10 @@ export default function Produits() {
                     <Eye className="w-4 h-4" />
                     {t('card.explore')}
                   </Link>
-                  <button className="p-2 bg-[#235730]/10 text-[#235730] rounded-lg hover:bg-[#235730]/20 transition-colors">
+                  <button
+                    onClick={() => handleEdit(product)}
+                    className="p-2 bg-[#235730]/10 text-[#235730] rounded-lg hover:bg-[#235730]/20 transition-colors"
+                  >
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
@@ -205,6 +233,15 @@ export default function Produits() {
           ))}
         </div>
       )}
+
+      {/* Product Modal */}
+      <ProductModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        product={selectedProduct}
+        categories={categories}
+        onSave={handleSaveProduct}
+      />
     </div>
   );
 }

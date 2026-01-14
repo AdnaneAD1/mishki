@@ -1,18 +1,34 @@
 'use client';
 
+import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Mail, Calendar, TrendingUp, Package, Loader2 } from 'lucide-react';
 import { useAdminUsers, useAdminUserDetail } from '@/apps/admin/hooks/useAdminUsers';
 import { useTranslations } from 'next-intl';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/apps/admin/components/ui/dialog';
+import { Input } from '@/apps/admin/components/ui/input';
+import { Label } from '@/apps/admin/components/ui/label';
+import { Button } from '@/apps/admin/components/ui/button';
 
 export default function ProfessionnelDetail() {
   const params = useParams();
   const id = params.id as string;
 
   const { user, orders, stats, loading, error } = useAdminUserDetail(id);
-  const { validateUser, suspendUser } = useAdminUsers();
+  const { validateUser, suspendUser, reactivateUser, updateUserRemise } = useAdminUsers();
   const t = useTranslations('admin.professionalDetail');
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [tempRemise, setTempRemise] = useState<string>('0');
+  const [isUpdating, setIsUpdating] = useState(false);
 
   if (loading) {
     return (
@@ -29,6 +45,28 @@ export default function ProfessionnelDetail() {
       </div>
     );
   }
+
+  const handleModifyDiscount = () => {
+    setTempRemise((user.remise || 0).toString());
+    setModalOpen(true);
+  };
+
+  const confirmModifyDiscount = async () => {
+    const newRemise = parseFloat(tempRemise);
+    if (!isNaN(newRemise) && newRemise >= 0 && newRemise <= 100) {
+      setIsUpdating(true);
+      try {
+        await updateUserRemise(user.id, newRemise);
+        setModalOpen(false);
+      } catch {
+        alert('Erreur lors de la modification de la remise');
+      } finally {
+        setIsUpdating(false);
+      }
+    } else {
+      alert('Veuillez entrer un nombre valide entre 0 et 100');
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -184,11 +222,20 @@ export default function ProfessionnelDetail() {
               {t('actions.validateAccount')}
             </button>
           )}
-          <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+          <button
+            onClick={handleModifyDiscount}
+            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+          >
             {t('actions.modifyDiscount')}
           </button>
           <button
-            onClick={() => suspendUser(user.id)}
+            onClick={() => {
+              if (user.status === 'Suspendu') {
+                reactivateUser(user.id);
+              } else {
+                suspendUser(user.id);
+              }
+            }}
             className={`px-4 py-2 rounded-lg transition-colors ${user.status === 'Suspendu'
               ? 'bg-green-100 text-green-700 hover:bg-green-200'
               : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
@@ -198,6 +245,45 @@ export default function ProfessionnelDetail() {
           </button>
         </div>
       </div>
+
+      {/* Discount Modal */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{t('actions.modifyDiscount')}</DialogTitle>
+            <DialogDescription>
+              {user?.name} ({user?.company})
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="remise">
+                {t('stats.discountGranted')}
+              </Label>
+              <div className="relative">
+                <Input
+                  id="remise"
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={tempRemise}
+                  onChange={(e) => setTempRemise(e.target.value)}
+                  className="pr-8"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">%</span>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setModalOpen(false)} disabled={isUpdating}>
+              {t('actions.cancel') || 'Annuler'}
+            </Button>
+            <Button onClick={confirmModifyDiscount} disabled={isUpdating}>
+              {isUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : (t('actions.save') || 'Enregistrer')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -101,7 +101,32 @@ export function useAdminUsers() {
         }
     };
 
-    return { users, loading, error, validateUser, suspendUser };
+    const reactivateUser = async (userId: string) => {
+        try {
+            await updateDoc(doc(db, 'users', userId), {
+                status: 'active', // Assuming 'active' or just clearing suspended status
+                validated: true,
+                updatedAt: new Date(),
+            });
+        } catch (err: unknown) {
+            console.error('Error reactivating user:', err);
+            throw err;
+        }
+    };
+
+    const updateUserRemise = async (userId: string, remise: number) => {
+        try {
+            await updateDoc(doc(db, 'users', userId), {
+                remise,
+                updatedAt: new Date(),
+            });
+        } catch (err: unknown) {
+            console.error('Error updating user remise:', err);
+            throw err;
+        }
+    };
+
+    return { users, loading, error, validateUser, suspendUser, reactivateUser, updateUserRemise };
 }
 
 export function useAdminUserDetail(userId: string) {

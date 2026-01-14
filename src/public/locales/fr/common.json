@@ -61,7 +61,10 @@
                 "view": "Voir",
                 "validate": "Valider le compte",
                 "reject": "Rejeter / Suspendre",
-                "suspend": "Suspendre le compte"
+                "suspend": "Suspendre le compte",
+                "reactivate": "Réactiver le compte",
+                "modifyDiscount": "Modifier la remise",
+                "modifyDiscountPrompt": "Nouvelle remise (%) :"
             },
             "error": "Erreur lors de la récupération des professionnels : {error}"
         },
@@ -136,6 +139,8 @@
             "title": "Produits",
             "subtitle": "Gérer le catalogue de produits ({count})",
             "newProduct": "Nouveau produit",
+            "editProduct": "Modifier le produit",
+            "backToList": "Retour aux produits",
             "search": {
                 "placeholder": "Rechercher par nom ou référence..."
             },
@@ -160,7 +165,47 @@
             },
             "confirmDelete": "Êtes-vous sûr de vouloir supprimer le produit \"{name}\" ?",
             "deleteError": "Erreur lors de la suppression du produit",
-            "noResults": "Aucun produit ne correspond à votre recherche."
+            "noResults": "Aucun produit ne correspond à votre recherche.",
+            "actions": {
+                "save": "Enregistrer",
+                "cancel": "Annuler"
+            },
+            "form": {
+                "other": "Autre...",
+                "newCategory": "Nouvelle catégorie (Slug)",
+                "imageLabel": "Image du produit",
+                "importImage": "Importer une image",
+                "saving": "Enregistrement...",
+                "save": "Enregistrer le produit",
+                "slugLabel": "Slug / Référence",
+                "slugPlaceholder": "ex: creme-visage-50ml",
+                "priceLabel": "Prix (€)",
+                "stockLabel": "Stock",
+                "classificationLabel": "Classification",
+                "categoryLabel": "Catégorie",
+                "selectCategoryPlaceholder": "Sélectionner une catégorie",
+                "contentLabel": "Contenu multilingue",
+                "tabFR": "Détails (FR)",
+                "tabEN": "Details (EN)",
+                "tabES": "Detalles (ES)",
+                "nameLabel": "Nom du produit",
+                "namePlaceholderFR": "Nom en français",
+                "namePlaceholder": "Nom traduit",
+                "catLabelLabel": "Label Catégorie",
+                "catLabelPlaceholder": "ex: Soins du Visage",
+                "shortDescLabel": "Description courte",
+                "longDescLabel": "Description détaillée",
+                "usageLabel": "Conseils d'utilisation",
+                "ingredientLabel": "Ingrédient de base",
+                "volumeLabel": "Volume (ex: 150g, 250ml)"
+            },
+            "detail": {
+                "title": "Détails & Traductions",
+                "presentation": "Présentation",
+                "characteristics": "Caractéristiques",
+                "stockValue": "Valeur du Stock",
+                "updateInventory": "Mettre à jour l'inventaire"
+            }
         },
         "settings": {
             "title": "Paramètres",

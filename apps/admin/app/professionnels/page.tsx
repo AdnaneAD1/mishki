@@ -2,16 +2,64 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Search, Eye, Check, X, MoreVertical, Loader2 } from 'lucide-react';
-import { useAdminUsers } from '@/apps/admin/hooks/useAdminUsers';
+import { Search, Eye, Check, X, EllipsisVertical, Loader2, Pencil } from 'lucide-react';
+import { useAdminUsers, type AdminUser } from '@/apps/admin/hooks/useAdminUsers';
 import { useTranslations } from 'next-intl';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+    DropdownMenuSeparator,
+    DropdownMenuLabel,
+} from '@/apps/admin/components/ui/dropdown-menu';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/apps/admin/components/ui/dialog';
+import { Input } from '@/apps/admin/components/ui/input';
+import { Label } from '@/apps/admin/components/ui/label';
+import { Button } from '@/apps/admin/components/ui/button';
 
 export default function Professionnels() {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('Tous');
     const [currentPage, setCurrentPage] = useState(1);
-    const { users, loading, error, validateUser, suspendUser } = useAdminUsers();
+    const { users, loading, error, validateUser, suspendUser, reactivateUser, updateUserRemise } = useAdminUsers();
     const t = useTranslations('admin.professionals');
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
+    const [tempRemise, setTempRemise] = useState<string>('0');
+    const [isUpdating, setIsUpdating] = useState(false);
+
+    const handleModifyDiscount = (user: AdminUser) => {
+        setSelectedUser(user);
+        setTempRemise((user.remise || 0).toString());
+        setModalOpen(true);
+    };
+
+    const confirmModifyDiscount = async () => {
+        if (!selectedUser) return;
+        const newRemise = parseFloat(tempRemise);
+        if (!isNaN(newRemise) && newRemise >= 0 && newRemise <= 100) {
+            setIsUpdating(true);
+            try {
+                await updateUserRemise(selectedUser.id, newRemise);
+                setModalOpen(false);
+            } catch {
+                alert('Erreur lors de la modification de la remise');
+            } finally {
+                setIsUpdating(false);
+            }
+        } else {
+            alert('Veuillez entrer un nombre valide entre 0 et 100');
+        }
+    };
     const itemsPerPage = 5;
 
     const filteredUsers = useMemo(() => {
@@ -160,44 +208,61 @@ export default function Professionnels() {
                                         <td className="px-6 py-4 text-sm text-gray-900">{user.remise}%</td>
                                         <td className="px-6 py-4 text-sm text-gray-600">{user.createdAt}</td>
                                         <td className="px-6 py-4">
-                                            <div className="flex items-center gap-2">
-                                                <Link
-                                                    href={`/admin/professionnels/${user.id}`}
-                                                    className="p-2 text-gray-600 hover:text-[#235730] hover:bg-gray-100 rounded-lg transition-colors"
-                                                    title={t('actions.view')}
-                                                >
-                                                    <Eye className="w-4 h-4" />
-                                                </Link>
-                                                {user.status === 'En attente' && (
-                                                    <>
-                                                        <button
-                                                            onClick={() => validateUser(user.id)}
-                                                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                                                            title={t('actions.validate')}
-                                                        >
-                                                            <Check className="w-4 h-4" />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => suspendUser(user.id)}
-                                                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                                            title={t('actions.reject')}
-                                                        >
-                                                            <X className="w-4 h-4" />
-                                                        </button>
-                                                    </>
-                                                )}
-                                                {user.status === 'Validé' && (
-                                                    <button
-                                                        onClick={() => suspendUser(user.id)}
-                                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                                        title={t('actions.suspend')}
-                                                    >
-                                                        <X className="w-4 h-4" />
-                                                    </button>
-                                                )}
-                                                <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
-                                                    <MoreVertical className="w-4 h-4" />
-                                                </button>
+                                            <div className="flex items-center justify-end">
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" size="icon" className="h-8 w-8 p-0 hover:bg-gray-100">
+                                                            <span className="sr-only">Open menu</span>
+                                                            <EllipsisVertical className="h-5 w-5 text-gray-600" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end" className="w-[200px]">
+                                                        <DropdownMenuLabel>{t('table.actions')}</DropdownMenuLabel>
+                                                        <DropdownMenuItem asChild>
+                                                            <Link
+                                                                href={`/admin/professionnels/${user.id}`}
+                                                                className="flex items-center"
+                                                            >
+                                                                <Eye className="mr-2 h-4 w-4" />
+                                                                {t('actions.view')}
+                                                            </Link>
+                                                        </DropdownMenuItem>
+
+                                                        <DropdownMenuSeparator />
+
+                                                        <DropdownMenuItem onClick={() => handleModifyDiscount(user)}>
+                                                            <Pencil className="mr-2 h-4 w-4" />
+                                                            {t('actions.modifyDiscount') || 'Modifier remise'}
+                                                        </DropdownMenuItem>
+
+                                                        {user.status === 'En attente' && (
+                                                            <>
+                                                                <DropdownMenuItem onClick={() => validateUser(user.id)} className="text-green-600 focus:text-green-600">
+                                                                    <Check className="mr-2 h-4 w-4" />
+                                                                    {t('actions.validate')}
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem onClick={() => suspendUser(user.id)} className="text-red-600 focus:text-red-600">
+                                                                    <X className="mr-2 h-4 w-4" />
+                                                                    {t('actions.reject')}
+                                                                </DropdownMenuItem>
+                                                            </>
+                                                        )}
+
+                                                        {user.status === 'Validé' && (
+                                                            <DropdownMenuItem onClick={() => suspendUser(user.id)} className="text-red-600 focus:text-red-600">
+                                                                <X className="mr-2 h-4 w-4" />
+                                                                {t('actions.suspend')}
+                                                            </DropdownMenuItem>
+                                                        )}
+
+                                                        {user.status === 'Suspendu' && (
+                                                            <DropdownMenuItem onClick={() => reactivateUser(user.id)} className="text-green-600 focus:text-green-600">
+                                                                <Check className="mr-2 h-4 w-4" />
+                                                                {t('actions.reactivate') || 'Réactiver'}
+                                                            </DropdownMenuItem>
+                                                        )}
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
                                             </div>
                                         </td>
                                     </tr>
@@ -231,6 +296,45 @@ export default function Professionnels() {
                     </div>
                 )}
             </div>
+
+            {/* Discount Modal */}
+            <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>{t('actions.modifyDiscount')}</DialogTitle>
+                        <DialogDescription>
+                            {selectedUser?.name} ({selectedUser?.company})
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="remise">
+                                {t('table.discount')}
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    id="remise"
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    value={tempRemise}
+                                    onChange={(e) => setTempRemise(e.target.value)}
+                                    className="pr-8"
+                                />
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setModalOpen(false)} disabled={isUpdating}>
+                            {t('auth.register.btn_cancel') || 'Annuler'}
+                        </Button>
+                        <Button onClick={confirmModifyDiscount} disabled={isUpdating}>
+                            {isUpdating ? <Loader2 className="w-4 h-4 animate-spin" /> : (t('settings.saveChanges') || 'Enregistrer')}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

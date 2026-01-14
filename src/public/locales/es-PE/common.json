@@ -61,7 +61,10 @@
                 "view": "Ver",
                 "validate": "Validar cuenta",
                 "reject": "Rechazar / Suspender",
-                "suspend": "Suspender cuenta"
+                "suspend": "Suspender cuenta",
+                "reactivate": "Reactivar cuenta",
+                "modifyDiscount": "Modificar descuento",
+                "modifyDiscountPrompt": "Nuevo descuento (%) :"
             },
             "error": "Error al recuperar profesionales: {error}"
         },
@@ -136,6 +139,8 @@
             "title": "Productos",
             "subtitle": "Gestionar catálogo de productos ({count})",
             "newProduct": "Nuevo producto",
+            "editProduct": "Editar producto",
+            "backToList": "Volver a productos",
             "search": {
                 "placeholder": "Buscar por nombre o referencia..."
             },
@@ -160,7 +165,47 @@
             },
             "confirmDelete": "¿Estás seguro de querer eliminar el producto \"{name}\"?",
             "deleteError": "Error al eliminar producto",
-            "noResults": "Ningún producto coincide con tu búsqueda."
+            "noResults": "Ningún producto coincide con tu búsqueda.",
+            "actions": {
+                "save": "Guardar",
+                "cancel": "Cancelar"
+            },
+            "form": {
+                "other": "Otro...",
+                "newCategory": "Nueva categoría (Slug)",
+                "imageLabel": "Imagen del producto",
+                "importImage": "Importar una imagen",
+                "saving": "Guardando...",
+                "save": "Guardar producto",
+                "slugLabel": "Slug / Referencia",
+                "slugPlaceholder": "ej: crema-facial-50ml",
+                "priceLabel": "Precio (€)",
+                "stockLabel": "Stock",
+                "classificationLabel": "Clasificación",
+                "categoryLabel": "Categoría",
+                "selectCategoryPlaceholder": "Seleccionar una categoría",
+                "contentLabel": "Contenido multilingüe",
+                "tabFR": "Detalles (FR)",
+                "tabEN": "Detalles (EN)",
+                "tabES": "Detalles (ES)",
+                "nameLabel": "Nombre del producto",
+                "namePlaceholderFR": "Nombre en francés",
+                "namePlaceholder": "Nombre traducido",
+                "catLabelLabel": "Etiqueta de categoría",
+                "catLabelPlaceholder": "ej: Cuidado Facial",
+                "shortDescLabel": "Descripción corta",
+                "longDescLabel": "Descripción Detallada",
+                "usageLabel": "Consejos de Uso",
+                "ingredientLabel": "Ingrediente Base",
+                "volumeLabel": "Volumen (ej: 150g, 250ml)"
+            },
+            "detail": {
+                "title": "Detalles y Traducciones",
+                "presentation": "Presentación",
+                "characteristics": "Características",
+                "stockValue": "Valor del Stock",
+                "updateInventory": "Actualizar Inventario"
+            }
         },
         "settings": {
             "title": "Configuración",
